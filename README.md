@@ -16,6 +16,17 @@ npx serve demo-host -l 3200    # externe testpagina op een andere origin
 
 Zonder `MAKE_WEBHOOK_URL` logt de server de aanvraag alleen in de console (dev-modus, mokdata).
 
+## Let op: OneDrive en de build-map
+
+Dit project staat in een OneDrive-map. OneDrive synchroniseert dan ook `.next` (de build) en `node_modules`, en kan daar
+**oude bestanden laten staan naast nieuwe** (herkenbaar aan bestanden met `-DESKTOP-…` in de naam). Gevolg: `next start`
+draait op verouderde code. Zo kreeg de app een keer de oude header `x-rentalflow-secret` mee terwijl de broncode al
+`x-make-apikey` had, en gaf Make `401`.
+
+- Bij vreemd gedrag na een wijziging: stop de app, verwijder `.next` en bouw opnieuw (`npm.cmd run build`).
+- Controle: `find .next -name "*DESKTOP-*"` moet niets teruggeven.
+- Structureel: verplaats het project naar een map buiten OneDrive (bijvoorbeeld `C:\dev\rentalflowai`); GitHub is dan de back-up.
+
 ## Widget op een site plaatsen
 
 ```html
