@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Demo woningpagina</title>
+  <style>
+    body{font-family:system-ui,sans-serif;margin:0;color:#1a1a1a}
+    header{background:#0f2a43;color:#fff;padding:14px 24px;font-weight:600}
+    main{max-width:820px;margin:24px auto;padding:0 16px}
+    .photo{height:240px;border-radius:10px;background:linear-gradient(135deg,#cfd8e3,#9fb3c8)}
+    h1{margin:16px 0 4px;font-size:1.6rem}
+    .price{font-size:1.2rem;font-weight:600;margin-bottom:16px}
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+    .hostbtn{font:inherit;cursor:pointer;padding:.65em 1.1em;border-radius:6px;border:1px solid #0f2a43;background:#fff;color:#0f2a43}
+    .hostbtn.primary{background:#0f2a43;color:#fff}
+    nav a{margin-right:12px}
+    .note{background:#f3f6fa;border-radius:8px;padding:12px;font-size:.9rem;color:#445}
+  </style>
+</head>
+<body>
+  <header>Demo Makelaardij (voorbeeldsite)</header>
+  <main>
+    <nav id="nav"></nav>
+    <div class="photo" role="img" aria-label="Foto van de woning"></div>
+    <h1 id="address"></h1>
+    <div class="price" id="price"></div>
+    <div class="actions">
+      <button class="hostbtn primary" type="button">Contact</button>
+      <button class="hostbtn" type="button" id="brochure-knop">Bekijk brochure</button>
+      <!-- de knop "Aanvraag" wordt hier door het widget geplaatst -->
+    </div>
+    <p class="note">Dit is een nagebootste woningpagina. De derde knop komt uit <code>widget.js</code>;
+      tenant en woning-id komen uit de scriptregel onderaan deze pagina.</p>
+  </main>
+
+  <script>
+    // Alleen voor de demo: woning kiezen via ?p=1001..1004, zodat je alle varianten kunt testen.
+    var woningen = {
+      "1001": { address: "Keizersgracht 100, Amsterdam", rent: 1850 },
+      "1002": { address: "Universiteitsweg 12, Utrecht", rent: 795 },
+      "1003": { address: "Stationsplein 5, Rotterdam", rent: 1450 },
+      "1004": { address: "Dorpsstraat 40, Zwolle", rent: 1100 },
+      "1005": { address: "Testlaan 5, Eindhoven", rent: 1200 }
+    };
+    var p = new URLSearchParams(location.search).get("p");
+    if (!woningen[p]) p = "1001";
+    var w = woningen[p];
+    document.getElementById("address").textContent = w.address;
+    document.getElementById("price").textContent = "€ " + w.rent + " per maand";
+    document.getElementById("nav").innerHTML = Object.keys(woningen).map(function (id) {
+      return '<a href="?p=' + id + '">' + id + '</a>';
+    }).join("");
+    // Zo ziet de echte scriptregel eruit (hier via document.write zodat de woning kiesbaar is):
+    document.write(
+      '<script src="/widget.js" data-tenant="demo" data-property-id="' + p + '"' +
+      ' data-rent="' + w.rent + '" data-address="' + w.address + '"' +
+      ' data-target="#brochure-knop" data-class="hostbtn primary" data-lang="auto"><\/script>'
+    );
+  </script>
+</body>
+</html>

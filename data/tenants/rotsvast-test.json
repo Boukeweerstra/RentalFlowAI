@@ -1,0 +1,46 @@
+{
+  "tenantId": "rotsvast-test",
+  "name": "Rotsvast (alleen test, geen officiële koppeling)",
+  "mode": "test",
+  "sendApplicantMail": false,
+  "allowedOrigins": [
+    "https://www.rotsvast.nl",
+    "https://rotsvast.nl",
+    "http://localhost:3200"
+  ],
+  "properties": [],
+  "propertyDefaults": {
+    "criteria": {
+      "minAge": 18,
+      "allowedIncomeTypes": [
+        "employment",
+        "self_employed",
+        "pension",
+        "benefits",
+        "other"
+      ],
+      "minIncomeFactor": 3,
+      "incomeBasis": "household",
+      "maxApplicants": 2,
+      "maxOccupants": 4,
+      "petsAllowed": false,
+      "probationAllowed": false,
+      "minEmploymentMonths": 3,
+      "guarantor": "allowed",
+      "minLeaseMonths": 12,
+      "housematesAllowed": false,
+      "studentsAllowed": true,
+      "depositGuarantee": "not_needed",
+      "residencePermitRequired": false,
+      "severity": {
+        "probation_not_allowed": "review",
+        "employment_too_short": "review"
+      }
+    },
+    "documentsLater": [
+      "id",
+      "payslip",
+      "employer_statement"
+    ]
+  }
+}

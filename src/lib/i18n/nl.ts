@@ -1,0 +1,128 @@
+import type { PrecheckReason } from "@/lib/schema";
+
+export const nl = {
+  title: "Aanvraag indienen",
+  allRequired: "Alle velden zijn verplicht, behalve de toelichting.",
+  intro:
+    "Vul onderstaande gegevens in. We vragen alleen wat voor deze woning nodig is.",
+  requirementsTitle: "Wat er voor deze woning nodig is",
+  reqIncome: (factor: number, amount: string) =>
+    `Bruto maandinkomen van minimaal ${factor}× de huur (${amount} per maand)`,
+  reqIncomeHousehold: "Het inkomen van alle aanvragers telt samen mee",
+  reqIncomeIndividual: "Alleen het inkomen van de hoofdaanvrager telt mee",
+  reqNoProbation: "Niet in proeftijd",
+  reqMinEmployment: (m: number) => `Minimaal ${m} maanden in dienst`,
+  reqMinAge: (a: number) => `Minimaal ${a} jaar`,
+  reqNoStudents: "Geen studenten",
+  reqNoHousemates: "Geen woningdelers",
+  reqNoPets: "Geen huisdieren",
+  reqMaxOccupants: (n: number) => `Maximaal ${n} bewoners`,
+  reqGuarantorRequired: "Garantsteller verplicht",
+  reqGuarantorAllowed: "Garantsteller mogelijk",
+  reqDepositGuarantee: "Borgstelling mogelijk of vereist",
+  reqResidencePermit: "Geldige verblijfstitel",
+  reqMinLease: (m: number) => `Minimale huurperiode van ${m} maanden`,
+  documentsLaterTitle: "Documenten die we later vragen",
+  documentsLaterNote:
+    "Alleen als uw aanvraag past bij de woning, vragen we hierna om deze documenten. U hoeft nu niets te uploaden.",
+
+  sectionYou: "Uw gegevens",
+  name: "Volledige naam",
+  email: "E-mailadres",
+  phone: "Telefoonnummer",
+  ageConfirm: (a: number) => `Ik ben ${a} jaar of ouder`,
+
+  sectionPersons: "Inkomen",
+  primaryPerson: "Hoofdaanvrager",
+  extraPerson: (n: number) => `Medeaanvrager ${n}`,
+  role: "Relatie tot hoofdaanvrager",
+  roles: { primary: "Hoofdaanvrager", partner: "Partner / gezin", housemate: "Woningdeler" },
+  incomeType: "Bron van inkomen",
+  monthlyIncome: "Bruto maandinkomen (€)",
+  employmentMonths: "Aantal maanden in dienst",
+  inProbation: "Zit u nog in de proeftijd?",
+  isStudent: "Bent u student?",
+  addPerson: "Partner of medeaanvrager toevoegen",
+  removePerson: "Verwijderen",
+  householdIncome: "Gezamenlijk maandinkomen",
+
+  sectionSituation: "Uw situatie",
+  hasHousemates: "Wilt u de woning delen met personen die geen partner of familie zijn?",
+  hasPets: "Heeft u huisdieren?",
+  occupants: "Met hoeveel personen gaat u in de woning wonen?",
+  occupantsHint: "Uzelf en eventuele kinderen meegeteld.",
+  occupantsBelowApplicants: "Dit kunnen er niet minder zijn dan het aantal aanvragers",
+
+  sectionLease: "Huur",
+  desiredStartDate: "Gewenste ingangsdatum",
+  desiredLeaseMonths: "Gewenste huurperiode (maanden)",
+  guarantorAvailable: "Heeft u een garantsteller beschikbaar?",
+  depositGuaranteeOk: "Bent u akkoord met borgstelling?",
+  hasValidPermit: "Beschikt u over een geldige verblijfstitel?",
+
+  motivation: "Toelichting (optioneel)",
+  motivationHint: "Bijvoorbeeld iets over uw situatie of reden van verhuizing.",
+
+  privacyBefore: "Ik ga akkoord met de verwerking van mijn gegevens voor deze woningaanvraag (",
+  privacyAfter: "). Gegevens worden alleen gebruikt om uw aanvraag te beoordelen.",
+  privacyLink: "privacyverklaring",
+  privacyNoLink: "geen privacyverklaring gekoppeld",
+
+  yes: "Ja",
+  no: "Nee",
+  choose: "Kies…",
+  submit: "Aanvraag versturen",
+  submitting: "Versturen…",
+  close: "Sluiten",
+
+  successTitle: "Bedankt, uw aanvraag is ontvangen",
+  successBody:
+    "De makelaar beoordeelt uw aanvraag en neemt contact met u op als deze past bij de woning.",
+  errorGeneric: "Er ging iets mis bij het versturen. Probeer het later opnieuw.",
+  errorFix: "Controleer de gemarkeerde velden.",
+  errorRateLimit: "Te veel pogingen. Wacht even en probeer het opnieuw.",
+  required: "Dit veld is verplicht",
+  invalidEmail: "Vul een geldig e-mailadres in",
+  notFoundTitle: "Woning niet gevonden",
+  notFoundBody: "Deze woning is niet beschikbaar voor aanvragen.",
+
+  warnTitle: "Let op: uw aanvraag lijkt niet aan alle voorwaarden te voldoen",
+  warnBody:
+    "Op basis van uw antwoorden lijkt u niet aan de onderstaande voorwaarden te voldoen. U kunt de aanvraag toch versturen; de makelaar beoordeelt zelf of het past. Controleer eerst of u alles goed heeft ingevuld.",
+  warnBack: "Gegevens aanpassen",
+  warnSend: "Toch versturen",
+  reasons: {
+    income_too_low: "Uw inkomen ligt onder de gevraagde inkomenseis",
+    income_type_not_allowed: "Uw inkomstenbron wordt voor deze woning niet geaccepteerd",
+    probation_not_allowed: "Kandidaten in de proeftijd worden niet geaccepteerd",
+    employment_too_short: "Uw dienstverband is korter dan gevraagd",
+    student_not_allowed: "Studenten worden voor deze woning niet geaccepteerd",
+    housemates_not_allowed: "Woningdelen is bij deze woning niet toegestaan",
+    guarantor_required: "Een garantsteller is vereist",
+    deposit_guarantee_required: "Akkoord met borgstelling is vereist",
+    residence_permit_required: "Een geldige verblijfstitel is vereist",
+    start_date_out_of_range: "Uw gewenste ingangsdatum wijkt af van de beschikbaarheid",
+    lease_too_short: "Uw gewenste huurperiode is korter dan de minimale huurperiode",
+    pets_not_allowed: "Huisdieren zijn bij deze woning niet toegestaan",
+    too_many_occupants: "Het aantal bewoners is hoger dan het maximum voor deze woning",
+  } satisfies Record<PrecheckReason, string>,
+
+  incomeTypes: {
+    employment: "Loon uit dienstverband",
+    self_employed: "Zelfstandig inkomen",
+    pension: "Pensioen",
+    student_finance: "Studiefinanciering",
+    benefits: "Uitkering",
+    other: "Anders",
+  },
+  documents: {
+    id: "Identiteitsbewijs",
+    payslip: "Recente loonstrook(en)",
+    employer_statement: "Werkgeversverklaring",
+    bank_statement: "Bankafschriften",
+    guarantor_statement: "Gegevens en verklaring garantsteller",
+    residence_permit: "Verblijfsdocument",
+  },
+};
+
+export type Dict = typeof nl;

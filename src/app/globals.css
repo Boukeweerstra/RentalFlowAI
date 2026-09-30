@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Het formulier draait als widget op sites van makelaars: altijd licht thema,
+   ongeacht de donkere modus van de bezoeker, zodat contrast voorspelbaar blijft. */
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Zichtbare toetsenbordfocus op alles wat bedienbaar is (WCAG 2.4.7). */
+:focus-visible {
+  outline: 3px solid #1d4ed8;
+  outline-offset: 2px;
+}

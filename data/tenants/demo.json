@@ -1,0 +1,168 @@
+{
+  "tenantId": "demo",
+  "name": "Demo Makelaardij",
+  "mode": "test",
+  "sendApplicantMail": false,
+  "allowedOrigins": [
+    "http://localhost:3000",
+    "http://localhost:3100",
+    "http://localhost:3200"
+  ],
+  "properties": [
+    {
+      "propertyId": "1001",
+      "address": "Keizersgracht 100, Amsterdam",
+      "rent": 1850,
+      "availableFrom": "2026-11-01",
+      "criteria": {
+        "minAge": 21,
+        "allowedIncomeTypes": [
+          "employment",
+          "self_employed"
+        ],
+        "minIncomeFactor": 3,
+        "incomeBasis": "household",
+        "maxApplicants": 2,
+        "maxOccupants": 3,
+        "petsAllowed": false,
+        "probationAllowed": false,
+        "minEmploymentMonths": 6,
+        "guarantor": "not_allowed",
+        "minLeaseMonths": 12,
+        "housematesAllowed": false,
+        "studentsAllowed": false,
+        "depositGuarantee": "not_needed",
+        "residencePermitRequired": false,
+        "severity": {
+          "employment_too_short": "review",
+          "probation_not_allowed": "review"
+        }
+      },
+      "documentsLater": [
+        "id",
+        "payslip",
+        "employer_statement"
+      ]
+    },
+    {
+      "propertyId": "1002",
+      "address": "Universiteitsweg 12, Utrecht",
+      "rent": 795,
+      "availableFrom": "2026-10-15",
+      "criteria": {
+        "minAge": 18,
+        "allowedIncomeTypes": [
+          "employment",
+          "student_finance",
+          "benefits",
+          "other"
+        ],
+        "minIncomeFactor": 3,
+        "incomeBasis": "primary_applicant",
+        "maxApplicants": 1,
+        "maxOccupants": 2,
+        "probationAllowed": true,
+        "guarantor": "required",
+        "minLeaseMonths": 6,
+        "housematesAllowed": true,
+        "studentsAllowed": true,
+        "depositGuarantee": "not_needed",
+        "residencePermitRequired": false,
+        "severity": {
+          "guarantor_required": "review"
+        }
+      },
+      "documentsLater": [
+        "id",
+        "guarantor_statement"
+      ]
+    },
+    {
+      "propertyId": "1003",
+      "address": "Stationsplein 5, Rotterdam",
+      "rent": 1450,
+      "availableFrom": "2026-12-01",
+      "criteria": {
+        "minAge": 21,
+        "allowedIncomeTypes": [
+          "employment",
+          "self_employed",
+          "pension"
+        ],
+        "minIncomeFactor": 3,
+        "incomeBasis": "primary_applicant",
+        "maxApplicants": 1,
+        "petsAllowed": false,
+        "probationAllowed": false,
+        "minEmploymentMonths": 12,
+        "guarantor": "allowed",
+        "minLeaseMonths": 12,
+        "housematesAllowed": false,
+        "studentsAllowed": false,
+        "depositGuarantee": "allowed",
+        "residencePermitRequired": true
+      },
+      "documentsLater": [
+        "id",
+        "payslip",
+        "residence_permit"
+      ]
+    },
+    {
+      "propertyId": "1004",
+      "address": "Dorpsstraat 40, Zwolle",
+      "rent": 1100,
+      "criteria": {
+        "allowedIncomeTypes": [
+          "employment",
+          "self_employed",
+          "pension",
+          "benefits",
+          "other"
+        ],
+        "minIncomeFactor": 2.5,
+        "incomeBasis": "household",
+        "maxApplicants": 4,
+        "maxOccupants": 6,
+        "petsAllowed": true,
+        "probationAllowed": true,
+        "guarantor": "allowed",
+        "housematesAllowed": true,
+        "studentsAllowed": true,
+        "depositGuarantee": "allowed",
+        "residencePermitRequired": false
+      },
+      "documentsLater": [
+        "id"
+      ]
+    },
+    {
+      "propertyId": "1005",
+      "address": "Testlaan 5, Eindhoven (garantsteller mag inkomen niet compenseren)",
+      "rent": 1200,
+      "criteria": {
+        "minAge": 18,
+        "allowedIncomeTypes": [
+          "employment",
+          "self_employed",
+          "pension",
+          "benefits",
+          "other"
+        ],
+        "minIncomeFactor": 3,
+        "incomeBasis": "primary_applicant",
+        "maxApplicants": 1,
+        "probationAllowed": true,
+        "guarantor": "allowed",
+        "guarantorCompensatesIncome": false,
+        "housematesAllowed": true,
+        "studentsAllowed": true,
+        "depositGuarantee": "not_needed",
+        "residencePermitRequired": false
+      },
+      "documentsLater": [
+        "id"
+      ]
+    }
+  ]
+}

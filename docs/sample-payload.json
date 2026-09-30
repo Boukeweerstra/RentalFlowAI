@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 1,
+  "tenantMode": "test",
+  "flat": {
+    "submittedAt": "2026-09-30T11:34:01.842Z",
+    "id": "9d1319cb-8bdb-47c7-9b14-68b6a9941935",
+    "tenantId": "demo",
+    "propertyId": "1001",
+    "address": "Keizersgracht 100, Amsterdam",
+    "rent": 1850,
+    "propertySource": "config",
+    "name": "Voorbeeld Persoon",
+    "email": "voorbeeld@example.com",
+    "phone": "0612345678",
+    "applicants": 2,
+    "occupants": 2,
+    "p1_incomeType": "employment",
+    "p1_monthlyIncome": 3200,
+    "p2_role": "partner",
+    "p2_monthlyIncome": 2900,
+    "totalMonthlyIncome": 6100,
+    "incomeRequired": 5550,
+    "hasPets": false,
+    "hasHousemates": false,
+    "guarantorAvailable": null,
+    "desiredStartDate": "2026-11-15",
+    "desiredLeaseMonths": 12,
+    "precheckStatus": "suitable",
+    "precheckReasons": "",
+    "precheckReasonsText": "",
+    "motivation": "Voorbeeld <b>test</b>"
+  },
+  "mail": {
+    "notify": {
+      "to": null,
+      "subject": "[Aanvraag: GESCHIKT] Keizersgracht 100, Amsterdam – Voorbeeld Persoon",
+      "body": "Nieuwe aanvraag voor Keizersgracht 100, Amsterdam (woning 1001)\nEerste check: geschikt voor bezichtiging\n\nAanvrager: Voorbeeld Persoon · voorbeeld@example.com · 0612345678\nAanvragers: 2 · bewoners: 2 · gezamenlijk bruto maandinkomen € 6.100\nInkomenseis: € 5.550 · gemeten € 6.100 → ja\nHoofdaanvrager: employment, 24 mnd in dienst, proeftijd: nee\nIngangsdatum: 2026-11-15 · huurperiode 12 mnd\nGarantsteller: - · Borgstelling akkoord: - · Verblijfstitel: -\nWoningdelers: nee · Huisdieren: nee\nToelichting: Voorbeeld <b>test</b>\n\nAanvraag-ID: 9d1319cb-8bdb-47c7-9b14-68b6a9941935",
+      "html": "<div style=\"font-family:Arial,sans-serif;font-size:14px;line-height:1.5\">Nieuwe aanvraag voor Keizersgracht 100, Amsterdam (woning 1001)<br>Eerste check: geschikt voor bezichtiging<br><br>Aanvrager: Voorbeeld Persoon · voorbeeld@example.com · 0612345678<br>Aanvragers: 2 · bewoners: 2 · gezamenlijk bruto maandinkomen € 6.100<br>Inkomenseis: € 5.550 · gemeten € 6.100 → ja<br>Hoofdaanvrager: employment, 24 mnd in dienst, proeftijd: nee<br>Ingangsdatum: 2026-11-15 · huurperiode 12 mnd<br>Garantsteller: - · Borgstelling akkoord: - · Verblijfstitel: -<br>Woningdelers: nee · Huisdieren: nee<br>Toelichting: Voorbeeld &lt;b&gt;test&lt;/b&gt;<br><br>Aanvraag-ID: 9d1319cb-8bdb-47c7-9b14-68b6a9941935</div>"
+    },
+    "applicant": {
+      "to": "voorbeeld@example.com",
+      "enabled": true,
+      "subject": "Uw aanvraag voor Keizersgracht 100, Amsterdam is ontvangen",
+      "body": "Beste Voorbeeld,\n\nBedankt voor uw aanvraag voor Keizersgracht 100, Amsterdam. Op basis van uw gegevens past uw aanvraag bij de woning. De makelaar neemt contact met u op om een bezichtiging te plannen.\n\nMogelijk vragen we u daarna om de volgende documenten:\n- identiteitsbewijs\n- recente loonstrook(en)\n- werkgeversverklaring\n\nMet vriendelijke groet,\nDemo Makelaardij",
+      "html": "<div style=\"font-family:Arial,sans-serif;font-size:14px;line-height:1.5\">Beste Voorbeeld,<br><br>Bedankt voor uw aanvraag voor Keizersgracht 100, Amsterdam. Op basis van uw gegevens past uw aanvraag bij de woning. De makelaar neemt contact met u op om een bezichtiging te plannen.<br><br>Mogelijk vragen we u daarna om de volgende documenten:<br>- identiteitsbewijs<br>- recente loonstrook(en)<br>- werkgeversverklaring<br><br>Met vriendelijke groet,<br>Demo Makelaardij</div>"
+    }
+  },
+  "application": {
+    "schemaVersion": 1,
+    "id": "9d1319cb-8bdb-47c7-9b14-68b6a9941935",
+    "submittedAt": "2026-09-30T11:34:01.842Z",
+    "lang": "nl",
+    "tenantId": "demo",
+    "propertyId": "1001",
+    "applicant": {
+      "name": "Voorbeeld Persoon",
+      "email": "voorbeeld@example.com",
+      "phone": "0612345678",
+      "ageConfirmed": true
+    },
+    "persons": [
+      {
+        "role": "primary",
+        "incomeType": "employment",
+        "monthlyIncome": 3200,
+        "employmentMonths": 24,
+        "inProbation": false,
+        "isStudent": false
+      },
+      {
+        "role": "partner",
+        "incomeType": "employment",
+        "monthlyIncome": 2900,
+        "employmentMonths": 36,
+        "inProbation": false
+      }
+    ],
+    "situation": {
+      "hasHousemates": false,
+      "hasPets": false,
+      "occupants": 2
+    },
+    "lease": {
+      "desiredStartDate": "2026-11-15",
+      "desiredLeaseMonths": 12
+    },
+    "residence": {},
+    "motivation": "Voorbeeld <b>test</b>",
+    "household": {
+      "applicants": 2,
+      "occupants": 2,
+      "totalMonthlyIncome": 6100
+    },
+    "consent": {
+      "privacyAccepted": true,
+      "version": "2026-09-v1",
+      "at": "2026-09-30T11:34:01.843Z"
+    },
+    "precheck": {
+      "status": "suitable",
+      "reasons": [],
+      "incomeRequired": 5550,
+      "incomeMeasured": 6100,
+      "meetsIncomeRule": true
+    }
+  }
+}
