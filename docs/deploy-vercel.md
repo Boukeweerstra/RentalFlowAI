@@ -12,8 +12,8 @@ Make-scenario en Gmail. Lees eerst "Risico's van een openbare test".
 - **`MAKE_WEBHOOK_URL` en `MAKE_WEBHOOK_SECRET`** zet de eigenaar zelf in Vercel.
 - **Nieuw sterk `MAKE_WEBHOOK_SECRET`** (64 tekens, alleen hex) staat in `.env.local`; dezelfde waarde moet als API key in de Make-webhook
   staan **vóór** er gedeployed of getest wordt (zie "Geheim vervangen in Make" hieronder).
-- **Vóór de echte openbare test verplicht:** betere bescherming tegen misbruik (rate limiting die echt werkt, extra controle op het
-  formulier), zie PLAN.md. **Daarna pas** de koppeling met een externe (Rotsvast-)site.
+- **Vóór de echte openbare test:** de bescherming tegen misbruik is gebouwd (zie [abuse-protection.md](abuse-protection.md)). Stel eerst Upstash
+  (gedeelde teller) en Turnstile (botcontrole) in en zet de sleutels in Vercel. **Daarna pas** de koppeling met een externe (Rotsvast-)site.
 
 ## Geheim vervangen in Make
 

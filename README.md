@@ -50,6 +50,11 @@ staan alleen in `.env.local` (en later Vercel), nooit in code, git of de browser
 
 Ketentest zonder formulier: `node scripts/e2e.mjs <suitable|review|unsuitable> <jouw-emailadres> [nl|en]`.
 
+## Bescherming tegen misbruik
+
+Rate limiting, botcontrole (Turnstile), invultijd, dubbele aanvragen en een dagplafond: zie [docs/abuse-protection.md](docs/abuse-protection.md).
+Test alle lagen met `node scripts/mock-services.mjs` en `node scripts/test-abuse.mjs`.
+
 ## Nieuwe tenant of woning
 
 - Woning: voeg toe aan `properties` in `data/tenants/<tenant>.json`.

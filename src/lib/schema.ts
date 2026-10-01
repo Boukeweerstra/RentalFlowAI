@@ -243,11 +243,20 @@ export const applicationInputSchema = z.object({
     .optional(),
   /** Honeypot: moet leeg blijven. */
   website: z.string().max(0).optional(),
+  /**
+   * Bescherming tegen misbruik. Beide worden door de API-route afgedwongen (niet door dit schema),
+   * zodat het formulier het schema ook kan gebruiken voor de waarschuwing vóór het versturen.
+   */
+  formToken: z.string().max(200).optional(),
+  turnstileToken: z.string().max(4096).optional(),
 });
 export type ApplicationInput = z.infer<typeof applicationInputSchema>;
 
 /** Definitieve, server-verrijkte payload naar Make.com. */
-export type Application = Omit<ApplicationInput, "website" | "consent" | "hints"> & {
+export type Application = Omit<
+  ApplicationInput,
+  "website" | "consent" | "hints" | "formToken" | "turnstileToken"
+> & {
   schemaVersion: typeof SCHEMA_VERSION;
   id: string;
   submittedAt: string;

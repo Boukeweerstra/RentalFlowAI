@@ -1,6 +1,6 @@
 "use client";
 
-import { cloneElement, useEffect, useRef, useState } from "react";
+import { cloneElement, useCallback, useEffect, useRef, useState } from "react";
 import {
   INCOME_TYPES,
   applicationInputSchema,
@@ -14,6 +14,7 @@ import { deriveFromInput } from "@/lib/precheck";
 import type { FormModel } from "@/lib/form-model";
 import { needsEmploymentDetails } from "@/lib/form-model";
 import { getDict, type Dict } from "@/lib/i18n";
+import TurnstileBox from "@/components/TurnstileBox";
 
 type PersonState = {
   role: Person["role"];
@@ -44,6 +45,10 @@ type Props = {
   privacyVersion: string;
   /** Woninggegevens uit het widget, alleen voor test-tenants zonder vaste woningconfig. */
   hints?: { rent?: number; address?: string };
+  /** Ondertekend token van de server (bewijst o.a. hoe lang het formulier open stond). */
+  formToken: string;
+  /** Alleen gezet als Turnstile (botcontrole) actief is. */
+  turnstileSiteKey?: string;
 };
 
 export default function ApplicationForm({
@@ -53,8 +58,15 @@ export default function ApplicationForm({
   privacyPolicyUrl,
   privacyVersion,
   hints,
+  formToken,
+  turnstileSiteKey,
 }: Props) {
   const t = getDict(lang);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileReset, setTurnstileReset] = useState(0);
+  const [captchaBroken, setCaptchaBroken] = useState(false);
+  // Stabiele functie: TurnstileBox zet zijn effect opnieuw op als deze verandert.
+  const handleCaptchaError = useCallback(() => setCaptchaBroken(true), []);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -111,7 +123,10 @@ export default function ApplicationForm({
     const code = errors[key];
     if (!code) return undefined;
     if (code === "occupants_below_applicants") return t.occupantsBelowApplicants;
-    return code.includes("email") ? t.invalidEmail : t.required;
+    if (code === "email_not_allowed") return t.errorEmailNotAllowed;
+    if (code === "invalid_name") return t.errorInvalidName;
+    if (code === "links_not_allowed") return t.errorLinks;
+    return code === "email" ? t.invalidEmail : t.required;
   }
 
   function validateClient(): Record<string, string> {
@@ -158,6 +173,10 @@ export default function ApplicationForm({
       focusFirstInvalid();
       return;
     }
+    if (turnstileSiteKey && !turnstileToken) {
+      setFormError(captchaBroken ? t.errorCaptcha : t.errorCaptchaRequired);
+      return;
+    }
     setFormError("");
 
     const body = {
@@ -195,6 +214,7 @@ export default function ApplicationForm({
       motivation: motivation.trim() || undefined,
       consent: { privacyAccepted: true, version: privacyVersion },
       website,
+      formToken,
     };
 
     // Zelfde regels als op de server: past deze kandidaat op papier niet? Dan
@@ -214,18 +234,26 @@ export default function ApplicationForm({
   async function send(body: Record<string, unknown>) {
     setWarning(null);
     setStatus("sending");
+    // Een Turnstile-token is eenmalig; na elke poging (ook een mislukte) vragen we een nieuwe.
+    const consumeCaptcha = () => {
+      if (!turnstileSiteKey) return;
+      setTurnstileToken("");
+      setTurnstileReset((n) => n + 1);
+    };
     try {
       const res = await fetch("/api/aanvraag", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({ ...body, turnstileToken: turnstileToken || undefined }),
       });
       if (res.ok) {
         setStatus("done");
         window.parent?.postMessage({ source: "rentalflowai", type: "submitted" }, "*");
         return;
       }
+      consumeCaptcha();
       const data = (await res.json().catch(() => ({}))) as {
+        error?: string;
         errors?: Record<string, string>;
       };
       if (res.status === 400 && data.errors) {
@@ -233,10 +261,21 @@ export default function ApplicationForm({
         setFormError(t.errorFix);
         focusFirstInvalid();
       } else {
-        setFormError(res.status === 429 ? t.errorRateLimit : t.errorGeneric);
+        const messages: Record<string, string> = {
+          rate_limited: t.errorRateLimit,
+          duplicate: t.errorDuplicate,
+          busy: t.errorBusy,
+          too_fast: t.errorTooFast,
+          session_invalid: t.errorSession,
+          session_expired: t.errorSession,
+          captcha_failed: t.errorCaptcha,
+          captcha_unavailable: t.errorCaptcha,
+        };
+        setFormError(messages[data.error ?? ""] ?? t.errorGeneric);
       }
       setStatus("error");
     } catch {
+      consumeCaptcha();
       setFormError(t.errorGeneric);
       setStatus("error");
     }
@@ -457,6 +496,18 @@ export default function ApplicationForm({
         </div>
       ) : (
         <>
+          {turnstileSiteKey && (
+            <div>
+              <p className="mb-1 text-sm font-medium">{t.captchaLabel}</p>
+              <TurnstileBox
+                siteKey={turnstileSiteKey}
+                lang={lang}
+                resetKey={turnstileReset}
+                onToken={setTurnstileToken}
+                onError={handleCaptchaError}
+              />
+            </div>
+          )}
           {formError && (
             <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-800">{formError}</p>
           )}

@@ -32,14 +32,16 @@ Scope: **huurwoningen**, geen Supabase.
 
 Bewust uit scope: eigen inbox/dashboard, login, Supabase, AI.
 
-### Fase 2 — Automatische beoordeling
-1. Harde criteria via regels, rest via AI (OpenAI of Gemini, zie §6).
-2. Classificatie: *Geschikt voor bezichtiging* / *Ongeschikt* / *Meer informatie nodig* + korte onderbouwing.
-3. Bij "Meer informatie nodig": AI benoemt wat ontbreekt en maakt een conceptmail (makelaar keurt goed).
-4. Make.com regelt het versturen; gefaseerde documentaanvraag bij "Geschikt".
+### Fase 2 — Dashboard voor de makelaar, daarna AI
+
+Volledig plan: [docs/plan-fase-2.md](docs/plan-fase-2.md).
+
+1. **Dashboard** (beveiligde pagina in dezelfde app): aanvragen staan automatisch onder Suitable, Review en Unsuitable, met mail en telefoonnummer meteen zichtbaar, filter per woning, en de mogelijkheid om groep, behandelstatus en notitie aan te passen.
+2. **Opslag in Supabase** (EU, schone nieuwe tabellen, rijafscherming, logboek, bewaartermijn van 6 maanden). Make blijft de mail en de Sheet doen; de Sheet wordt back-up.
+3. **AI** waar regels tekortschieten (samenvatting van de toelichting, conceptmail), en meten wat dat toevoegt ten opzichte van de regels. De mens beslist.
 
 ### Fase 3 — Later
-Supabase (structurele opslag, historie), makelaarsdashboard met login, CRM-/makelaarssoftware-koppeling.
+Meerdere medewerkers per kantoor met rollen, documenten uitlezen, koppeling met CRM- of makelaarssoftware, woningconfiguratie beheerd door de makelaar.
 
 ## 3. Architectuur
 
@@ -242,17 +244,19 @@ Later toegevoegd (fase 2): `Assessment { applicationId, category, reasons[], mis
 
 1. **Lokaal** controleren met de productiebuild (`npm.cmd run build`, dan `npm.cmd run start`) en het nieuwe `MAKE_WEBHOOK_SECRET`.
 2. **GitHub** (privé-repo) en **Vercel** koppelen door de eigenaar; Deployment Protection aan; env-variabelen zelf zetten.
-3. **Bescherming tegen misbruik** bouwen (zie hieronder) vóór de app echt openbaar getest wordt.
+3. **Bescherming tegen misbruik**: gebouwd; Upstash en Turnstile nog instellen (zie hieronder) vóór de app echt openbaar getest wordt.
 4. **Pas daarna** de externe Rotsvast-site (userscript/widget op een andere origin).
 
-### Vóór de openbare test: bescherming tegen misbruik (nog te bouwen)
+### Bescherming tegen misbruik (gebouwd en getest)
 
-De huidige limiter (5 per 10 minuten per IP, per serverinstantie) is voor productie te zwak. Minimaal:
-- **Echte rate limiting:** gedeelde teller (Upstash Redis / Vercel KV, `@upstash/ratelimit`) en/of Vercel Firewall; limiet per IP, per e-mailadres en per woning; totaalplafond per dag zodat de Make-quota (1.000 ops/maand gratis) niet leeg kan.
-- **Botcontrole:** Cloudflare Turnstile of vergelijkbaar op het formulier, met servercontrole van het token.
-- **Extra formuliercontrole:** minimale invultijd (te snel = bot), dubbele aanvragen (zelfde e-mail + woning) blokkeren of markeren, lengtelimieten en het weigeren van wegwerp-e-maildomeinen als optie, en `Origin`/`Referer`-controle blijven.
-- **Meldingen beschermen:** geen bevestigingsmail naar aanvragers (`sendApplicantMail: false`) tot bovenstaande staat; overweeg een alarm bij ongewone aantallen.
-- **Geheim roteren** bij verdenking van lekkage; eventueel HMAC-handtekening met tijdstempel in plaats van een vaste API key.
+Volledige beschrijving, instellingen en installatiestappen: [docs/abuse-protection.md](docs/abuse-protection.md).
+
+- **11 lagen** in vaste volgorde: grootte, same-origin, honeypot, rate limit per IP, ondertekend formuliertoken met minimale invultijd, Turnstile (optioneel), validatie, spam/wegwerp-e-mail, rate limit per e-mailadres (gehasht), dubbele aanvraag (zelfde persoon + woning, 24 uur) en een dagplafond dat de Make-quota beschermt.
+- **Gedeelde teller:** Upstash Redis via REST (zonder extra pakket), met terugval op geheugen bij een storing. Zonder Upstash gelden de limieten per serverinstantie; de app logt dat.
+- **Teruggeven van plekken:** mislukt de aflevering aan Make, dan worden de dubbel-plek en de dagteller teruggegeven.
+- **Getest:** `scripts/test-abuse.mjs` (29 controles, allemaal geslaagd) tegen nep-Make en nep-Upstash; Turnstile server-side tegen Cloudflare met hun testsleutels (geslaagd en geweigerd) en in de browser (vakje, token, versturen, foutmelding bij dubbele aanvraag).
+- **Nog te doen door de eigenaar voordat Deployment Protection uitgaat:** Upstash-database en Turnstile-widget aanmaken en de sleutels in Vercel zetten; een Vercel Firewall rate-limit-regel als extra vangnet. Zonder die twee blijft de site achter de login.
+- **Blijft een keuze/beperking:** verfijnde aanvallers met wisselende IP's en opgeloste captcha's; het formuliertoken is niet eenmalig (herhaling wordt tegengehouden door teller, dubbelcontrole en Turnstile).
 
 ### Fase 2: waar wordt het AI, en waar niet? (voor de minor)
 

@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import ApplicationForm from "@/components/ApplicationForm";
 import RequirementsPanel from "@/components/RequirementsPanel";
+import { createFormToken } from "@/lib/abuse/form-token";
 import { configProvider } from "@/lib/config";
 import { getDict, resolveLang } from "@/lib/i18n";
 import { buildFormModel } from "@/lib/form-model";
@@ -58,6 +59,10 @@ export default async function EmbedAanvraagPage({
         privacyPolicyUrl={tenant.privacyPolicyUrl}
         privacyVersion={PRIVACY_VERSION}
         hints={useHints ? hints : undefined}
+        formToken={createFormToken(config.tenantId, config.propertyId)}
+        turnstileSiteKey={
+          process.env.TURNSTILE_SECRET_KEY ? process.env.TURNSTILE_SITE_KEY : undefined
+        }
       />
     </main>
   );
