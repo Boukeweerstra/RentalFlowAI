@@ -13,7 +13,12 @@ import { updateSession } from "@/lib/supabase/proxy-session";
 export async function proxy(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
-  if (path === "/login" || path.startsWith("/dashboard")) {
+  if (
+    path === "/login" ||
+    path === "/wachtwoord-vergeten" ||
+    path === "/wachtwoord-nieuw" ||
+    path.startsWith("/dashboard")
+  ) {
     return updateSession(request);
   }
 
@@ -32,5 +37,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/embed/:path*", "/login", "/dashboard/:path*"],
+  matcher: ["/embed/:path*", "/login", "/wachtwoord-vergeten", "/wachtwoord-nieuw", "/dashboard/:path*"],
 };
