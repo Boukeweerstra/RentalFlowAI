@@ -142,5 +142,34 @@ const input = { applicationId: "a1", organizationId: "o1", motivation: MOTIVATIO
   check("onzinwaarde = standaard", dailyLimit({ AI_DAILY_LIMIT: "-3" }) === 20 && dailyLimit({ AI_DAILY_LIMIT: "abc" }) === 20);
 }
 
+// ---- 6. Conceptmail (E5) ----
+{
+  const { asksFor, buildDraftRequest, parseDraft, fillName, DRAFT_PROMPT_VERSION } = await import("@/lib/ai/draft-mail");
+  check("alleen redenen met een vraag geven een mail", asksFor(["pets_not_allowed", "too_many_occupants"]).length === 0);
+  check("inkomen en garantsteller geven twee vragen", asksFor(["income_too_low", "guarantor_required"]).length === 2);
+  check("proeftijd en te kort dienstverband geven één vraag", asksFor(["probation_not_allowed", "employment_too_short"]).length === 1);
+  check("dubbele redenen geven één vraag", asksFor(["income_too_low", "income_too_low"]).length === 1);
+  check("zonder vraag geen aanroep", buildDraftRequest({ lang: "nl", propertyAddress: "Keizersgracht 100", reasons: ["pets_not_allowed"] }) === null);
+  const req = buildDraftRequest({ lang: "en", propertyAddress: "Keizersgracht 100, Amsterdam", reasons: ["income_too_low"] });
+  check("taal en adres in de aanvraag", req.user.includes("Taal: en") && req.user.includes("Keizersgracht 100"));
+  check("systeemprompt: concept, geen toezeggingen", /CONCEPT/.test(req.system) && /GEEN toezeggingen/.test(req.system));
+  check("promptversie vastgelegd", DRAFT_PROMPT_VERSION === "draft-mail-v1");
+  const goodDraft = JSON.stringify({ subject: "Aanvullende informatie voor uw aanvraag", body: "Beste [naam],\n\nGraag ontvangen wij uw recente loonstroken, zodat wij uw aanvraag verder kunnen beoordelen.\n\nMet vriendelijke groet,\n[naam makelaar]" });
+  check("goed concept", parseDraft(goodDraft).ok);
+  check("naam wordt ingevuld", fillName(parseDraft(goodDraft).content, "Jan").body.startsWith("Beste Jan,") && fillName(parseDraft(goodDraft).content, "Jan").body.includes("[naam makelaar]"));
+  check("lege voornaam laat plaatshouder staan", fillName(parseDraft(goodDraft).content, " ").body.startsWith("Beste [naam],"));
+  check("kapot JSON", parseDraft("nee").code === "invalid_json");
+  check("te korte tekst", parseDraft(JSON.stringify({ subject: "x", body: "kort" })).code === "invalid_shape");
+  for (const [why, body] of [
+    ["oordeel", "Beste [naam], uw aanvraag is helaas afgewezen."],
+    ["toezegging", "Beste [naam], u krijgt de woning zodra u de stukken stuurt."],
+    ["gevoelig", "Beste [naam], wij zien dat u zwanger bent en vragen daarom extra stukken."],
+    ["mailadres", "Beste [naam], stuur de stukken naar jan@voorbeeld.nl alstublieft."],
+    ["link", "Beste [naam], upload de stukken op https://voorbeeld.nl/upload alstublieft."],
+    ["telefoon", "Beste [naam], bel ons op 0201234567 voor de stukken alstublieft."],
+  ]) check(`concept geweerd: ${why}`, !parseDraft(JSON.stringify({ subject: "Onderwerp", body })).ok, why);
+  check("geen persoonsgegevens in aanvraag", !req.user.match(/Vries|@|\d{6,}/));
+}
+
 console.log(bad ? `${bad} fout, ${ok} goed` : `${ok}/${ok} goed`);
 if (bad) process.exitCode = 1;

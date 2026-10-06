@@ -1,8 +1,8 @@
 import "server-only";
-import { getStore } from "@/lib/abuse/store";
 import { adminClient, lookupOrganizationId } from "@/lib/db/applications";
 import type { Application } from "@/lib/schema";
-import { dailyLimit, getProvider } from "./providers";
+import { claimAiBudget } from "./budget";
+import { getProvider } from "./providers";
 import { runSummary, type SummaryOutcome } from "./run";
 
 /**
@@ -22,11 +22,7 @@ export async function generateSummaryFor(app: Application): Promise<SummaryOutco
       { applicationId: app.id, organizationId, motivation: app.motivation, applicantName: app.applicant.name },
       {
         provider,
-        claimBudget: async () => {
-          const day = new Date().toISOString().slice(0, 10);
-          const used = await getStore().incr(`ai:day:${day}`, 2 * 24 * 3600);
-          return used <= dailyLimit();
-        },
+        claimBudget: claimAiBudget,
         save: async (row) => {
           const { error } = await db.from("ai_outputs").insert(row);
           if (error && error.code !== "23505") console.error("[ai] opslaan mislukt:", error.code);

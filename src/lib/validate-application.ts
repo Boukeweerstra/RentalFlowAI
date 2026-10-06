@@ -9,7 +9,7 @@ import {
 import { buildFormModel, needsEmploymentDetails } from "@/lib/form-model";
 import { deriveFromInput } from "@/lib/precheck";
 
-export const PRIVACY_VERSION = "2026-10-v1";
+export const PRIVACY_VERSION = "2026-10-v2";
 
 export type FieldErrors = Record<string, string>;
 

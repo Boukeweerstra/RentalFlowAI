@@ -26,7 +26,9 @@ import {
 import { REASON_NL } from "@/lib/mail-texts";
 import { getDict } from "@/lib/i18n";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
+import { asksFor } from "@/lib/ai/draft-mail";
 import {
+  createDraftMail,
   deleteApplication,
   loadApplications,
   loadAiSummary,
@@ -184,10 +186,14 @@ type CardProps = {
   onDelete: (id: string) => void;
   fetchEvents: (id: string) => Promise<DashEvent[] | null>;
   fetchSummary: (id: string) => Promise<AiSummary | null>;
+  onDraft: (id: string) => Promise<{ ok: true; data: { subject: string; body: string } } | { ok: false; error: string }>;
 };
 
-function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false, busy, onPatch, onDelete, fetchEvents, fetchSummary }: CardProps) {
+function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false, busy, onPatch, onDelete, fetchEvents, fetchSummary, onDraft }: CardProps) {
   const [noteDraft, setNoteDraft] = useState(app.note);
+  const [draft, setDraft] = useState<{ subject: string; body: string } | null>(null);
+  const [draftBusy, setDraftBusy] = useState(false);
+  const [draftError, setDraftError] = useState("");
   const [aiSummary, setAiSummary] = useState<AiSummary | null>(null);
 
   // De AI-samenvatting komt iets na de aanvraag binnen; ophalen zodra de kaart open gaat (alleen als er een toelichting is).
@@ -374,6 +380,44 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
             </button>
           </div>
 
+          {app.group === "review" && asksFor(app.precheckReasons).length > 0 && (
+            <div className="rounded-md border border-zinc-300 p-3">
+              <h4 className="text-sm font-medium">Conceptmail om informatie op te vragen</h4>
+              <p className="mt-1 text-sm text-zinc-700">
+                Gemaakt met AI op basis van wat er ontbreekt ({asksFor(app.precheckReasons).length === 1 ? "1 punt" : `${asksFor(app.precheckReasons).length} punten`}).
+                Er wordt <strong>niets verstuurd</strong>: lees het concept, pas het aan en verstuur het zelf.
+              </p>
+              {!draft ? (
+                <button type="button" disabled={draftBusy || busy} onClick={async () => {
+                  setDraftBusy(true); setDraftError("");
+                  const res = await onDraft(app.id);
+                  if (res.ok) setDraft({ subject: res.data.subject, body: res.data.body }); else setDraftError(res.error);
+                  setDraftBusy(false);
+                }}
+                  className="mt-2 min-h-11 rounded-md border border-zinc-500 px-4 text-sm font-medium hover:bg-zinc-50 disabled:opacity-50">
+                  {draftBusy ? "Concept maken…" : "Concept maken met AI"}
+                </button>
+              ) : (
+                <div className="mt-2 space-y-2">
+                  <label htmlFor={`draft-subject-${app.id}`} className="block text-sm font-medium">Onderwerp</label>
+                  <input id={`draft-subject-${app.id}`} value={draft.subject} onChange={(e) => setDraft({ ...draft, subject: e.target.value })}
+                    className="block min-h-11 w-full rounded-md border border-zinc-500 bg-white px-3 text-base" />
+                  <label htmlFor={`draft-body-${app.id}`} className="block text-sm font-medium">Tekst</label>
+                  <textarea id={`draft-body-${app.id}`} rows={9} value={draft.body} onChange={(e) => setDraft({ ...draft, body: e.target.value })}
+                    className="block w-full rounded-md border border-zinc-500 bg-white px-3 py-2 text-base" />
+                  <p className="text-xs text-zinc-700">AI-concept, kan fouten bevatten. Vul zelf je naam in bij &ldquo;[naam makelaar]&rdquo; en controleer alles voor je het verstuurt.</p>
+                  <div className="flex flex-wrap gap-3">
+                    <button type="button" onClick={() => navigator.clipboard?.writeText(`${draft.subject}\n\n${draft.body}`)}
+                      className="min-h-11 rounded-md border border-zinc-500 px-4 text-sm font-medium hover:bg-zinc-50">Kopieer onderwerp en tekst</button>
+                    <a href={`mailto:${app.email}?subject=${encodeURIComponent(draft.subject)}&body=${encodeURIComponent(draft.body)}`}
+                      className="inline-flex min-h-11 items-center rounded-md border border-zinc-500 px-4 text-sm font-medium hover:bg-zinc-50">Open in mailprogramma</a>
+                  </div>
+                </div>
+              )}
+              {draftError && <p role="alert" className="mt-2 text-sm text-red-800">{draftError}</p>}
+            </div>
+          )}
+
           <div>
             <h4 className="text-sm font-medium">Logboek</h4>
             {eventsError ? (
@@ -553,6 +597,18 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
     setSavingId(null);
   }
 
+  const makeDraft = useCallback(
+    async (id: string) => {
+      if (preview) {
+        // Verzonnen voorbeeld om het scherm te kunnen beoordelen zonder AI.
+        return { ok: true as const, data: { subject: "Voorbeeld: aanvullende informatie voor uw aanvraag", body: "Beste voorbeeld,\n\nDit is een verzonnen voorbeeldconcept (geen echte AI).\n\nMet vriendelijke groet,\n[naam makelaar]" } };
+      }
+      const res = await createDraftMail(id);
+      return res.ok ? { ok: true as const, data: { subject: res.data.subject, body: res.data.body } } : { ok: false as const, error: res.error };
+    },
+    [preview],
+  );
+
   const fetchSummary = useCallback(
     async (id: string): Promise<AiSummary | null> => {
       // Voorbeeld met verzonnen tekst, om het scherm te kunnen beoordelen zonder AI (de kaart vraagt dit alleen bij een toelichting).
@@ -653,7 +709,7 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
                 {shown.map((a) => (
                   <ApplicationCard key={a.id} app={a} open={openIds.has(a.id)} onToggle={toggleOpen}
                     scrollIntoView={a.id === focusId} busy={savingId === a.id} onPatch={patch} onDelete={remove}
-                    fetchEvents={fetchEvents} fetchSummary={fetchSummary} orgName={multiOrg ? organizations[a.organizationId] : undefined} />
+                    fetchEvents={fetchEvents} fetchSummary={fetchSummary} onDraft={makeDraft} orgName={multiOrg ? organizations[a.organizationId] : undefined} />
                 ))}
                 {list.length > limit && (
                   <button type="button" onClick={() => setExtra((e) => ({ ...e, [g]: e[g] + PAGE_SIZE }))}

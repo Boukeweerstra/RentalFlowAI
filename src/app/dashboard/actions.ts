@@ -2,6 +2,11 @@
 
 import { z } from "zod";
 import { createClient, getAuthedUser } from "@/lib/supabase/server";
+import { claimAiBudget } from "@/lib/ai/budget";
+import { DRAFT_PROMPT_VERSION, asksFor, buildDraftRequest, draftSchema, fillName, parseDraft } from "@/lib/ai/draft-mail";
+import { getProvider } from "@/lib/ai/providers";
+import { adminClient } from "@/lib/db/applications";
+import type { PrecheckReason } from "@/lib/schema";
 import {
   APPLICATION_SELECT,
   GROUPS,
@@ -163,4 +168,83 @@ export async function loadAiSummary(applicationId: string): Promise<ActionResult
   if (!content || typeof content.summary !== "string") return { ok: true, data: null };
   const points = Array.isArray(content.points) ? content.points.filter((p): p is string => typeof p === "string").slice(0, 4) : [];
   return { ok: true, data: { summary: content.summary, points, model: String(data?.model ?? "") } };
+}
+
+export type DraftMail = { subject: string; body: string; model: string; fresh: boolean };
+
+/**
+ * Maakt (of haalt op) een CONCEPT-mail om ontbrekende informatie op te vragen. Alleen op verzoek van een ingelogde makelaar, alleen voor
+ * aanvragen onder Review met een concrete vraag. Er gaat geen naam, mail of telefoonnummer naar de AI; de voornaam wordt hier pas ingevuld.
+ * Niets wordt verstuurd: de makelaar leest, past aan en verstuurt zelf. Eén concept per aanvraag en promptversie (kostenbeheersing).
+ */
+export async function createDraftMail(applicationId: string): Promise<ActionResult<DraftMail>> {
+  if (!(await getAuthedUser())) return { ok: false, error: NOT_SIGNED_IN };
+  if (!z.string().uuid().safeParse(applicationId).success) return { ok: false, error: GENERIC };
+
+  const supabase = await createClient();
+  const { data: app, error } = await supabase
+    .from("applications")
+    .select("id, organization_id, name, lang, property_address, group_current, precheck_reasons")
+    .eq("id", applicationId)
+    .maybeSingle();
+  if (error) {
+    console.error("[dashboard] concept: aanvraag laden mislukt:", error.code);
+    return { ok: false, error: GENERIC };
+  }
+  if (!app) return { ok: false, error: "Deze aanvraag is niet gevonden." };
+
+  const firstName = String(app.name).trim().split(/\s+/)[0] ?? "";
+  const reasons = (app.precheck_reasons ?? []) as PrecheckReason[];
+  if (app.group_current !== "review" || asksFor(reasons).length === 0) {
+    return { ok: false, error: "Een conceptmail kan alleen bij een aanvraag onder Review waarbij informatie ontbreekt." };
+  }
+
+  // Bestaat er al een concept? Dan dat tonen: geen tweede aanroep en dus geen extra kosten.
+  const { data: existing } = await supabase
+    .from("ai_outputs")
+    .select("content, model")
+    .eq("application_id", applicationId)
+    .eq("kind", "draft_mail")
+    .eq("status", "ok")
+    .eq("prompt_version", DRAFT_PROMPT_VERSION)
+    .maybeSingle();
+  const old = draftSchema.safeParse(existing?.content);
+  if (old.success) {
+    const filled = fillName(old.data, firstName);
+    return { ok: true, data: { ...filled, model: String(existing?.model ?? ""), fresh: false } };
+  }
+
+  const provider = getProvider();
+  if (!provider) return { ok: false, error: "AI staat uit. Schrijf de mail zelf, of laat de beheerder AI aanzetten." };
+  const request = buildDraftRequest({ lang: app.lang === "en" ? "en" : "nl", propertyAddress: String(app.property_address), reasons });
+  if (!request) return { ok: false, error: GENERIC };
+  if (!(await claimAiBudget())) return { ok: false, error: "Het dagplafond voor AI is bereikt. Probeer het morgen opnieuw of schrijf zelf." };
+
+  const result = await provider.completeJson(request);
+  if (!result.ok) {
+    console.warn("[ai] concept mislukt:", result.code);
+    return { ok: false, error: "De AI gaf geen antwoord. Probeer het zo nog eens of schrijf zelf." };
+  }
+  const parsed = parseDraft(result.text);
+  if (!parsed.ok) {
+    console.warn("[ai] concept afgekeurd:", parsed.code);
+    return { ok: false, error: "Het concept voldeed niet aan de veiligheidsregels en wordt niet getoond. Schrijf zelf of probeer opnieuw." };
+  }
+
+  const db = adminClient();
+  if (db) {
+    const { error: saveError } = await db.from("ai_outputs").insert({
+      application_id: applicationId,
+      organization_id: app.organization_id,
+      kind: "draft_mail",
+      status: "ok",
+      content: parsed.content,
+      model: result.model,
+      prompt_version: DRAFT_PROMPT_VERSION,
+      input_tokens: result.usage.inputTokens,
+      output_tokens: result.usage.outputTokens,
+    });
+    if (saveError && saveError.code !== "23505") console.error("[ai] concept opslaan mislukt:", saveError.code);
+  }
+  return { ok: true, data: { ...fillName(parsed.content, firstName), model: result.model, fresh: true } };
 }

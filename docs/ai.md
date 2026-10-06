@@ -63,7 +63,6 @@ Dien aanvragen in met deze toelichtingen (verzonnen) en kijk wat de samenvatting
 
 ## Wat nog moet (stappenplan fase E)
 
-- E5: conceptmail bij ontbrekende informatie (alleen concept, kopieerknop, nooit versturen).
 - E8: vergelijking regels / AI / regels plus AI, ook met Gemini, op de testset (`docs/rapport-regels-basis.md` is de basis). Zonder echte, door een makelaar nagekeken labels blijft dat een indicatie.
 - E9: besluit welke AI-functies aan blijven.
 
@@ -83,3 +82,12 @@ Wat we eruit leren:
 - Een model volgt een nette prompt meestal, maar de eerste versie liet toch gezondheidsinformatie door. Daarom zit er een tweede vangnet in de code (`SENSITIVE_LANGUAGE`): een samenvatting met zulke woorden wordt weggegooid. Dit vangnet is nog niet in de proef geraakt, want het model volgde in versie 2 de prompt.
 - Dat het model de injectie weigerde bij 5 gevallen zegt niet dat het altijd zo gaat. De bewaker op beoordelende taal en het feit dat de AI de groep nooit kan wijzigen blijven de eigenlijke bescherming.
 - Een woonwens "dicht bij de huisarts" kan zelf nog iets over gezondheid verraden. Bespreek dit met een jurist (zie DPIA risico 4).
+
+## Conceptmail (E5), gebouwd 6 oktober 2026
+
+- In de details van een aanvraag onder **Review** staat een blok "Conceptmail om informatie op te vragen", alleen als er iets te vragen valt (inkomen, garantsteller, werkgeversverklaring, verblijfsvergunning, ingangsdatum, huurperiode, borgstelling). Bij redenen als "huisdieren niet toegestaan" is er geen concept, want dat is geen ontbrekende informatie.
+- De makelaar klikt op **Concept maken met AI**. Er is dus geen automatische aanroep en geen kosten tot iemand klikt. Eén concept per aanvraag (tweede klik toont het bestaande concept).
+- De AI krijgt alleen het adres van de woning, de taal en de lijst met punten. **Geen naam, mail of telefoon.** De voornaam wordt pas in het dashboard ingevuld.
+- De uitvoer wordt gecontroleerd: geen oordeel of toezegging ("afgewezen", "u krijgt de woning"), geen gevoelige woorden, geen mailadressen, links of lange cijferreeksen.
+- Er is **geen verzendknop** en geen codepad dat een mail verstuurt. De makelaar kan kopiëren of het concept in zijn eigen mailprogramma openen en verstuurt het daar zelf.
+- Proef met echt model (4 gevallen, NL en EN): netjes, alleen de gevraagde punten, geen toezeggingen. Eén dubbele vraag is samengevoegd. Weinig gevallen, dus een indicatie.

@@ -47,7 +47,7 @@ van het project (Bouke Weerstra) beide; dat verandert zodra een echt kantoor het
 
 ## Verwerking 5 (in test, standaard uit): AI-ondersteuning
 
-Zie fase E van het stappenplan en de DPIA. Alleen de toelichting en redenencodes gaan naar de AI-aanbieder, nooit naam, mail of telefoon. Dit register wordt aangevuld zodra een aanbieder is gekozen (E1).
+Samenvatting van de toelichting (automatisch na het indienen, als AI aan staat) en conceptmail (alleen op klik van de makelaar). Zie `docs/ai.md`, fase E van het stappenplan en de DPIA. Alleen de toelichting en redenencodes gaan naar de AI-aanbieder, nooit naam, mail of telefoon. Dit register wordt aangevuld zodra een aanbieder is gekozen (E1).
 
 ## Maatregelen (technisch en organisatorisch)
 

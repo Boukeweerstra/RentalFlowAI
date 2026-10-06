@@ -69,6 +69,16 @@ export function buildPrivacyText(lang: Lang, office: string, contactEmail?: stri
           ],
         },
         {
+          heading: "Cookies",
+          paragraphs: ["This form does not use cookies or other tracking. Only people at the office who log in to the dashboard receive the cookies strictly needed for logging in."],
+        },
+        {
+          heading: "AI assistance",
+          paragraphs: [
+            "If the office has turned on AI assistance, the text of your own explanation (without your name, e-mail address and phone number, which are removed first) is sent to an AI provider (currently OpenAI) to make a short summary for the agent. The AI does not decide anything and does not change the first check. An AI-written draft e-mail is only a proposal: the agent reads it and sends it, or not, themselves.",
+          ],
+        },
+        {
           heading: "Your rights",
           paragraphs: [
             "You can ask for access to your data, correction, deletion, restriction or to object, and you can withdraw your consent at any time. You can also file a complaint with the Dutch Data Protection Authority (Autoriteit Persoonsgegevens).",
@@ -78,7 +88,7 @@ export function buildPrivacyText(lang: Lang, office: string, contactEmail?: stri
           ],
         },
       ],
-      updated: "Version 2026-10-v1 (draft)",
+      updated: "Version 2026-10-v2 (draft)",
     };
   }
   return {
@@ -133,6 +143,16 @@ export function buildPrivacyText(lang: Lang, office: string, contactEmail?: stri
         ],
       },
       {
+        heading: "Cookies",
+        paragraphs: ["Dit formulier gebruikt geen cookies of andere volgtechnieken. Alleen medewerkers van het kantoor die inloggen op het dashboard krijgen de cookies die strikt nodig zijn om in te loggen."],
+      },
+      {
+        heading: "AI-hulp",
+        paragraphs: [
+          "Als het kantoor AI-hulp heeft aangezet, wordt de tekst van uw eigen toelichting (zonder uw naam, e-mailadres en telefoonnummer, die eerst worden gewist) naar een AI-aanbieder gestuurd (nu OpenAI) om een korte samenvatting voor de makelaar te maken. De AI beslist niets en verandert de eerste check niet. Een door AI geschreven conceptmail is alleen een voorstel: de makelaar leest het en verstuurt het zelf, of niet.",
+        ],
+      },
+      {
         heading: "Uw rechten",
         paragraphs: [
           "U kunt vragen om inzage, correctie, verwijdering, beperking van de verwerking of bezwaar maken, en u kunt uw toestemming altijd intrekken. U kunt ook een klacht indienen bij de Autoriteit Persoonsgegevens.",
@@ -142,6 +162,6 @@ export function buildPrivacyText(lang: Lang, office: string, contactEmail?: stri
         ],
       },
     ],
-    updated: "Versie 2026-10-v1 (concept)",
+    updated: "Versie 2026-10-v2 (concept)",
   };
 }
