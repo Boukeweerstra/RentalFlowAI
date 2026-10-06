@@ -76,3 +76,23 @@ Wachtwoorden zet ik nooit zelf.
 4. Een tweede testaanvraag ingediend terwijl het dashboard open staat: verschijnt die vanzelf? Staat rechtsboven "Live bijgewerkt"?
 5. Groep verplaatst, notitie gemaakt; na verversen staat het er nog, en het staat in het logboek.
 6. Uitgelogd en `/dashboard` geprobeerd: je wordt naar `/login` gestuurd.
+
+## Verwijderen op verzoek (AVG)
+
+Een aanvrager kan vragen zijn gegevens te laten verwijderen. Doe dan dit, in deze volgorde:
+
+1. **Dashboard:** open de aanvraag, klik op *Details en acties*, daarna *Aanvraag verwijderen…* en bevestig. Alleen de eigenaar van het kantoor kan dit. De aanvraag en het bijbehorende logboek zijn dan uit de database.
+2. **Google Sheet:** zoek de rij (op e-mailadres of tijdstip) en verwijder die. Het dashboard kan dit niet voor je doen.
+3. **Mailbox van het kantoor:** verwijder de melding "Nieuwe aanvraag" van deze persoon, ook uit de prullenbak.
+4. **Make.com:** uitvoergeschiedenis bewaart de gegevens een beperkte tijd; controleer de bewaartermijn van je Make-abonnement en wis zo nodig de uitvoering (Scenario → History).
+5. **Bevestig aan de aanvrager** dat het is gebeurd, zonder de verwijderde gegevens te herhalen.
+
+Wat de database vastlegt: een regel in `deletion_log` met alleen de interne id, het kantoor, wie het deed en wanneer (geen naam, mail of telefoon). De nachtelijke bewaartaak (na 6 maanden) schrijft dezelfde regels met `method = systeem`.
+
+Controleren dat het gelukt is (SQL-editor, vervang de id):
+
+```sql
+select count(*) from public.applications where id = '<id>';           -- 0
+select count(*) from public.application_events where application_id = '<id>';  -- 0
+select * from public.deletion_log where application_id = '<id>';      -- 1 regel
+```

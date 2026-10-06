@@ -113,3 +113,24 @@ export async function loadEvents(applicationId: string): Promise<ActionResult<Da
     })),
   };
 }
+
+/**
+ * Verwijdert een aanvraag definitief (AVG: verwijderen op verzoek). Alleen de eigenaar van het kantoor mag dit;
+ * de database dwingt dat af en legt de verwijdering vast zonder persoonsgegevens. Het logboek van de aanvraag gaat mee.
+ * Let op: de rij in de Google Sheet en de mail naar het kantoor blijven bestaan en moeten handmatig weg.
+ */
+export async function deleteApplication(id: string): Promise<ActionResult<{ id: string }>> {
+  if (!(await getAuthedUser())) return { ok: false, error: NOT_SIGNED_IN };
+  if (!z.string().uuid().safeParse(id).success) return { ok: false, error: GENERIC };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("applications").delete().eq("id", id).select("id");
+  if (error) {
+    console.error("[dashboard] verwijderen mislukt:", error.code);
+    return { ok: false, error: GENERIC };
+  }
+  if (!data || data.length === 0) {
+    return { ok: false, error: "Verwijderen is niet gelukt. Alleen de eigenaar van het kantoor mag aanvragen verwijderen." };
+  }
+  return { ok: true, data: { id } };
+}

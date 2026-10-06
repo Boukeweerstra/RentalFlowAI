@@ -27,6 +27,7 @@ import { REASON_NL } from "@/lib/mail-texts";
 import { getDict } from "@/lib/i18n";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import {
+  deleteApplication,
   loadApplications,
   loadEvents,
   updateApplication,
@@ -178,11 +179,13 @@ type CardProps = {
   scrollIntoView?: boolean;
   busy: boolean;
   onPatch: (id: string, patch: ApplicationPatch, optimistic: Partial<DashApplication>) => void;
+  onDelete: (id: string) => void;
   fetchEvents: (id: string) => Promise<DashEvent[] | null>;
 };
 
-function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false, busy, onPatch, fetchEvents }: CardProps) {
+function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false, busy, onPatch, onDelete, fetchEvents }: CardProps) {
   const [noteDraft, setNoteDraft] = useState(app.note);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const [events, setEvents] = useState<DashEvent[] | null>(null);
   const [eventsError, setEventsError] = useState(false);
 
@@ -361,6 +364,33 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
               </ul>
             )}
           </div>
+
+          <div className="border-t border-zinc-200 pt-4">
+            {!confirmDelete ? (
+              <button type="button" onClick={() => setConfirmDelete(true)} disabled={busy}
+                className="min-h-11 rounded-md border border-red-800 px-4 text-sm font-medium text-red-800 hover:bg-red-50 disabled:opacity-50">
+                Aanvraag verwijderen…
+              </button>
+            ) : (
+              <div role="group" aria-labelledby={`del-${app.id}`} className="rounded-md bg-red-50 p-3 text-sm text-red-950">
+                <p id={`del-${app.id}`} className="font-medium">Definitief verwijderen?</p>
+                <p className="mt-1">
+                  De gegevens van {app.name} en het logboek worden uit het dashboard verwijderd. Dit kan niet ongedaan worden gemaakt.
+                  De rij in de Google Sheet en de mail naar het kantoor blijven bestaan: verwijder die zelf ook.
+                </p>
+                <div className="mt-3 flex flex-wrap gap-3">
+                  <button type="button" onClick={() => onDelete(app.id)} disabled={busy}
+                    className="min-h-11 rounded-md bg-red-800 px-4 font-medium text-white hover:bg-red-900 disabled:opacity-60">
+                    Ja, definitief verwijderen
+                  </button>
+                  <button type="button" onClick={() => setConfirmDelete(false)}
+                    className="min-h-11 rounded-md border border-zinc-600 bg-white px-4 font-medium text-zinc-900 hover:bg-zinc-50">
+                    Annuleren
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </article>
@@ -477,6 +507,26 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
     setSavingId(null);
   }
 
+  async function remove(id: string) {
+    setSavingId(id);
+    setNotice("");
+    setError("");
+    if (preview) {
+      setApps((list) => list.filter((a) => a.id !== id));
+      setSavingId(null);
+      setNotice("Verwijderd (voorbeeld, niets echt verwijderd)");
+      return;
+    }
+    const res = await deleteApplication(id);
+    if (res.ok) {
+      setApps((list) => list.filter((a) => a.id !== id));
+      setNotice("Aanvraag verwijderd. Verwijder ook de rij in de Google Sheet en de mail naar het kantoor.");
+    } else {
+      setError(res.error);
+    }
+    setSavingId(null);
+  }
+
   const fetchEvents = useCallback(
     async (id: string): Promise<DashEvent[] | null> => {
       if (preview) return previewEvents?.[id] ?? [];
@@ -566,7 +616,7 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
               <>
                 {shown.map((a) => (
                   <ApplicationCard key={a.id} app={a} open={openIds.has(a.id)} onToggle={toggleOpen}
-                    scrollIntoView={a.id === focusId} busy={savingId === a.id} onPatch={patch}
+                    scrollIntoView={a.id === focusId} busy={savingId === a.id} onPatch={patch} onDelete={remove}
                     fetchEvents={fetchEvents} orgName={multiOrg ? organizations[a.organizationId] : undefined} />
                 ))}
                 {list.length > limit && (
