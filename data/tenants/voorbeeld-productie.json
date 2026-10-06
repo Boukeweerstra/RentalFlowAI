@@ -1,0 +1,47 @@
+{
+  "tenantId": "voorbeeld-productie",
+  "name": "Voorbeeld Productie (alleen als voorbeeld van een echte tenant)",
+  "mode": "production",
+  "privacyPolicyUrl": "/privacy/voorbeeld-productie",
+  "sendApplicantMail": false,
+  "allowedOrigins": [
+    "https://www.voorbeeld-makelaar.example"
+  ],
+  "properties": [
+    {
+      "propertyId": "P-1",
+      "address": "Voorbeeldlaan 1, Utrecht",
+      "rent": 1500,
+      "availableFrom": "2026-11-01",
+      "criteria": {
+        "minAge": 21,
+        "allowedIncomeTypes": [
+          "employment",
+          "self_employed"
+        ],
+        "minIncomeFactor": 3,
+        "incomeBasis": "household",
+        "maxApplicants": 2,
+        "maxOccupants": 3,
+        "petsAllowed": false,
+        "probationAllowed": false,
+        "minEmploymentMonths": 6,
+        "guarantor": "not_allowed",
+        "minLeaseMonths": 12,
+        "housematesAllowed": false,
+        "studentsAllowed": false,
+        "depositGuarantee": "not_needed",
+        "residencePermitRequired": false,
+        "severity": {
+          "employment_too_short": "review",
+          "probation_not_allowed": "review"
+        }
+      },
+      "documentsLater": [
+        "id",
+        "payslip",
+        "employer_statement"
+      ]
+    }
+  ]
+}

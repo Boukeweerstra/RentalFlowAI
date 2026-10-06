@@ -1,5 +1,6 @@
 import demo from "./demo.json";
 import rotsvastTest from "./rotsvast-test.json";
+import voorbeeldProductie from "./voorbeeld-productie.json";
 
 /**
  * Register van alle tenants (makelaars). Nieuwe tenant = JSON-bestand toevoegen
@@ -9,4 +10,5 @@ import rotsvastTest from "./rotsvast-test.json";
 export const tenantFiles: Record<string, unknown> = {
   demo,
   "rotsvast-test": rotsvastTest,
+  "voorbeeld-productie": voorbeeldProductie,
 };
