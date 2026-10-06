@@ -45,7 +45,7 @@ van het project (Bouke Weerstra) beide; dat verandert zodra een echt kantoor het
 | Gegevens | `deletion_log`: interne id, kantoor, wie (of "systeem") en wanneer; **geen** persoonsgegevens |
 | Bewaartermijn | Zolang het kantoor bestaat |
 
-## Verwerking 5 (gepland): AI-ondersteuning
+## Verwerking 5 (in test, standaard uit): AI-ondersteuning
 
 Zie fase E van het stappenplan en de DPIA. Alleen de toelichting en redenencodes gaan naar de AI-aanbieder, nooit naam, mail of telefoon. Dit register wordt aangevuld zodra een aanbieder is gekozen (E1).
 

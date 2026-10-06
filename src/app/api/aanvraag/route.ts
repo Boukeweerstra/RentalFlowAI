@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
+import { generateSummaryFor } from "@/lib/ai/generate";
 import { clientIp } from "@/lib/abuse/client-ip";
 import { hashForCounter, verifyFormToken } from "@/lib/abuse/form-token";
 import { limits } from "@/lib/abuse/limits";
@@ -165,6 +166,10 @@ export async function POST(request: Request) {
 
   // Eerst opslaan: de database is de bron van waarheid voor het dashboard.
   const stored = await saveApplication(application, config);
+
+  // AI-samenvatting van de toelichting: pas na het opslaan en buiten het antwoord aan de woningzoeker.
+  // Een trage of falende AI kan het formulier dus nooit vertragen of laten mislukken (standaard staat AI uit).
+  if (stored === "stored") after(() => generateSummaryFor(application));
 
   // APP_URL (alleen server, tijdens het draaien gelezen) heeft voorrang op NEXT_PUBLIC_APP_URL (bij het bouwen vastgelegd).
   const appUrl = (process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL)?.replace(/\/$/, "");

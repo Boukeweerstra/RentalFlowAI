@@ -29,7 +29,9 @@ import { createBrowserSupabase } from "@/lib/supabase/browser";
 import {
   deleteApplication,
   loadApplications,
+  loadAiSummary,
   loadEvents,
+  type AiSummary,
   updateApplication,
   type ApplicationPatch,
 } from "@/app/dashboard/actions";
@@ -181,10 +183,20 @@ type CardProps = {
   onPatch: (id: string, patch: ApplicationPatch, optimistic: Partial<DashApplication>) => void;
   onDelete: (id: string) => void;
   fetchEvents: (id: string) => Promise<DashEvent[] | null>;
+  fetchSummary: (id: string) => Promise<AiSummary | null>;
 };
 
-function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false, busy, onPatch, onDelete, fetchEvents }: CardProps) {
+function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false, busy, onPatch, onDelete, fetchEvents, fetchSummary }: CardProps) {
   const [noteDraft, setNoteDraft] = useState(app.note);
+  const [aiSummary, setAiSummary] = useState<AiSummary | null>(null);
+
+  // De AI-samenvatting komt iets na de aanvraag binnen; ophalen zodra de kaart open gaat (alleen als er een toelichting is).
+  useEffect(() => {
+    if (!open || !app.motivation) return;
+    let cancelled = false;
+    fetchSummary(app.id).then((s) => { if (!cancelled) setAiSummary(s); });
+    return () => { cancelled = true; };
+  }, [open, app.id, app.motivation, fetchSummary]);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [events, setEvents] = useState<DashEvent[] | null>(null);
   const [eventsError, setEventsError] = useState(false);
@@ -294,6 +306,20 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
             <div><dt className="text-zinc-700">Huurprijs</dt><dd>{euro(app.rent)} per maand</dd></div>
             {app.motivation && (
               <div className="sm:col-span-2"><dt className="text-zinc-700">Toelichting van de aanvrager</dt><dd className="whitespace-pre-wrap">{app.motivation}</dd></div>
+            )}
+            {app.motivation && aiSummary && (
+              <div className="sm:col-span-2 rounded-md border border-zinc-300 bg-zinc-50 p-3">
+                <dt className="text-zinc-800">Samenvatting van de toelichting <span className="text-xs text-zinc-700">(AI-hulpmiddel, kan fouten bevatten; lees de originele tekst hierboven)</span></dt>
+                <dd>
+                  <p>{aiSummary.summary}</p>
+                  {aiSummary.points.length > 0 && (
+                    <ul className="mt-1 list-disc pl-5">
+                      {aiSummary.points.map((p) => (<li key={p}>{p}</li>))}
+                    </ul>
+                  )}
+                  <p className="mt-1 text-xs text-zinc-700">Dit beïnvloedt de groep niet; die komt alleen uit de regels en uw eigen keuze.</p>
+                </dd>
+              </div>
             )}
           </dl>
 
@@ -527,6 +553,16 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
     setSavingId(null);
   }
 
+  const fetchSummary = useCallback(
+    async (id: string): Promise<AiSummary | null> => {
+      // Voorbeeld met verzonnen tekst, om het scherm te kunnen beoordelen zonder AI (de kaart vraagt dit alleen bij een toelichting).
+      if (preview) return { summary: "Voorbeeldsamenvatting (verzonnen, geen echte AI).", points: ["Voorbeeld-aandachtspunt"], model: "voorbeeld" };
+      const res = await loadAiSummary(id);
+      return res.ok ? res.data : null;
+    },
+    [preview],
+  );
+
   const fetchEvents = useCallback(
     async (id: string): Promise<DashEvent[] | null> => {
       if (preview) return previewEvents?.[id] ?? [];
@@ -617,7 +653,7 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
                 {shown.map((a) => (
                   <ApplicationCard key={a.id} app={a} open={openIds.has(a.id)} onToggle={toggleOpen}
                     scrollIntoView={a.id === focusId} busy={savingId === a.id} onPatch={patch} onDelete={remove}
-                    fetchEvents={fetchEvents} orgName={multiOrg ? organizations[a.organizationId] : undefined} />
+                    fetchEvents={fetchEvents} fetchSummary={fetchSummary} orgName={multiOrg ? organizations[a.organizationId] : undefined} />
                 ))}
                 {list.length > limit && (
                   <button type="button" onClick={() => setExtra((e) => ({ ...e, [g]: e[g] + PAGE_SIZE }))}

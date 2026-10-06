@@ -79,3 +79,16 @@ export async function saveApplication(
     return "failed";
   }
 }
+
+/** Voor andere server-onderdelen (bijv. AI-resultaten) die met dezelfde geheime sleutel naar Supabase schrijven. */
+export const adminClient = admin;
+
+export async function lookupOrganizationId(tenantKey: string): Promise<string | null> {
+  const db = admin();
+  if (!db) return null;
+  try {
+    return await organizationId(db, tenantKey);
+  } catch {
+    return null;
+  }
+}

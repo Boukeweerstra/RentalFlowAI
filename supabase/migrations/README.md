@@ -11,6 +11,7 @@ De bestandsnamen hebben dezelfde versienummers als in de database (`supabase_mig
 | 20261001112912 | retention_job | Nachtelijke taak: aanvragen ouder dan de bewaartermijn verwijderen. |
 | 20261001113029 | events_fk_indexes | Indexen op het logboek. |
 | 20261006104648 | delete_applications | Verwijderen op verzoek: eigenaar mag aanvragen verwijderen, `deletion_log` zonder persoonsgegevens (ook voor de bewaartaak). |
+| 20261006110218 | ai_outputs | Resultaten van AI-hulp (samenvatting), alleen lezen voor het eigen kantoor, volgt de aanvraag bij verwijderen. |
 
 Nieuwe migraties: eerst als bestand hier toevoegen en daarna toepassen, en de versie die de database kiest overnemen in de bestandsnaam.
 Gegevens zoals kantoren en leden (met e-mailadressen) staan bewust **niet** in een migratie; die zet je met een losse opdracht in de database.

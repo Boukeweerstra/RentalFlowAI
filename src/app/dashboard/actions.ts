@@ -134,3 +134,33 @@ export async function deleteApplication(id: string): Promise<ActionResult<{ id: 
   }
   return { ok: true, data: { id } };
 }
+
+export type AiSummary = { summary: string; points: string[]; model: string };
+
+/**
+ * De AI-samenvatting van de toelichting (als die er is). Alleen een hulpmiddel: de rijafscherming laat alleen het eigen
+ * kantoor lezen, en de uitkomst van de regels wordt hierdoor nooit gewijzigd. Fouten van de AI worden hier niet getoond.
+ */
+export async function loadAiSummary(applicationId: string): Promise<ActionResult<AiSummary | null>> {
+  if (!(await getAuthedUser())) return { ok: false, error: NOT_SIGNED_IN };
+  if (!z.string().uuid().safeParse(applicationId).success) return { ok: false, error: GENERIC };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("ai_outputs")
+    .select("content, model")
+    .eq("application_id", applicationId)
+    .eq("kind", "summary")
+    .eq("status", "ok")
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (error) {
+    console.error("[dashboard] AI-samenvatting laden mislukt:", error.code);
+    return { ok: false, error: GENERIC };
+  }
+  const content = data?.content as { summary?: unknown; points?: unknown } | null | undefined;
+  if (!content || typeof content.summary !== "string") return { ok: true, data: null };
+  const points = Array.isArray(content.points) ? content.points.filter((p): p is string => typeof p === "string").slice(0, 4) : [];
+  return { ok: true, data: { summary: content.summary, points, model: String(data?.model ?? "") } };
+}
