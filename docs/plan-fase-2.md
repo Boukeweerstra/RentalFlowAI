@@ -1,6 +1,7 @@
 # Plan fase 2: dashboard voor de makelaar, daarna AI
 
-Status: **plan, nog niets gebouwd.** Besluiten van de eigenaar staan onder "Besluiten".
+Status: **stap 0 tot en met 6 zijn gebouwd en getest** (zie "Voortgang" onderaan en [dashboard.md](dashboard.md)). De AI-stappen 7 tot en met 9 volgen.
+Besluiten van de eigenaar staan onder "Besluiten".
 
 ## 1. Waarom en wat
 
@@ -109,7 +110,7 @@ makelaar uiteindelijk koos.
 
 ## 7. Opruimen van het oude schema (eerst doen)
 
-Het project `RentalFlowAI` bevat 17 tabellen van een eerder, groter ontwerp, zonder echte gegevens. Daarmee beginnen we niet. Om niets onomkeerbaars te doen:
+Het project `RentalFlowAI` bevatte 18 tabellen van een eerder, groter ontwerp, zonder echte gegevens. Daarmee beginnen we niet. Om niets onomkeerbaars te doen:
 1. Alle oude tabellen, typen en functies **verplaatsen naar een schema `archive_prototype`**. Dat is omkeerbaar en haalt ze uit de openbare API. Niets wordt verwijderd.
 2. Controleren dat de **5 beveiligingswaarschuwingen** daarmee verdwijnen (een functie die zonder inloggen uitvoerbaar is, drie rolfuncties en een functie zonder vast zoekpad). Blijft er iets over, dan lossen we dat apart op.
 3. **Bescherming tegen gelekte wachtwoorden** aanzetten (dat is een instelling in het Supabase-dashboard, geen SQL).
@@ -166,7 +167,22 @@ In stap 9 meten we de AI tegen de regels op een testset van 30 tot 50 verzonnen 
 - **Upstash en Turnstile instellen** (zie [abuse-protection.md](abuse-protection.md)) voordat Deployment Protection uitgaat.
 - Akkoord geven bij elke stap die de database aanpast (ik pas niets aan zonder dat).
 
-## 12. Nog open
+## 12. Voortgang
+
+| Stap | Stand |
+|---|---|
+| 0 Opruimen oud schema | **Klaar.** 18 tabellen, 9 typen en 5 functies naar `archive_prototype` (gegevens intact), `public` leeg; 4 van de 5 beveiligingswaarschuwingen weg. Alleen "gelekte wachtwoorden" staat open (instelling in het Supabase-dashboard). |
+| 1 Database | **Klaar.** Migraties in `supabase/migrations/`; rijafscherming getest met twee kantoren (21 controles), bewaartaak getest (7 controles), kantoren `demo` en `rotsvast-test` aangemaakt en gekoppeld aan de bestaande gebruiker. |
+| 2 Opslaan bij indienen | **Klaar.** `scripts/test-store.mjs` (23 controles) en de echte database accepteert de rij die de app maakt. De 29 misbruiktests slagen nog. |
+| 3 Inloggen en beveiligde routes | **Gebouwd en getest op routegedrag** (redirect, headers, geen iframe, geen cache). Inloggen met een echte gebruiker niet getest door mij (geen wachtwoord invoeren). |
+| 4 Dashboard overzicht | **Klaar.** Getest in de browser op voorbeeldgegevens: groepen, filter, mail en telefoon zichtbaar, 0 axe-overtredingen, mobiel. |
+| 5 Acties en live | **Acties klaar en getest** (voorbeeldmodus, en de database-kant met echte afscherming). **Live bijwerken** is gebouwd, maar nog niet met een echte inlog uitgeprobeerd. |
+| 6 Afronden | **Grotendeels klaar.** Headers, bewaartaak, toegankelijkheid en documentatie. Nog te doen door de eigenaar: secret key zetten, inlog aanmaken, en de checklist in [dashboard.md](dashboard.md). |
+| 7 tot en met 9 (AI) | Nog niet begonnen. |
+
+Ontdekt tijdens het bouwen: `NEXT_PUBLIC_…`-variabelen worden bij het bouwen vastgelegd. Voor de server gebruiken we daarom `SUPABASE_URL` en `APP_URL`, die tijdens het draaien worden gelezen (met `NEXT_PUBLIC_…` als terugval).
+
+## 13. Nog open
 
 1. **Inloggen:** e-mail met wachtwoord, of een magische link per mail? Ik raad wachtwoord plus de controle op gelekte wachtwoorden aan (en later tweestapsverificatie).
 2. **Taal van het dashboard:** alleen Nederlands, of ook Engels?

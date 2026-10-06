@@ -2,6 +2,10 @@
 
 Universele "Aanvraag"-knop voor huurwoningen. Zie [PLAN.md](PLAN.md) voor het volledige plan.
 
+## Wat nog volgt
+
+Het volledige stappenplan met eindchecklist staat in [docs/stappenplan.md](docs/stappenplan.md).
+
 ## Lokaal draaien
 
 ```bash
@@ -49,6 +53,10 @@ Stap-voor-stap in [docs/make-setup.md](docs/make-setup.md). `MAKE_WEBHOOK_URL` e
 staan alleen in `.env.local` (en later Vercel), nooit in code, git of de browser.
 
 Ketentest zonder formulier: `node scripts/e2e.mjs <suitable|review|unsuitable> <jouw-emailadres> [nl|en]`.
+
+## Dashboard voor de makelaar
+
+Beveiligde pagina met de aanvragen onder Suitable, Review en Unsuitable, mail en telefoon direct zichtbaar: zie [docs/dashboard.md](docs/dashboard.md) (instellen, gebruiken, testen).
 
 ## Bescherming tegen misbruik
 

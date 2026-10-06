@@ -6,6 +6,7 @@ import { countLinks, isDisposableEmail, looksLikeRealName } from "@/lib/abuse/sp
 import { getStore } from "@/lib/abuse/store";
 import { verifyTurnstile } from "@/lib/abuse/turnstile";
 import { configProvider } from "@/lib/config";
+import { saveApplication } from "@/lib/db/applications";
 import { deliverToMake } from "@/lib/make-client";
 import { buildMakePayload } from "@/lib/make-payload";
 import { validateApplication } from "@/lib/validate-application";
@@ -19,7 +20,9 @@ import { validateApplication } from "@/lib/validate-application";
  *  7. validatie tegen de woningconfig  8. spam-/wegwerp-e-mailcontrole
  *  9. rate limit per e-mailadres  10. dubbele aanvraag (zelfde persoon + woning)
  *  11. dagplafond voor de hele app (beschermt de Make-quota)
- * Plekken die in 10 en 11 gereserveerd zijn, worden teruggegeven als de aflevering mislukt.
+ * Daarna: opslaan in Supabase (bron voor het dashboard) en versturen naar Make (mail + Sheet).
+ * Lukt minstens één van de twee, dan is de aanvraag niet verloren en krijgt de woningzoeker een succesmelding.
+ * Mislukken beide, dan worden de plekken uit 10 en 11 teruggegeven.
  */
 const json = (body: unknown, status = 200, headers?: Record<string, string>) =>
   NextResponse.json(body, { status, headers });
@@ -160,13 +163,27 @@ export async function POST(request: Request) {
     return json({ error: "busy" }, 503, { "retry-after": "3600" });
   }
 
-  const delivery = await deliverToMake(buildMakePayload(application, config, tenant));
+  // Eerst opslaan: de database is de bron van waarheid voor het dashboard.
+  const stored = await saveApplication(application, config);
+
+  // APP_URL (alleen server, tijdens het draaien gelezen) heeft voorrang op NEXT_PUBLIC_APP_URL (bij het bouwen vastgelegd).
+  const appUrl = (process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL)?.replace(/\/$/, "");
+  const dashboardUrl =
+    stored === "stored" && appUrl ? `${appUrl}/dashboard?application=${application.id}` : undefined;
+  const delivery = await deliverToMake(buildMakePayload(application, config, tenant, { dashboardUrl }));
+
   if (!delivery.ok) {
-    await release();
-    return json(
-      { error: delivery.reason },
-      delivery.reason === "not_configured" ? 500 : 502,
-    );
+    if (stored !== "stored") {
+      await release();
+      return json(
+        { error: delivery.reason },
+        delivery.reason === "not_configured" ? 500 : 502,
+      );
+    }
+    // Opgeslagen maar niet naar Make: de makelaar ziet de aanvraag in het dashboard, de mail en Sheet ontbreken.
+    console.error("[delivery] Make mislukt, aanvraag wel opgeslagen:", delivery.reason);
+    return json({ ok: true, id: application.id, mode: "stored" });
   }
+  if (stored === "failed") console.error("[db] aanvraag niet opgeslagen, wel naar Make gestuurd");
   return json({ ok: true, id: application.id, mode: delivery.mode });
 }

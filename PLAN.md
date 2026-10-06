@@ -1,5 +1,7 @@
 # RentalFlowAI: universele "Aanvraag"-knop voor huurwoningen
 
+> **Hoofdplan voor alles wat nog volgt, met eindchecklist: [docs/stappenplan.md](docs/stappenplan.md).**
+
 > Status: **v1.0 (definitief voor start fase 1)**. Besluiten: geen Supabase in fase 1, Make.com → eigen Gmail + Google Sheet als ontvangst, config in JSON achter een vervangbare laag, woninggegevens handmatig via `data-*`, leeftijd als bevestiging, inkomen per persoon met gezamenlijk totaal, universeel widget (testsite Rotsvast.nl), alleen makelaar beheert, NL + EN, OpenAI + Gemini in fase 2, productnaam RentalFlowAI.
 
 ## 1. Doel

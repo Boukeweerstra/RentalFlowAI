@@ -77,7 +77,11 @@ const eur = (n: number) => `€ ${n.toLocaleString("nl-NL")}`;
 const yn = (v: boolean | null | undefined) => (v === null || v === undefined ? "-" : v ? "ja" : "nee");
 
 /** Compacte tekst voor de makelaar (altijd Nederlands). */
-export function buildSummary(app: Application, config: PropertyConfig): string {
+export function buildSummary(
+  app: Application,
+  config: PropertyConfig,
+  dashboardUrl?: string,
+): string {
   const p1 = app.persons[0];
   const { precheck } = app;
   return [
@@ -100,6 +104,7 @@ export function buildSummary(app: Application, config: PropertyConfig): string {
       ? `Let op: huur en adres komen uit het widget (test-tenant), niet uit een vaste woningconfiguratie.`
       : null,
     ``,
+    dashboardUrl ? `Open in dashboard: ${dashboardUrl}` : null,
     `Aanvraag-ID: ${app.id}`,
   ]
     .filter((l): l is string => l !== null)
@@ -107,13 +112,17 @@ export function buildSummary(app: Application, config: PropertyConfig): string {
 }
 
 /** Melding aan de makelaar; de status staat in de onderwerpregel. */
-export function buildNotifyMail(app: Application, config: PropertyConfig): Mail {
+export function buildNotifyMail(
+  app: Application,
+  config: PropertyConfig,
+  dashboardUrl?: string,
+): Mail {
   const tag = { suitable: "GESCHIKT", review: "BEOORDELEN", unsuitable: "ONGESCHIKT" }[
     app.precheck.status
   ];
   return toMail(
     `[Aanvraag: ${tag}] ${config.address} – ${app.applicant.name}`,
-    buildSummary(app, config),
+    buildSummary(app, config, dashboardUrl),
   );
 }
 

@@ -66,6 +66,8 @@ export function buildMakePayload(
   app: Application,
   config: PropertyConfig,
   tenant: TenantConfig,
+  /** Link naar de aanvraag in het dashboard; alleen meegeven als de aanvraag echt is opgeslagen. */
+  opts?: { dashboardUrl?: string },
 ): MakePayload {
   const p1 = app.persons[0];
   const p2 = app.persons[1];
@@ -105,7 +107,7 @@ export function buildMakePayload(
     tenantMode: tenant.mode,
     flat,
     mail: {
-      notify: { to: tenant.notifyEmail ?? null, ...buildNotifyMail(app, config) },
+      notify: { to: tenant.notifyEmail ?? null, ...buildNotifyMail(app, config, opts?.dashboardUrl) },
       applicant: {
         to: app.applicant.email,
         enabled: tenant.sendApplicantMail,
