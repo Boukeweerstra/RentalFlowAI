@@ -62,6 +62,7 @@ export default async function EmbedAanvraagPage({
         privacyVersion={PRIVACY_VERSION}
         hints={useHints ? hints : undefined}
         formToken={createFormToken(config.tenantId, config.propertyId)}
+        demoTools={tenant.mode === "test"}
         turnstileSiteKey={
           process.env.TURNSTILE_SECRET_KEY ? process.env.TURNSTILE_SITE_KEY : undefined
         }

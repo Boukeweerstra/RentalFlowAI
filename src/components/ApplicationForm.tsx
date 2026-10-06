@@ -49,6 +49,8 @@ type Props = {
   formToken: string;
   /** Alleen gezet als Turnstile (botcontrole) actief is. */
   turnstileSiteKey?: string;
+  /** Alleen voor testkantoren: knoppen om het formulier met een verzonnen voorbeeld te vullen, voor demo's. */
+  demoTools?: boolean;
 };
 
 export default function ApplicationForm({
@@ -60,6 +62,7 @@ export default function ApplicationForm({
   hints,
   formToken,
   turnstileSiteKey,
+  demoTools = false,
 }: Props) {
   const t = getDict(lang);
   const [turnstileToken, setTurnstileToken] = useState("");
@@ -101,6 +104,53 @@ export default function ApplicationForm({
 
   const updatePerson = (i: number, patch: Partial<PersonState>) =>
     setPersons((ps) => ps.map((p, idx) => (idx === i ? { ...p, ...patch } : p)));
+
+  /** Demo: vult het formulier met een verzonnen voorbeeld dat bij de eisen van deze woning past (of juist niet). */
+  function fillExample(kind: "strong" | "doubt" | "nofit") {
+    const c = config.criteria;
+    const required = c.minIncomeFactor ? config.rent * c.minIncomeFactor : 0;
+    const factor = { strong: 1.3, doubt: 0.97, nofit: 0.4 }[kind];
+    const income = Math.round(required ? required * factor : { strong: 4000, doubt: 3500, nofit: 1200 }[kind]);
+    const soonDate = new Date();
+    soonDate.setDate(soonDate.getDate() + 45);
+    const soon = soonDate.toISOString().slice(0, 10);
+    const who = { strong: ["Sanne de Vries", "sterk"], doubt: ["Mark Jansen", "twijfel"], nofit: ["Lars Smit", "past-niet"] }[kind];
+    setName(who[0]);
+    setEmail(`demo.${who[1]}@example.com`);
+    setPhone("0612345678");
+    setAgeConfirmed(true);
+    setPersons([
+      {
+        role: "primary",
+        incomeType: "employment",
+        monthlyIncome: String(income),
+        employmentMonths: kind === "strong" ? "36" : kind === "doubt" ? "2" : "1",
+        inProbation: kind === "strong" ? "no" : "yes",
+        isStudent: "no",
+      },
+    ]);
+    setHasHousemates("no");
+    setHasPets(kind === "nofit" && model.askPets ? "yes" : "no");
+    setOccupants(String(kind === "nofit" && model.maxOccupants ? model.maxOccupants + 1 : 1));
+    setStartDate(soon);
+    setLeaseMonths(String(Math.max(model.minLeaseMonths, 12)));
+    setGuarantor(kind === "strong" && c.guarantor === "required" ? "yes" : "no");
+    setDepositOk("yes");
+    setPermit("yes");
+    setMotivation(
+      kind === "strong"
+        ? "Wij zoeken een rustige woning dicht bij ons werk."
+        : kind === "doubt"
+          ? c.guarantor === "not_allowed"
+            ? "Mijn proeftijd loopt nog een paar weken; daarna wordt mijn contract vast."
+            : "Mijn ouders willen garant staan, ze kunnen direct een verklaring sturen."
+          : "",
+    );
+    setConsent(true);
+    setErrors({});
+    setWarning(null);
+    setFormError("");
+  }
 
   const formRef = useRef<HTMLFormElement>(null);
   const doneRef = useRef<HTMLDivElement>(null);
@@ -307,6 +357,20 @@ export default function ApplicationForm({
 
   return (
     <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-8">
+      {demoTools && (
+        <div className="rounded-xl border border-dashed border-brand-200 bg-brand-50 p-3">
+          <p className="text-sm font-medium text-brand-900">Demo: vul in met een verzonnen voorbeeld</p>
+          <p className="mt-0.5 text-xs text-zinc-700">Alleen zichtbaar bij testkantoren. Daarna kunt u alles nog aanpassen.</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {([["strong", "Sterke aanvraag"], ["doubt", "Twijfelgeval"], ["nofit", "Past niet"]] as const).map(([kind, label]) => (
+              <button key={kind} type="button" onClick={() => fillExample(kind)}
+                className="min-h-11 rounded-md border border-brand-200 bg-white px-3 text-sm font-medium text-brand-800 hover:bg-brand-100">
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <p className="text-sm text-zinc-700">{t.allRequired}</p>
       {/* Honeypot: mensen zien dit niet; bots vullen het in. */}
       <div aria-hidden="true" className="absolute -left-[9999px]">
