@@ -6,11 +6,12 @@ import { signIn, type LoginState } from "./actions";
 const fieldCls =
   "mt-1 block w-full min-h-11 rounded-md border border-zinc-500 bg-white px-3 py-2 text-base shadow-sm focus:border-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900/30 aria-[invalid=true]:border-red-700";
 
-export default function LoginForm() {
+export default function LoginForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState<LoginState, FormData>(signIn, {});
 
   return (
     <form action={action} className="space-y-5" noValidate>
+      <input type="hidden" name="next" value={next} />
       <div>
         <label htmlFor="email" className="block text-sm font-medium">E-mailadres</label>
         <input id="email" name="email" type="email" autoComplete="username" required

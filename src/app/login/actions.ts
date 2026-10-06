@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { ipFromHeaders } from "@/lib/abuse/client-ip";
 import { getStore } from "@/lib/abuse/store";
+import { safeNext } from "@/lib/safe-next";
 import { createClient, supabaseConfigured } from "@/lib/supabase/server";
 
 export type LoginState = { error?: string };
@@ -43,7 +44,7 @@ export async function signIn(_prev: LoginState, formData: FormData): Promise<Log
     return { error: "Het e-mailadres of wachtwoord klopt niet." };
   }
 
-  redirect("/dashboard");
+  redirect(safeNext(formData.get("next")));
 }
 
 export async function signOut(): Promise<void> {

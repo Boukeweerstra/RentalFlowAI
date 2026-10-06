@@ -306,8 +306,18 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
 
           <label htmlFor={`contacted-${app.id}`} className="flex min-h-11 items-center gap-3 text-sm">
             <input id={`contacted-${app.id}`} type="checkbox" className="h-6 w-6" checked={app.contactedAt !== null} disabled={busy}
-              onChange={(e) => onPatch(app.id, { contacted: e.target.checked },
-                { contactedAt: e.target.checked ? new Date().toISOString() : null })} />
+              onChange={(e) => {
+                // Wie iemand benadert, wil niet langer "Nieuw" zien: zet die status mee op "Benaderd".
+                const advance = e.target.checked && app.handling === "nieuw";
+                onPatch(
+                  app.id,
+                  advance ? { contacted: true, handling: "benaderd" } : { contacted: e.target.checked },
+                  {
+                    contactedAt: e.target.checked ? new Date().toISOString() : null,
+                    ...(advance ? { handling: "benaderd" as Handling } : {}),
+                  },
+                );
+              }} />
             <span>
               Benaderd
               {app.contactedAt && <span className="text-zinc-700"> (op {dateTime(app.contactedAt)})</span>}

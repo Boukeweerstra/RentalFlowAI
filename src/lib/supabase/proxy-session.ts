@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { safeNext } from "@/lib/safe-next";
 
 /**
  * Beveiligingsheaders voor /login en /dashboard: nooit in een iframe, nooit in een cache.
@@ -63,8 +64,12 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
     return secure(res);
   };
 
-  if (!signedIn && path.startsWith("/dashboard") && !isPreview) return redirectTo("/login");
-  if (signedIn && path === "/login") return redirectTo("/dashboard");
+  if (!signedIn && path.startsWith("/dashboard") && !isPreview) {
+    // Onthoud waar de bezoeker heen wilde (bijv. de link uit de mail naar één aanvraag).
+    const wanted = safeNext(path + request.nextUrl.search);
+    return redirectTo(wanted === "/dashboard" ? "/login" : `/login?next=${encodeURIComponent(wanted)}`);
+  }
+  if (signedIn && path === "/login") return redirectTo(safeNext(request.nextUrl.searchParams.get("next")));
 
   return secure(response);
 }

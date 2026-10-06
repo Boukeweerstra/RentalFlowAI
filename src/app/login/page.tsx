@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LoginForm from "./LoginForm";
+import { safeNext } from "@/lib/safe-next";
 import { supabaseConfigured } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Inloggen – RentalFlowAI" };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ fout?: string }> }) {
-  const { fout } = await searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ fout?: string; next?: string }> }) {
+  const { fout, next } = await searchParams;
   return (
     <main lang="nl" className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4 py-10">
       <h1 className="text-2xl font-semibold tracking-tight">Inloggen</h1>
@@ -23,7 +24,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
           Deze link is verlopen of al gebruikt. Vraag via &lsquo;Wachtwoord vergeten&rsquo; een nieuwe aan.
         </p>
       )}
-      <LoginForm />
+      <LoginForm next={safeNext(next)} />
       <p className="mt-6 text-sm">
         <Link href="/wachtwoord-vergeten" className="underline">Wachtwoord vergeten?</Link>
       </p>
