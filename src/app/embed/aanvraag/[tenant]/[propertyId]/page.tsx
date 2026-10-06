@@ -56,7 +56,9 @@ export default async function EmbedAanvraagPage({
         config={config}
         model={model}
         lang={lang}
-        privacyPolicyUrl={tenant.privacyPolicyUrl}
+        privacyPolicyUrl={
+          tenant.privacyPolicyUrl?.startsWith("/") ? `${tenant.privacyPolicyUrl}?lang=${lang}` : tenant.privacyPolicyUrl
+        }
         privacyVersion={PRIVACY_VERSION}
         hints={useHints ? hints : undefined}
         formToken={createFormToken(config.tenantId, config.propertyId)}

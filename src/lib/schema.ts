@@ -168,7 +168,10 @@ export const tenantConfigSchema = z
   sendApplicantMail: z.boolean().default(true),
   /** Domeinen waarop het widget mag draaien (frame-ancestors + origin-check). */
   allowedOrigins: z.array(z.string().url()),
-  privacyPolicyUrl: z.string().url().optional(),
+  /** Volledig adres, of een pad op deze app (`/privacy/<tenantId>`): het formulier toont dan de verklaring van RentalFlowAI zelf. */
+  privacyPolicyUrl: z
+    .union([z.string().url(), z.string().regex(/^\/privacy\/[a-z0-9-]{1,60}$/)])
+    .optional(),
   properties: z.array(propertyConfigSchema.omit({ tenantId: true })),
   /**
    * Alleen voor test-tenants: woningen die niet in `properties` staan, krijgen
