@@ -26,6 +26,7 @@ Voorbeeldnaam in dit document: kantoor **Voorbeeld Makelaars**, sleutel (`tenant
    - **verwijder** `propertyDefaults` (die zijn alleen voor test-tenants)
    - `privacyPolicyUrl`: eigen adres, of `/privacy/voorbeeld-makelaars`
    - `sendApplicantMail`: `false` tot de eerste echte test geslaagd is
+   - `incomeMarginPercent` (optioneel, 0 tot 10, per woning in `criteria`): een inkomen tot zoveel procent onder de eis wordt **Review** in plaats van **Unsuitable**. Laat het weg voor geen marge. Dit is een keuze van de makelaar, spreek het af.
    - `properties`: één blok per woning met `propertyId`, `address`, `rent`, `availableFrom` en `criteria`
 3. Registreer het bestand in `data/tenants/index.ts` (één import en één regel in `tenantFiles`).
 4. Controleer: `npx tsc --noEmit`, `npm run lint`, en open `http://localhost:3100/embed/aanvraag/voorbeeld-makelaars/<propertyId>`.

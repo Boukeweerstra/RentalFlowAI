@@ -123,6 +123,12 @@ export const criteriaSchema = z.object({
    * false: een inkomenstekort blijft ook met garantsteller een gewoon (hard) tekort.
    */
   guarantorCompensatesIncome: z.boolean().default(true),
+  /**
+   * Marge onder de inkomenseis, in procenten (0 tot 10). Een inkomen dat er maximaal zoveel procent onder zit,
+   * wordt `review` (de makelaar kijkt zelf) in plaats van hard `unsuitable`. Niet ingesteld = geen marge.
+   * Voorbeeld: eis € 5.550, marge 3 → vanaf € 5.383,50 is het `review`.
+   */
+  incomeMarginPercent: z.number().min(0).max(10).optional(),
   minLeaseMonths: z.number().int().min(1).optional(),
   housematesAllowed: z.boolean(),
   studentsAllowed: z.boolean(),

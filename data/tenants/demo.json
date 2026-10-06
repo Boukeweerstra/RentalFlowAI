@@ -37,7 +37,8 @@
         "severity": {
           "employment_too_short": "review",
           "probation_not_allowed": "review"
-        }
+        },
+        "incomeMarginPercent": 3
       },
       "documentsLater": [
         "id",
@@ -101,7 +102,8 @@
         "housematesAllowed": false,
         "studentsAllowed": false,
         "depositGuarantee": "allowed",
-        "residencePermitRequired": true
+        "residencePermitRequired": true,
+        "incomeMarginPercent": 3
       },
       "documentsLater": [
         "id",
@@ -131,7 +133,8 @@
         "housematesAllowed": true,
         "studentsAllowed": true,
         "depositGuarantee": "allowed",
-        "residencePermitRequired": false
+        "residencePermitRequired": false,
+        "incomeMarginPercent": 3
       },
       "documentsLater": [
         "id"

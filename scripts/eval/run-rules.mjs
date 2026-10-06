@@ -57,6 +57,10 @@ const md = `# Basismeting: de regelmotor zonder AI
 Gemaakt met \`scripts/eval/run-rules.mjs\` op ${rows.length} verzonnen aanvragen (\`scripts/eval/cases.mjs\`), tegen de woningen 1001 tot 1005 van de demo-tenant.
 Rapport is reproduceerbaar: dezelfde invoer geeft hetzelfde rapport.
 
+**Verloop van de meting:**
+- Eerste meting (6 okt, zonder inkomensmarge): 31 van 40 goed (78%); 8 aanvragen onterecht "Unsuitable".
+- Daarna is \`criteria.incomeMarginPercent\` gebouwd en voor de woningen 1001, 1003 en 1004 op 3% gezet (een inkomen tot 3% onder de eis is dan "Review"). Dit rapport is de meting **met** die marge. Dat de score stijgt is deels logisch, want de testset bevat bewust gevallen net onder de grens (c05, c29, c37). Het is dus een bevestiging dat de instelling doet wat hij moet doen, geen bewijs dat 3% de goede marge is: dat is een keuze van de makelaar.
+
 **Let op bij het lezen:**
 - De verwachte uitkomsten zijn bepaald door de ontwikkelaar (met Claude), niet door een echte makelaar. Ze moeten nog worden nagekeken.
 - "Duidelijke gevallen" volgen uit de eisen van de woning. "Inschattingsgevallen" zijn gevallen waarin een mens redelijkerwijs anders kan kiezen of informatie gebruikt die de regels niet zien. De testset is bewust niet representatief voor de praktijk: hij bevat verhoudingsgewijs veel lastige gevallen.
@@ -96,7 +100,7 @@ ${rows.filter((r) => !ok(r)).map((r) => `| ${r.id} | ${r.propertyId} | ${LABEL[r
 
 - Bijna alle afwijkingen zijn van het soort "de regels zeggen **Unsuitable**, een mens zou **Review** kiezen" (${all.wronglyUnsuitable.length} van ${rows.filter((r) => !ok(r)).length}). Dat komt doordat een harde grens (inkomen, bronnenlijst, studenten) niets "bijna" kent.
   Dat is precies de fout waar de woningzoeker het meest onder lijdt, ook al beslist een mens altijd.
-- Mogelijke ontwerpkeuzes om te bespreken met een makelaar, zonder AI: een marge van enkele procenten onder de inkomensgrens als **Review** (c05, c37); studenten of bijzondere inkomensbronnen met een stevig inkomen als **Review** in plaats van **Unsuitable** (c10, c15, c23). Een marge onder de inkomensgrens bestaat nu niet als instelling en zou nieuw gebouwd moeten worden.
+- Mogelijke ontwerpkeuzes om te bespreken met een makelaar, zonder AI: een marge van enkele procenten onder de inkomensgrens als **Review** (c05, c29, c37; bestaat nu als instelling incomeMarginPercent, 0 tot 10 procent, standaard uit); studenten of bijzondere inkomensbronnen met een stevig inkomen als **Review** in plaats van **Unsuitable** (c10, c15, c23; nog niet aangepakt).
 - Dit zijn beleidskeuzes van de makelaar (per woning in te stellen via \`criteria.severity\`), niet iets wat de ontwikkelaar of AI voor hen beslist.
 `;
 

@@ -89,7 +89,13 @@ export function runPrecheck(input: PrecheckInput, config: PropertyConfig): Prech
       c.guarantorCompensatesIncome &&
       c.guarantor !== "not_allowed" &&
       input.lease.guarantorAvailable === true;
-    if (guarantorCanFix) soft.add("income_too_low");
+    // Net onder de eis (criteria.incomeMarginPercent): de makelaar kijkt zelf, het is geen harde afwijzing.
+    const withinMargin =
+      incomeRequired !== null &&
+      c.incomeMarginPercent !== undefined &&
+      c.incomeMarginPercent > 0 &&
+      incomeMeasured >= round2(incomeRequired * (1 - c.incomeMarginPercent / 100));
+    if (guarantorCanFix || withinMargin) soft.add("income_too_low");
     else flag("income_too_low");
   }
   if (!c.allowedIncomeTypes.includes(primary.incomeType)) flag("income_type_not_allowed");
