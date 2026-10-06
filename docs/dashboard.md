@@ -97,7 +97,9 @@ select count(*) from public.application_events where application_id = '<id>';  -
 select * from public.deletion_log where application_id = '<id>';      -- 1 regel
 ```
 
-## Herstelmail bestendig maken tegen linkscans (eenmalig, in Supabase)
+## Herstelmail bestendig maken tegen linkscans (pas mogelijk met een eigen mailserver)
+
+> **Stand 6 okt:** niet uitvoerbaar op het huidige Supabase-project. Supabase laat de mailtemplates alleen aanpassen als er een eigen SMTP-server is gekoppeld ("Set up custom SMTP to edit templates"). Voor de demo blijft de standaardmail met de oude route (`/auth/callback`) gelden: klik één keer op de link, in dezelfde browser. Een eigen mailserver (met eigen domein) is sowieso nodig voor echt gebruik: de standaardmail is streng beperkt en komt van een algemeen adres. Doe deze stappen pas dan.
 
 Mailprogramma's en virusscanners openen links automatisch. Met de standaardmail van Supabase verbruikt zo'n scan de eenmalige code, waarna de
 echte klik "verlopen of al gebruikt" geeft. De app heeft daarom een tussenpagina `/auth/bevestig` met een knop **Doorgaan**; de code wordt pas
