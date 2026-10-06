@@ -1,145 +1,139 @@
-# Stappenplan: uitlegvideo voor de minor
+# Stappenplan: uitlegvideo voor de minor (versie 2)
 
 **User story:** Als AI-ontwikkelaar wil ik via verschillende connectors via Claude een uitlegvideo maken over wat ik tot nu toe heb gedaan en gemaakt, zodat ik die voor mijn minor kan laten zien en verschillende leeruitkomsten kan voltooien.
 
-Stand: 6 oktober 2026. Doel: van "connectors koppelen" tot een **MP4-bestand op je laptop** dat je overal kunt afspelen.
+**Keuzes van Bouke (6 oktober):** video van **3 tot 4 minuten**, **niet alle leeruitkomsten**, met een **AI-stem**.
+Doel: van "connectors koppelen" tot een **MP4-bestand op je laptop** dat je overal kunt afspelen.
 
-## 0. Wat ik heb vastgesteld over jouw laptop en over Claude (belangrijk voor de keuzes)
-
-| Onderdeel | Stand | Gevolg voor het plan |
-|---|---|---|
-| Verbonden connectors in Claude | **Claude Docs, Google Drive, Notion, Supabase, Vercel, visualize** | Hiermee kan ik documenten schrijven, bestanden bewaren, een draaiboek maken, bewijs uit de database halen en schema's tekenen |
-| Niet verbonden | Claude in Chrome (extensie), Figma, Slack e.a. | Niet nodig. Chrome-extensie is optioneel |
-| PowerPoint | **Geïnstalleerd** | Kan slides afspelen, je stem opnemen en exporteren naar **MP4** |
-| Windows-opname (Xbox Game Bar, `Win+G`) | Standaard in Windows 11 | Schermopnames van de demo zonder extra programma |
-| Video-editor | Clipchamp hoort standaard bij Windows 11 (controleren in stap 1.4) | Stukken aan elkaar plakken, ondertitels |
-| ffmpeg, OBS, VLC | **Niet geïnstalleerd** (wel te installeren met `winget`, alleen met jouw akkoord) | Niet nodig voor het basisplan |
-| Nederlandse computerstem | **Geen** (alleen Engelse stemmen: Zira en David) | Claude kan **geen** goede Nederlandse voice-over genereren. Jij spreekt het zelf in. Dat past ook beter bij een minor-presentatie |
-| Microfoon | Aanwezig (Microphone Array) | Een headset of een rustige ruimte geeft een beter resultaat |
-
-**Eerlijk over wat Claude hier wel en niet kan:** Claude schrijft het draaiboek en de slides, verzamelt bewijs en screenshots, tekent schema's en controleert alles. Claude kan zelf geen video renderen of inspreken in deze omgeving. Het opnemen en samenvoegen doe jij met PowerPoint en Windows, volgens stappen die ik je klik voor klik geef.
-
-**Gekozen route (aanbevolen):** *PowerPoint-slides van Claude + korte schermopnames van de demo + jouw eigen stem*, samengevoegd en geëxporteerd als MP4.
+**Voorstel voor acceptatiecriteria bij de user story** (nodig voor LU 5, zie hieronder):
+1. De video is 3 tot 4 minuten lang en speelt als MP4 af op mijn laptop, zonder internet.
+2. De video toont minstens drie leeruitkomsten, elk met zichtbaar bewijs uit het project.
+3. Bij elke bewering over resultaten noem ik de beperking (kleine steekproef, eigen labels, nog niet met een echte makelaar getest).
+4. Er staat niets gevoeligs in beeld of in het geluid (sleutels, wachtwoorden, echte gegevens van anderen).
+5. De video vermeldt dat de stem AI-gegenereerd is.
+6. Er is een lijst met tijdcodes per leeruitkomst voor mijn docent.
 
 ---
 
-## Fase 1. Connectors koppelen en testen (ongeveer 30 minuten)
+## 0. Welke leeruitkomsten kiezen we?
+
+| LU | Past bij dit project? | Bewijs dat er al is | Wat er nog mist | Advies |
+|---|---|---|---|---|
+| **LU 1** AI-impact op beroepsrol | Zwak | Alleen indirect | Gesprekken met professionals en een analyse van veranderende taken | **Overslaan** voor deze video |
+| **LU 2** Praktijkgerichte AI-oplossing ontwerpen, realiseren en valideren | Sterk, maar **gedeeltelijk** | Werkende oplossing voor een echt werkproces; 170+ tests; testset en meting (78% naar 85% bij 40 gevallen); AI-proef met echt model; kosten per aanroep (ongeveer 330 tokens in, 50 uit) | **Validatie met gebruikers of een opdrachtgever.** Dat heb je nog niet gedaan. Ook de tijdswinst ("efficiëntie") is nog niet gemeten | **Kiezen, eerlijk presenteren** en eerst één korte validatie (zie stap 2.5) |
+| **LU 3** Verantwoord AI-gebruik toetsen aan ethiek en regelgeving | Zeer sterk | Verwerkingsregister, DPIA, bewaartermijn, verwijderen met logboek, geen persoonsgegevens naar de AI, bewaker tegen gevoelige onderwerpen, "de computer wijst nooit af", test op prompt-injectie | **Een expliciete analyse van de Europese AI-verordening.** Die staat nog niet in het project (alleen de AVG). Ook een korte lijst aanbevelingen | **Kiezen.** Eerst de analyse laten maken (stap 2.4) |
+| **LU 4** AI-tools en -technieken toepassen | Zeer sterk | Prompting (versie 1 naar 2 met gemeten verbetering), workflowautomatisering (Make.com), regels tegenover een taalmodel, bouwen met Claude en connectors, beperkingen (hallucinaties, injectie, harde grenzen) | Niets belangrijks | **Kiezen** |
+| **LU 5** Regie over je eigen leerproces | Redelijk | De user story van deze video zelf, het stappenplan met besluiten (bijvoorbeeld koerswijziging naar "eerst goed en uitlegbaar"), wat je wel en niet aan AI overliet, feedback en bijsturing | Een korte, eerlijke reflectie; "Show & Grow"-moment | **Kort meenemen** (20 tot 30 seconden reflectie) |
+
+**Voorstel: LU 2, 3 en 4 met een korte reflectie voor LU 5. LU 1 laten we weg.**
+
+## 1. De opbouw van de video (ongeveer 3 minuten 45)
+
+| Tijd | Hoofdstuk | Wat in beeld | LU |
+|---|---|---|---|
+| 0:00 tot 0:20 | Doel en probleem. "Deze stem is AI-gegenereerd." | Titelslide, het probleem van aanvragen per mail en spreadsheet | 5 |
+| 0:20 tot 1:10 | **De oplossing in actie** | Schermopname: demosite, formulier (demoknop), dashboard met de aanvraag onder Review, eisenscherm met de inkomenstest | 2 |
+| 1:10 tot 2:00 | **Hoe het werkt en welke AI-technieken** | Schema (regels, Make, Supabase, AI-laag); prompt-versie 1 en 2 naast elkaar; "gebouwd met Claude en connectors" | 4 |
+| 2:00 tot 2:50 | **Meten en valideren** | Grafiek: regels 78% naar 85%; AI-proef; kosten per aanroep; eerlijke beperkingen (eigen labels, 40 gevallen, nog geen makelaar) | 2, 4 |
+| 2:50 tot 3:30 | **Verantwoord gebruik** | AVG en AI-verordening, de computer wijst nooit af, privacy by design, bias, vijf aanbevelingen | 3 |
+| 3:30 tot 3:50 | **Reflectie en vervolg** | Wat ik aan Claude overliet en wat niet; volgende stap: proefgesprek met een makelaar | 5 |
+
+Ongeveer **500 woorden** voor de stem (een AI-stem leest rond 140 tot 160 woorden per minuut).
+
+## 2. Fase 1. Connectors koppelen en testen (ongeveer 30 minuten)
 
 | # | Wie | Stap | Klaar als |
 |---|---|---|---|
-| 1.1 | Jij | Open in de Claude-app de instellingen voor **Connectors** en controleer dat **Google Drive, Notion, Supabase, Vercel en Claude Docs** op *Verbonden* staan. Verbind wat ontbreekt. | Vijf vinkjes "verbonden" |
-| 1.2 | Claude | **Testen per connector** (kleine, onschuldige proef): Supabase (tabellen en migraties ophalen), Google Drive (testbestand uploaden in een nieuwe map `Minor-video`), Notion (testpagina maken), Claude Docs (testdocument), visualize (testschema). | Elke connector geeft een succesmelding; testbestanden weer verwijderd |
-| 1.3 | Samen | Bekijk wat de Vercel-koppeling mag. Mijn toegang tot jouw team gaf eerder een 403; als dat zo blijft, laten we Vercel weg en gebruiken we alleen jouw eigen screenshots van de Vercel-site. | Besluit: Vercel wel of niet als bewijs |
-| 1.4 | Jij | Controleer of **Clipchamp** (zoek in het Startmenu) en **Xbox Game Bar** (`Win+G`) werken. Test een opname van 10 seconden met `Win+Alt+R`. | Opname staat in *Video's > Captures* en speelt af met geluid |
-| 1.5 | Jij | Optioneel: installeer de Claude in Chrome-extensie als je wilt dat ik je echte, ingelogde dashboard kan bedienen tijdens het voorbereiden. | Extensie "verbonden" (mag overgeslagen worden) |
+| 1.1 | Jij | Controleer in de Claude-app bij **Connectors** dat Google Drive, Notion, Supabase, Vercel en Claude Docs op *Verbonden* staan. | Vijf keer "verbonden" |
+| 1.2 | Claude | Test elke connector met een kleine, onschuldige proef: Supabase (tabellen en migraties lezen), Google Drive (map `Minor-video` met een testbestand), Notion (testpagina), Claude Docs (testdocument), visualize (testschema). Testresten worden opgeruimd. | Alle vijf slagen |
+| 1.3 | Samen | Vercel: mijn toegang tot jouw team gaf eerder een 403. Blijft dat zo, dan gebruiken we Vercel niet als bewijs. | Besluit genoteerd |
+| 1.4 | **Jij** | **De AI-stem testen.** Open **Clipchamp** (Startmenu), maak een nieuwe video, kies *Opnemen en maken* > **Tekst naar spraak** en kijk of er **Nederlandse** stemmen zijn. Kies er één, laat hem één zin voorlezen, luister. Stuur me de naam van de stem en zeg of hij prettig klinkt. | Nederlandse stem gekozen |
+| 1.5 | Jij | Test `Win+Alt+R` (Game Bar) voor een opname van 10 seconden. | Opname staat in *Video's > Captures* |
 
-## Fase 2. Leeruitkomsten en verhaal (ongeveer 45 minuten)
+**Waarom Clipchamp voor de stem:** mijn controle liet zien dat je laptop alleen Engelse computerstemmen heeft. Clipchamp heeft een ingebouwde functie die tekst met een AI-stem voorleest en die ook Nederlands kan. Daar hoeft niets voor te worden gedownload. Mocht Clipchamp geen goede Nederlandse stem hebben, dan zoeken we samen een alternatief (bijvoorbeeld een gratis online dienst; de tekst bevat geen geheimen). Claude kan zelf geen audio maken.
 
-| # | Wie | Stap | Klaar als |
-|---|---|---|---|
-| 2.1 | **Jij** | Stuur me de **officiële lijst leeruitkomsten** van je minor (tekst of foto van je planning). Ik heb die lijst niet, dus ik ga niets raden. Zet erbij welke je met deze video wilt afronden. | Lijst bij mij |
-| 2.2 | Claude | Maak een **tabel: leeruitkomst, bewijs in het project, waar in de video**. Voorbeelden van bewijs dat al bestaat: testset en meting (`docs/rapport-regels-basis.md`), AI-vergelijking en prompt-iteraties (`docs/ai.md`), ethiek en privacy (`docs/dpia.md`, `docs/verwerkingsregister.md`), veiligheidstests (73 AI-tests), de database en afscherming. | Tabel in Notion en in `docs/`; elke uitkomst heeft minstens één bewijs |
-| 2.3 | Claude | Stel het **verhaal** voor (zie hieronder), met tijden en per hoofdstuk wat getoond wordt. | Jij hebt het goedgekeurd of aangepast |
-| 2.4 | Jij | Kies de **lengte** (voorstel: 8 tot 10 minuten) en de **doelgroep** (docenten en medestudenten). | Besluit genoteerd |
-
-**Voorgestelde opbouw (ongeveer 10 minuten):**
-1. Probleem en doel (1:00)
-2. De oplossing in beeld: demo van woningzoeker en dashboard (2:00)
-3. Woningen en eisen zelf instellen (1:00)
-4. De techniek en de connectors: Supabase, Make, Vercel, OpenAI, en hoe ik met Claude heb gebouwd (1:30)
-5. AI waar het helpt: samenvatting en conceptmail, prompt-versies en wat ik leerde (1:30)
-6. Meten in plaats van geloven: testset, regels tegen AI, de beperkingen van mijn meting (1:30)
-7. Ethiek en privacy: de computer wijst nooit af, AVG, DPIA, gevoelige onderwerpen (1:00)
-8. Terugblik, beperkingen en volgende stappen (0:30)
-
-## Fase 3. Bewijs en beeldmateriaal verzamelen (ongeveer 1 uur, grotendeels Claude)
+## 3. Fase 2. Bewijs, onderbouwing en validatie (ongeveer 2 uur, vooral Claude)
 
 | # | Wie | Stap | Klaar als |
 |---|---|---|---|
-| 3.1 | Claude | **Bewijs uit Supabase** via de connector: lijst van tabellen, de afschermingsregels (RLS), de migraties, de advieslijst (security advisor). Alles zonder persoonsgegevens. | Een overzicht in `video/bewijs/` en in Notion |
-| 3.2 | Claude | **Kerngetallen** uit de repo: aantal commits, bestanden, tests (63 + 73 + 12 + 11 + 11), documenten, migraties. | Een pagina met getallen en de commando's waarmee ze zijn berekend |
-| 3.3 | Claude | **Screenshots** met de ingebouwde browser, alleen van verzonnen gegevens: startpagina, demosite, formulier (drie scenario's), dashboard (voorbeeld), eisenscherm, inkomenstest. | Map `video/schermen/` met genummerde PNG's |
-| 3.4 | Claude | **Schema's** met de visualize-connector: architectuur (widget, formulier, regels, Supabase, Make, dashboard, AI) en de route van een aanvraag. | Twee à drie duidelijke schema's als afbeelding |
-| 3.5 | Claude | **Meetresultaten** als grafiek of tabel: regels 78% naar 85%, AI-proef (v1 tegenover v2 van de prompt), de vondsten van de tests (een bug die de tests vonden, de gezondheidsvermelding die de eerste prompt liet doorgaan). | Eén "lessons learned"-pagina met bewijs |
-| 3.6 | Jij | **Reset de demo-omgeving:** verwijder testaanvragen, controleer dat de app draait (`http://localhost:3100`) en dat je ingelogd bent in het dashboard. Ik lever hiervoor een controlescript (zie 5.1). | Script meldt "klaar voor opname" |
+| 2.1 | Claude | **Tabel "leeruitkomst, bewijs, moment in de video"** voor LU 2, 3, 4 en 5, in Notion en in `docs/`. | Elke gekozen LU heeft minstens twee bewijsstukken |
+| 2.2 | Claude | **Bewijs uit Supabase** via de connector (tabellen, afscherming, migraties, advieslijst) en de **kerngetallen** uit de repo (commits, tests, documenten). Geen persoonsgegevens. | Een bewijspagina met de commando's erbij |
+| 2.3 | Claude | **Meetresultaten** als één duidelijke grafiek en een "wat ik leerde"-pagina: regels 78% naar 85%, de bug die de tests vonden, de gezondheidsvermelding in prompt-versie 1 en de oplossing in versie 2. | Pagina klaar |
+| 2.4 | Claude | **Analyse Europese AI-verordening** (`docs/ai-verordening.md`): is dit systeem hoog-risico (vooral door het beoordelen van huurders), wat geldt voor transparantie, menselijk toezicht en AI-geletterdheid, wat voor de AI-leverancier; plus **vijf aanbevelingen voor verantwoord gebruik** en een bias-controle van de regels. Duidelijk gemarkeerd als eigen analyse, geen juridisch advies. | Document en een slide |
+| 2.5 | **Jij en een ander** | **Eén korte validatie** (30 minuten) met iemand die de opdrachtgever speelt: een docent, een mentor, een medestudent met kennis van het vak, of een echte makelaar. Doe de demo (vijf minuten) en stel de vragen uit `docs/uitleg-makelaars.md` sectie 8. Schrijf 5 bevindingen op. Zonder dit is LU 2 maar half aangetoond. | Notities met bevindingen |
+| 2.6 | Claude | **Screenshots** met de ingebouwde browser (alleen verzonnen gegevens) en **schema's** met de visualize-connector. | Map `video/` met genummerde afbeeldingen |
 
-## Fase 4. Draaiboek en slides (ongeveer 1,5 uur, Claude met jouw feedback)
-
-| # | Wie | Stap | Klaar als |
-|---|---|---|---|
-| 4.1 | Claude | **Draaiboek** per hoofdstuk: wat je zegt (spreektaal, ongeveer 130 woorden per minuut), wat er op het scherm staat, welke tijd. Opgeslagen als Claude Docs-document en in Notion. | Jij hebt het gelezen en aangepast |
-| 4.2 | Claude | **Slides** (PowerPoint, 16:9, grote lettertypen, geen lange tekst) met de schema's en screenshots, en de sprekerstekst in de notities. | `.pptx` gedownload naar je laptop en een kopie op Google Drive |
-| 4.3 | Jij | Lees het draaiboek **hardop** voor met een stopwatch. Streep weg wat te lang is. | Past binnen de gekozen lengte |
-| 4.4 | Claude | Verwerk jouw aanpassingen; maak de definitieve versie. | Versie "definitief" in Drive en op de laptop |
-
-## Fase 5. Opnemen (ongeveer 1,5 uur, jij met mijn stappenlijst)
+## 4. Fase 3. Draaiboek en beeldmateriaal (ongeveer 1 uur)
 
 | # | Wie | Stap | Klaar als |
 |---|---|---|---|
-| 5.1 | Claude | Een **controlescript** (`scripts/video-preflight.mjs`) dat checkt: app draait, database bereikbaar, geen testaanvragen over, demo-woningen aanwezig, AI aan of uit zoals gewenst. Plus een lijst om af te vinken. | Script draait en geeft groen |
-| 5.2 | Jij | **Voorbereiding:** zet meldingen uit (Windows *Niet storen*), sluit privé-tabbladen, zoom de browser op 125%, zet de lichte weergave aan, leg een glas water klaar, sluit Gmail en andere programma's. | Schoon bureaublad |
-| 5.3 | Jij | **Opnemen met PowerPoint:** *Diavoorstelling > Opnemen* (Record). Per hoofdstuk één opname van 1 tot 2 minuten, zodat een foutje alleen dat stuk kost. Spreek de tekst uit het draaiboek. | Alle slides hebben jouw stem en timing |
-| 5.4 | Jij | **Opnemen van de demo** met `Win+Alt+R` (Game Bar): formulier invullen met de demoknoppen, dashboard met de nieuwe aanvraag, eisenscherm met de inkomenstest. Elke scène 30 tot 90 seconden. | Vijf à zes korte clips met geluid uit (of met je uitleg) |
-| 5.5 | Jij | Luister elke opname terug. Overdoen wat onduidelijk, te snel of te zacht is. | Alle stukken goedgekeurd |
+| 3.1 | Claude | **Draaiboek** met per hoofdstuk de voorleestekst (korte zinnen, geschreven om te beluisteren, geen afkortingen die een stem verkeerd uitspreekt) en wat in beeld staat. Opgeslagen in Claude Docs en Notion. | Jij hebt het gelezen en aangepast |
+| 3.2 | Claude | **Slides** als PowerPoint (16:9, grote letters, één boodschap per slide) met sprekersnotities. | `.pptx` op je laptop en op Drive |
+| 3.3 | Jij | Lees de tekst **hardop** met een stopwatch. Zet twijfelachtige woorden (zoals "Supabase", "Make", "RLS") in het draaiboek fonetisch, zodat de AI-stem ze goed zegt. | Tekst past binnen 4 minuten |
+| 3.4 | Claude | **Controlescript voor de opname** (`scripts/video-preflight.mjs`): app draait, database bereikbaar, geen testaanvragen over, demo-woningen aanwezig. | Script meldt "klaar voor opname" |
 
-## Fase 6. Monteren en exporteren (ongeveer 1 uur)
-
-| # | Wie | Stap | Klaar als |
-|---|---|---|---|
-| 6.1 | Jij | Voeg de demo-clips in de slides in (PowerPoint: *Invoegen > Video*) of zet alles in **Clipchamp** op een tijdlijn. | Alles in de juiste volgorde |
-| 6.2 | Jij | **Ondertitels** (optioneel): Clipchamp kan automatisch Nederlandse ondertitels maken; controleer ze. | Ondertitels kloppen |
-| 6.3 | Jij | **Exporteren als MP4, 1080p:** PowerPoint *Bestand > Exporteren > Video maken > Full HD*, of in Clipchamp *Exporteren > 1080p*. | `Uitlegvideo-RentalFlowAI.mp4` op je laptop |
-| 6.4 | Samen | **Veiligheidscontrole voor het publiceren:** kijk de video helemaal door en let op beeld van sleutels, `.env.local`, wachtwoorden, echte e-mailadressen of telefoonnummers van anderen, Supabase-keys, mails in je Gmail. Alleen verzonnen gegevens. | Niets gevoeligs in beeld |
-
-## Fase 7. Controleren en opleveren (ongeveer 30 minuten)
+## 5. Fase 4. Opnemen en monteren in Clipchamp (ongeveer 1,5 uur, jij met mijn stappen)
 
 | # | Wie | Stap | Klaar als |
 |---|---|---|---|
-| 7.1 | Jij | Speel de MP4 af in de standaard Windows-speler (*Films en tv* of *Media Player*), **zonder internet**, met de speakers of een koptelefoon. Geluid, beeld en tijd kloppen. | Speelt foutloos van begin tot eind |
-| 7.2 | Claude | **Tijdcodes per leeruitkomst** (`00:00` tot `10:00`): bij welk moment in de video welke uitkomst wordt aangetoond. Op één pagina, ook als PDF. | Pagina klaar voor je docent |
-| 7.3 | Jij | **Back-ups:** kopie op Google Drive (de map `Minor-video`), op een USB-stick en op de laptop zelf. | Drie kopieën |
-| 7.4 | Claude | **Noodplan:** slides als PDF, de uitlegpagina en het voorbeeld-dashboard lokaal; als de video niet afspeelt, kun je het live laten zien of de PDF doorlopen. | Noodplan in je tas en in Drive |
-| 7.5 | Jij | **Vragenronde oefenen** met de lijst "Lastige vragen" uit `docs/uitleg-makelaars.md` en de eerlijke beperkingen (circulaire meting, kleine steekproef, niet juridisch getoetst, niet getest met een echte makelaar). | Je kunt elke vraag in 30 seconden beantwoorden |
+| 4.1 | Jij | **Schoon bureaublad:** meldingen uit (*Niet storen*), privé-tabbladen dicht, browserzoom 125%, lichte weergave, Gmail dicht. | Rustig scherm |
+| 4.2 | Jij | **Demo opnemen** met `Win+Alt+R`: formulier met de demoknop *Twijfelgeval*, aanvraag verschijnt in het dashboard, eisenscherm met de inkomenstest. Drie clips van 15 tot 30 seconden, **zonder je eigen stem** (de AI-stem komt erover). | Drie clips |
+| 4.3 | Jij | **Slides exporteren als afbeeldingen:** PowerPoint, *Bestand > Exporteren > Bestandstype wijzigen > PNG > Alle dia's*. | Een PNG per slide |
+| 4.4 | Jij | **In Clipchamp:** importeer PNG's en clips. Per hoofdstuk: zet de afbeelding of clip op de tijdlijn; maak met *Tekst naar spraak* de stem van dat hoofdstuk (plak de tekst, kies de gekozen stem) en zet die eronder. Trek de afbeelding zo lang als de stem. | Tijdlijn van begin tot eind |
+| 4.5 | Jij | **Ondertitels:** *Ondertitels > Automatisch* en lees ze na. Ze helpen als de zaal geluid mist. | Ondertitels kloppen |
+| 4.6 | Jij | **Exporteren als MP4 in 1080p** met *Exporteren*. Naam: `RentalFlowAI-uitleg.mp4`. | MP4 op je laptop |
+| 4.7 | **Samen** | **Veiligheidscontrole:** kijk alles door op sleutels, `.env.local`, wachtwoorden, echte e-mailadressen of telefoonnummers van anderen. Alleen verzonnen gegevens. | Niets gevoeligs in beeld |
+
+## 6. Fase 5. Controleren en opleveren (ongeveer 30 minuten)
+
+| # | Wie | Stap | Klaar als |
+|---|---|---|---|
+| 5.1 | Jij | Speel de MP4 af **zonder internet** in *Films en tv* of *Media Player*. Geluid, beeld en tijd kloppen. | Speelt foutloos |
+| 5.2 | Claude | **Tijdcodes per leeruitkomst** op één pagina (ook als PDF) voor je docent, met een verwijzing naar het bewijs in de repo. | Pagina klaar |
+| 5.3 | Jij | **Drie kopieën:** laptop, Google Drive (map `Minor-video`), USB-stick. | Drie kopieën |
+| 5.4 | Claude | **Noodplan:** slides als PDF en het voorbeeld-dashboard lokaal. | PDF in Drive en op de laptop |
+| 5.5 | Jij | **Vragen oefenen** met de lijst uit `docs/uitleg-makelaars.md` en de beperkingen. | Je kunt elke vraag in 30 seconden beantwoorden |
 
 ---
 
 ## Eindchecklist
 
-- [ ] Alle connectors verbonden en getest (Drive, Notion, Supabase, Docs, visualize; Vercel optioneel)
-- [ ] Lijst leeruitkomsten ontvangen en gekoppeld aan bewijs
-- [ ] Lengte en verhaal goedgekeurd
-- [ ] Bewijs verzameld (database, tests, getallen, screenshots, schema's)
-- [ ] Draaiboek hardop gelezen en op tijd
-- [ ] Slides definitief, sprekerstekst in de notities
-- [ ] Demo-omgeving gereset en controlescript groen
-- [ ] Alle stukken opgenomen en teruggeluisterd
-- [ ] Video geëxporteerd als MP4 in 1080p
-- [ ] Veiligheidscontrole: niets gevoeligs in beeld of in het geluid
-- [ ] Afgespeeld zonder internet in de standaard Windows-speler
+- [ ] Connectors verbonden en getest
+- [ ] Nederlandse AI-stem gekozen en beluisterd (stap 1.4)
+- [ ] Gekozen leeruitkomsten: LU 2, 3, 4, kort 5 (of afwijkend besluit)
+- [ ] Bewijstabel per leeruitkomst klaar
+- [ ] Analyse van de AI-verordening en vijf aanbevelingen geschreven
+- [ ] Eén validatie met een opdrachtgever gedaan en genoteerd
+- [ ] Draaiboek hardop gelezen, past in 4 minuten
+- [ ] Demo-omgeving gereset, controlescript groen
+- [ ] Demo-clips en slide-afbeeldingen klaar
+- [ ] Video gemonteerd, stem en ondertitels gecontroleerd
+- [ ] Vermelding "AI-gegenereerde stem" zichtbaar of hoorbaar
+- [ ] Geëxporteerd als MP4 in 1080p
+- [ ] Veiligheidscontrole: niets gevoeligs
+- [ ] Afgespeeld zonder internet
 - [ ] Tijdcodes per leeruitkomst gemaakt
 - [ ] Drie kopieën (laptop, Drive, USB)
-- [ ] Noodplan klaar (PDF van de slides)
-- [ ] Vragen geoefend, beperkingen eerlijk benoemd
+- [ ] Noodplan klaar
 
 ## Risico's
 
 | Risico | Kans | Aanpak |
 |---|---|---|
-| Geen Nederlandse stem voor een computerverteller | Zeker | Je spreekt zelf in; ook beter voor de minor |
-| Live demo gaat mis tijdens het opnemen | Gemiddeld | Opnemen in korte stukken; terugvallen op `/dashboard/preview` met verzonnen gegevens |
-| Gevoelige gegevens in beeld (sleutel, mail, wachtwoord) | Gemiddeld, ernstig | Controlescript, schoon bureaublad, volledige doorkijkronde (stap 6.4) |
-| Resultaten overdrijven (bijv. "85% goed") | Gemiddeld | Altijd de beperkingen noemen: labels door mijzelf, deels circulaire meting, 40 gevallen |
-| Te lang of te druk | Hoog | Draaiboek hardop lezen met stopwatch; één boodschap per slide |
-| Leeruitkomsten niet gedekt | Gemiddeld | Stap 2.2: eerst de tabel, pas daarna het draaiboek |
-| Bestand speelt niet af op de presentatiecomputer | Laag, hinderlijk | MP4 + USB + Drive + PDF van de slides |
+| Clipchamp heeft geen goede Nederlandse stem | Gemiddeld | Stap 1.4 test dit als eerste; alternatief: gratis online dienst voor tekst-naar-spraak, of toch zelf inspreken |
+| AI-stem spreekt vaktermen verkeerd uit | Hoog | Fonetisch opschrijven in het draaiboek en één keer terugluisteren per hoofdstuk |
+| LU 2 lijkt sterker dan het is | Hoog | Eerlijk zeggen dat de validatie met een echte gebruiker nog volgt; stap 2.5 doen als je het kunt |
+| LU 3 mist de AI-verordening | Hoog | Stap 2.4 maakt die analyse; zonder dat claim je LU 3 niet volledig |
+| Te veel in 4 minuten | Hoog | Eén boodschap per hoofdstuk; liever 3 leeruitkomsten goed dan 5 half |
+| Gevoelige gegevens in beeld | Gemiddeld, ernstig | Controlescript, schoon bureaublad, volledige doorkijkronde (4.7) |
+| Resultaten overdreven | Gemiddeld | Altijd de beperking erbij (eigen labels, 40 gevallen, geen echte makelaar) |
 
 ## Tijdsinschatting
 
-Ongeveer **6 tot 8 uur** in totaal, te verdelen over meerdere dagen. Het meeste werk van Claude zit in fase 3 en 4; het meeste werk van jou zit in fase 5 en 6.
+Ongeveer **5 tot 7 uur** in totaal, te verdelen over twee tot drie dagen. De video zelf is kort; het meeste werk zit in het bewijs, de analyse van de AI-verordening en de validatie.
 
-## Beslissingen die ik van je nodig heb
+## Wat ik van je nodig heb om te beginnen
 
-1. De lijst met **leeruitkomsten** (stap 2.1).
-2. **Lengte**: 8, 10 of 12 minuten?
-3. **Voice-over**: je eigen stem (aanbevolen), of liever geen stem met alleen tekst op de slides en ondertitels?
-4. Mag ik **Clipchamp en Game Bar** gebruiken zoals beschreven? Dan hoeft er niets te worden gedownload.
+1. **Akkoord** met het voorstel LU 2, 3, 4 en kort 5 (of een andere keuze).
+2. **Stap 1.4** doen: Clipchamp openen, kijken of er **Nederlandse AI-stemmen** zijn, en me de naam van de stem doorgeven.
+3. **Wie kan de opdrachtgever spelen** voor de validatie van 30 minuten (stap 2.5)?
