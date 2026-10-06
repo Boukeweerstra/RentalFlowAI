@@ -1,5 +1,6 @@
+import { DbBackedConfigProvider } from "./db-provider";
 import { JsonConfigProvider } from "./json-provider";
 import type { ConfigProvider } from "./provider";
 
-/** Wissel hier later naar een Google Sheet- of Supabase-provider. */
-export const configProvider: ConfigProvider = new JsonConfigProvider();
+/** Tenants uit bestanden; woningen eerst uit de database (scherm "Woningen"), daarna uit de bestanden. */
+export const configProvider: ConfigProvider = new DbBackedConfigProvider(new JsonConfigProvider());

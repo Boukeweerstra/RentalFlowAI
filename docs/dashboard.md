@@ -118,3 +118,16 @@ ingewisseld na die klik. Zet hiervoor de mail van Supabase om:
 3. Opslaan. De link gaat nu altijd naar het adres bij *URL Configuration > Site URL* (online). Lokaal testen van herstelmails werkt daarom alleen als je Site URL tijdelijk op `http://localhost:3100` zet; test dit liever online.
 
 Zonder deze wijziging blijft de oude route (`/auth/callback`) gewoon werken.
+
+## Woningen en eisen (scherm "Woningen")
+
+Via **Woningen** in het hoofdmenu beheert de makelaar de woningen van het kantoor en de eisen per woning. Het formulier voor woningzoekers leest daaruit.
+
+- **Wie mag wat:** alle medewerkers kunnen woningen en eisen bekijken; alleen de **eigenaar** van het kantoor kan toevoegen, wijzigen, uitzetten en verwijderen. De database laat de browser niets schrijven; opslaan gaat via de server, die controleert dat de gebruiker eigenaar is en de eisen opnieuw valideert.
+- **Woning-id** is het id uit het systeem van de makelaar en komt in de scriptregel op de site (`data-property-id`). Het kan na opslaan niet meer wijzigen.
+- **Per eis**: inkomen (factor, gezamenlijk of hoofdaanvrager, marge in procenten, toegestane bronnen), aantal aanvragers, garantsteller, proeftijd, minimale duur dienstverband, leeftijd, huisdieren, aantal bewoners, woningdelers, studenten, huurperiode, ingangsdatum, borgstelling, verblijfsvergunning en documenten die later gevraagd worden. Bij elke eis die ertoe doet kiest de eigenaar: *Past niet* (Unsuitable) of *Zelf bekijken* (Review).
+- **Rechts in het scherm:** een direct voorbeeld van het eisenblok dat de woningzoeker ziet, en **Probeer een inkomen**: wat de regelmotor doet met iemand die verder aan alles voldoet.
+- **Uitzetten** (Actief uit) sluit het formulier én het versturen direct; bestaande aanvragen blijven staan. **Verwijderen** kan alleen als er geen aanvragen voor de woning zijn.
+- **Voorrang:** een woning in de database gaat vóór de woningen in `data/tenants/<tenant>.json`. Een woning die in de database staat maar niet actief of ongeldig is, valt niet terug op het bestand. Woningen die niet in de database staan, komen nog uit het bestand (de oude werkwijze blijft werken). De app onthoudt woningen 10 seconden, dus een wijziging is binnen die tijd zichtbaar in het formulier.
+- **Oude aanvragen** veranderen niet: de uitkomst van de eerste check staat per aanvraag vast.
+- **Lokaal beproeven zonder opslaan:** `http://localhost:3100/dashboard/preview/woningen` (alleen lokaal, verzonnen gegevens).

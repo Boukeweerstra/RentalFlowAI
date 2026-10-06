@@ -19,6 +19,8 @@ Voorbeeldnaam in dit document: kantoor **Voorbeeld Makelaars**, sleutel (`tenant
 
 ## 1. Tenantbestand maken (Claude of jij)
 
+> **Sinds 6 oktober** beheert de eigenaar van het kantoor de woningen en eisen zelf in het scherm **Woningen** van het dashboard (zie `docs/dashboard.md`). Het tenantbestand bevat dan alleen nog het kantoor zelf (naam, modus, toegestane sites, privacyverklaring); de lijst `properties` in het bestand blijft mogelijk als terugval. Stap 1 hieronder beschrijft de oude werkwijze met woningen in het bestand en blijft werken.
+
 1. Kopieer `data/tenants/demo.json` naar `data/tenants/voorbeeld-makelaars.json`.
 2. Pas aan:
    - `tenantId`, `name`, `notifyEmail`, `allowedOrigins` (volledige adressen, zonder pad)

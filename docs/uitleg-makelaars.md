@@ -27,7 +27,7 @@ Drie dingen die de makelaar moet onthouden: **één knop**, **drie groepen**, **
 | Een waarschuwing vooraf als het niet lijkt te passen, maar hij mag altijd versturen | De redenen waarom een aanvraag in een groep staat, en een voorgestelde volgende stap |
 | Een neutrale bevestiging: "u hoort van ons" | Status (nieuw, benaderd, bezichtiging gepland, afgerond), notities, een logboek, zoeken en filteren |
 
-## 4. Demo van 5 minuten
+## 4. Demo van 6 minuten
 
 ### Voorbereiding (10 minuten van tevoren)
 1. Start de app: open PowerShell en plak `cd C:\dev\rentalflowai`, daarna `npm.cmd run dev -- -p 3100`. Wacht tot er "Ready" staat.
@@ -37,7 +37,7 @@ Drie dingen die de makelaar moet onthouden: **één knop**, **drie groepen**, **
 5. Controleer dat Make aan staat: een testaanvraag stuurt een mail naar het adres uit de demo-instelling (uw eigen mailbox).
 6. **Noodplan:** gaat iets mis (internet, Make), gebruik dan `http://localhost:3100/dashboard/preview`: hetzelfde dashboard met verzonnen gegevens, zonder inloggen. Het werkt alleen op uw eigen computer.
 
-### Het verhaal (met tijden)
+### Het verhaal (met tijden, ongeveer 6 minuten)
 
 | Min | Wat u doet | Wat u zegt |
 |---|---|---|
@@ -50,7 +50,11 @@ Drie dingen die de makelaar moet onthouden: **één knop**, **drie groepen**, **
 | 3:30 | Klik **Details en acties**; wijs naar de samenvatting (als AI aan staat) en de volgende stap | "De computer stelt de volgende stap voor: vraag een werkgeversverklaring. Als AI aan staat ziet u hier ook een samenvatting van de toelichting. Dat is een hulpmiddel; de originele tekst staat erboven." |
 | 4:00 | Klik **Concept maken met AI** (alleen als AI aan staat) | "Wilt u informatie opvragen, dan schrijft de AI een concept. Er is geen verzendknop: u leest het, past aan en verstuurt zelf." |
 | 4:30 | Vink **Benaderd** aan; wijs op de status | "Heeft u gebeld, dan vinkt u het aan. De status volgt, en het staat in het logboek." |
-| 5:00 | Terug naar de uitlegpagina, sectie **De drie groepen** | "En u bepaalt hoe streng: per eis hard of zelf bekijken. Vragen?" |
+| 5:00 | Klik bovenin op **Woningen** en open **Keizersgracht 100** | "Hier stelt u zelf uw woningen en eisen in. Rechts ziet u wat de woningzoeker te zien krijgt." |
+| 5:30 | Vul rechts bij **Probeer een inkomen** achtereenvolgens `6000`, `5400` en `5000` in; zet daarna links de marge op 5% en probeer `5400` opnieuw | "Zes mille past. Net onder de grens: zonder marge past het niet, met marge komt het onder Review zodat u het zelf bekijkt. U bepaalt hoe streng." |
+| 6:00 | Terug naar de uitlegpagina, sectie **De drie groepen** | "De computer sorteert voor, u beslist. Vragen?" |
+
+Let op bij het wijzigen in het echte scherm: het wijzigt de echte eisen van de demowoning. Zet de marge daarna terug op 3% (de standaard van de demo) of gebruik het voorbeeld-scherm op `http://localhost:3100/dashboard/preview/woningen`, waar niets wordt opgeslagen.
 
 Tip: laat bij een tweede demo ook **Past niet** zien. De woningzoeker krijgt dan vooraf een waarschuwing, maar mag toch versturen. De aanvraag komt dan onder Unsuitable, en u ziet waarom.
 
@@ -63,7 +67,7 @@ Na de demo: verwijder de testaanvragen in het dashboard (**Details en acties** >
 - *Review*: een punt wil de makelaar zelf bekijken, bijvoorbeeld proeftijd, garantsteller, inkomen net onder de grens.
 - *Unsuitable*: een harde eis wordt niet gehaald. Het is een indicatie; de makelaar kan de groep altijd wijzigen.
 
-**Hoe streng**: per woning en per eis wordt vastgelegd of het hard is of een punt om zelf te bekijken. Ook een marge onder de inkomensgrens is mogelijk. Nu zetten wij dat voor de makelaar klaar; een scherm om het zelf te wijzigen is er nog niet.
+**Hoe streng**: in het scherm **Woningen** stelt de eigenaar van het kantoor per woning en per eis in of het hard is of een punt om zelf te bekijken. Ook een marge onder de inkomensgrens is mogelijk. Rechts in het scherm staat wat de woningzoeker ziet, en met "Probeer een inkomen" test u direct in welke groep iemand komt.
 
 **AI**: alleen voor tekst, standaard uit. Samenvatting van de toelichting van de woningzoeker en een conceptmail bij ontbrekende informatie. De AI krijgt geen naam, mail of telefoon, beslist niets en verstuurt niets.
 
@@ -80,7 +84,7 @@ Na de demo: verwijder de testaanvragen in het dashboard (**Details en acties** >
 | Waar staan de gegevens? | In een database in Europa (Ierland). Hosting, database, doorsturen van de mail en AI zijn verwerkers; die afspraken worden vastgelegd vóór echt gebruik. Een deel van die partijen kan buiten de EU verwerken, met de gebruikelijke waarborgen. |
 | Werkt het met ons woningbeheersysteem? | Nog niet. Er is geen koppeling met pakketten zoals Realworks; dat vraagt eigen onderzoek per pakket. Nu komt de aanvraag per mail en in het dashboard, met een Google Sheet als back-up. |
 | Wat kost het? | Dat is nog niet bepaald. We willen eerst horen wat het waard is. |
-| Kunnen we de eisen zelf aanpassen? | Nu zetten wij ze voor u klaar, per woning. Zelf aanpassen in een scherm komt later. |
+| Kunnen we de eisen zelf aanpassen? | Ja. De eigenaar van het kantoor doet dat in het scherm Woningen: huur, inkomenseis, proeftijd, huisdieren, aantal bewoners, garantsteller en meer, met per eis de keuze "past niet" of "zelf bekijken". Medewerkers kunnen de eisen bekijken. Een woning uitzetten sluit direct het formulier. |
 | Hoe krijgen we de knop op onze site? | Eén regel code op de woningpagina, met het woning-id. Het formulier laadt alleen op uw eigen domein. |
 | Wat als het systeem uitvalt? | Een aanvraag wordt eerst opgeslagen en daarna pas verstuurd; lukt de ene route niet, dan staat de aanvraag er via de andere nog. Er is nog geen formele garantie of monitoring: het is een prototype. |
 | Kunnen woningzoekers documenten uploaden? | Nog niet. Het formulier noemt welke documenten later nodig zijn; uploaden is nog niet gebouwd. |
@@ -94,8 +98,8 @@ Na de demo: verwijder de testaanvragen in het dashboard (**Details en acties** >
 | De computer wijst nooit af | Een prijs, een leverdatum of beschikbaarheid |
 | AI is een standaard-uit hulpmiddel zonder beslissing | Dat de AI altijd klopt |
 | Het werkt in een demo en is getest op een testset van 40 verzonnen gevallen | Dat het op echte aanvragen al zo goed werkt |
-| Wij zetten de eisen per woning voor u klaar | Zelf wijzigen van eisen in een scherm (nog niet gebouwd) |
-| De data worden niet langer bewaard dan nodig, en u kunt verwijderen | Koppelingen met woningbeheersystemen, documenten uploaden, meerdere medewerkers per kantoor |
+| U beheert uw woningen en eisen zelf in het dashboard | Dat het eisenscherm al bij een echt kantoor is beproefd (het is getest met verzonnen gegevens) |
+| De data worden niet langer bewaard dan nodig, en u kunt verwijderen | Koppelingen met woningbeheersystemen, documenten uploaden, meerdere medewerkers per kantoor met eigen rechten |
 
 ## 8. Vragen aan de makelaar (voor uw onderzoek)
 

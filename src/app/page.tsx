@@ -185,10 +185,10 @@ export default function Home() {
           <div className="mt-8 rounded-2xl border border-accent-100 bg-accent-50 p-5">
             <h3 className="text-lg font-semibold text-accent-700">Hoe streng, bepaalt u</h3>
             <p className="mt-1 text-zinc-700">
-              Per woning en per eis wordt vastgelegd of het een <em>harde</em> eis is (dan Unsuitable) of een punt om zelf te bekijken (dan Review). Er kan ook een marge worden ingesteld, zodat een inkomen net onder de grens in Review komt in plaats van Unsuitable.
+              In het scherm <strong>Woningen</strong> stelt u per woning en per eis in of het een <em>harde</em> eis is (dan Unsuitable) of een punt om zelf te bekijken (dan Review). U kunt ook een marge instellen, zodat een inkomen net onder de grens in Review komt in plaats van Unsuitable.
+              Rechts ziet u direct wat de woningzoeker te zien krijgt, en met een voorbeeldinkomen test u meteen in welke groep iemand komt.
               De woningzoeker krijgt geen afwijzing van de computer: alleen een neutrale ontvangstbevestiging.
             </p>
-            <p className="mt-2 text-sm text-zinc-600">Stand van zaken: deze instellingen zetten wij nu voor u klaar. Een scherm waarmee u ze zelf wijzigt, is nog niet gebouwd.</p>
           </div>
         </section>
 
@@ -205,6 +205,7 @@ export default function Home() {
               <li className="flex gap-3"><span aria-hidden="true" className="mt-1 text-teal-300">✓</span><span><strong className="text-white">Zoeken, filteren en sorteren</strong> op naam, woning, status of inkomen.</span></li>
               <li className="flex gap-3"><span aria-hidden="true" className="mt-1 text-teal-300">✓</span><span><strong className="text-white">Status en notities:</strong> nieuw, benaderd, bezichtiging gepland, afgerond, met een logboek van wie wat deed.</span></li>
               <li className="flex gap-3"><span aria-hidden="true" className="mt-1 text-teal-300">✓</span><span><strong className="text-white">Bij elke aanvraag een voorgestelde volgende stap</strong>, bijvoorbeeld &ldquo;vraag een werkgeversverklaring&rdquo;.</span></li>
+              <li className="flex gap-3"><span aria-hidden="true" className="mt-1 text-teal-300">✓</span><span><strong className="text-white">Uw eigen woningen en eisen</strong> beheert u in het dashboard: huur, inkomenseis, proeftijd, huisdieren en meer, met een voorbeeld van wat de woningzoeker ziet.</span></li>
             </ul>
           </div>
         </section>
@@ -277,7 +278,7 @@ export default function Home() {
               <p>Nee. De computer sorteert voor in drie groepen en laat de redenen zien. Elke aanvraag blijft zichtbaar en een medewerker beslist altijd. De woningzoeker krijgt alleen een neutrale ontvangstbevestiging.</p>
             </Faq>
             <Faq q="Kan ik de eisen per woning zelf bepalen?">
-              <p>Ja. Per woning legt u vast: minimale leeftijd, inkomensfactor, inkomstenbronnen, proeftijd, minimale duur dienstverband, huisdieren, aantal bewoners, garantsteller, studenten, woningdelers en meer. Per eis kiest u of die hard is of een punt om zelf te bekijken. Nu zetten wij die instellingen voor u klaar; zelf wijzigen in het dashboard komt later.</p>
+              <p>Ja. Per woning legt u vast: minimale leeftijd, inkomensfactor, inkomstenbronnen, proeftijd, minimale duur dienstverband, huisdieren, aantal bewoners, garantsteller, studenten, woningdelers en meer. Per eis kiest u of die hard is of een punt om zelf te bekijken. Dat stelt de eigenaar van het kantoor zelf in, in het scherm Woningen van het dashboard.</p>
             </Faq>
             <Faq q="Hoe krijg ik de knop op mijn website?">
               <p>Met één regel code die u (of uw websitebouwer) op de woningpagina plaatst. U geeft de woning een kenmerk mee, en de rest werkt vanzelf. Het formulier laadt alleen op uw eigen website.</p>

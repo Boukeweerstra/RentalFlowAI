@@ -289,7 +289,7 @@ Besluit van Bouke: de site hoeft **nog lang niet online**. Eerst moet hij goed w
 **Volgende kandidaten (in volgorde van waarde voor het uitleggen)**
 | # | Wie | Onderdeel | Waarom |
 |---|---|---|---|
-| H1 | Claude | Scherm "Eisen per woning" (C12): de makelaar stelt eisen, hard/review en marge zelf in | Maakt "u bepaalt hoe streng" waar; sterkste demo-moment |
+| H1 | Claude | **Klaar 6 okt:** scherm "Woningen" (C12): de eigenaar stelt woningen, eisen, hard/review en marge zelf in; tabel `properties`; formulier leest uit de database; 63 + 11 tests, 0 axe-schendingen. Opslaan met een echte login nog niet door Bouke beproefd | Maakt "u bepaalt hoe streng" waar; sterkste demo-moment |
 | H2 | Claude | Echte screenshots en een korte "zo ziet het eruit"-sectie op de uitlegpagina | Makelaars geloven wat ze zien |
 | H3 | Claude | Presentatie (slides) en een A4 met de kern | Voor gesprekken en de eindpresentatie |
 | H4 | Claude | Formulier: voortgang, nette bevestigingspagina, mobiele controle van formulier en dashboard | Eerste indruk bij de woningzoeker |
