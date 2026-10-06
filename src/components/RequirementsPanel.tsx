@@ -36,16 +36,19 @@ export default function RequirementsPanel({
   if (c.residencePermitRequired) items.push(t.reqResidencePermit);
 
   return (
-    <section aria-labelledby="req-title" className="rounded-lg border border-zinc-200 bg-zinc-50 p-4">
-      <h2 id="req-title" className="font-semibold">{t.requirementsTitle}</h2>
-      <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-zinc-800">
+    <section aria-labelledby="req-title" className="rounded-xl border border-accent-100 bg-accent-50 p-4 sm:p-5">
+      <h2 id="req-title" className="font-semibold text-accent-700">{t.requirementsTitle}</h2>
+      <ul className="mt-3 space-y-1.5 text-sm text-zinc-800">
         {items.map((i) => (
-          <li key={i}>{i}</li>
+          <li key={i} className="flex gap-2">
+            <span aria-hidden="true" className="font-semibold text-accent-600">✓</span>
+            <span>{i}</span>
+          </li>
         ))}
       </ul>
       {config.documentsLater.length > 0 && (
-        <div className="mt-4 border-t border-zinc-200 pt-3">
-          <h3 className="text-sm font-semibold">{t.documentsLaterTitle}</h3>
+        <div className="mt-4 border-t border-accent-100 pt-3">
+          <h3 className="text-sm font-semibold text-zinc-900">{t.documentsLaterTitle}</h3>
           <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-zinc-800">
             {config.documentsLater.map((d) => (
               <li key={d}>{t.documents[d]}</li>

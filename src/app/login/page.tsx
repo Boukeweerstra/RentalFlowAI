@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AuthShell from "@/components/auth/AuthShell";
 import LoginForm from "./LoginForm";
 import { safeNext } from "@/lib/safe-next";
 import { supabaseConfigured } from "@/lib/supabase/server";
@@ -9,11 +10,11 @@ export const metadata: Metadata = { title: "Inloggen – RentalFlowAI" };
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ fout?: string; next?: string }> }) {
   const { fout, next } = await searchParams;
   return (
-    <main lang="nl" className="mx-auto flex min-h-screen max-w-sm flex-col justify-center px-4 py-10">
-      <h1 className="text-2xl font-semibold tracking-tight">Inloggen</h1>
-      <p className="mt-1 mb-6 text-sm text-zinc-700">
-        Aanvragen voor makelaars. Dit gedeelte is alleen toegankelijk met een account.
-      </p>
+    <AuthShell
+      title="Inloggen"
+      intro="Voor medewerkers van een verhuurkantoor. Hier ziet u de aanvragen voor uw woningen."
+      footer={<Link href="/wachtwoord-vergeten" className="underline">Wachtwoord vergeten?</Link>}
+    >
       {!supabaseConfigured() && (
         <p role="alert" className="mb-4 rounded-md bg-amber-50 p-3 text-sm text-amber-950">
           Inloggen is nog niet ingesteld op deze omgeving.
@@ -25,9 +26,6 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
         </p>
       )}
       <LoginForm next={safeNext(next)} />
-      <p className="mt-6 text-sm">
-        <Link href="/wachtwoord-vergeten" className="underline">Wachtwoord vergeten?</Link>
-      </p>
-    </main>
+    </AuthShell>
   );
 }

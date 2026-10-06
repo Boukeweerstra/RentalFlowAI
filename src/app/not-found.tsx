@@ -11,7 +11,7 @@ export default function NotFound() {
         De link klopt niet of de pagina is verplaatst. Controleer het adres of ga terug naar het begin.
       </p>
       <p className="mt-6">
-        <Link href="/login" className="inline-flex min-h-11 items-center rounded-md bg-zinc-900 px-4 py-3 font-medium text-white hover:bg-zinc-700">
+        <Link href="/login" className="inline-flex min-h-11 items-center rounded-md bg-brand-800 px-4 py-3 font-medium text-white hover:bg-brand-700">
           Naar inloggen
         </Link>
       </p>

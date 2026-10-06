@@ -13,12 +13,14 @@ export default function DashboardPreviewPage() {
   return (
     <main>
       <DashboardHeader officeNames={["Demo Makelaardij"]} email="demo@example.com" preview />
+      <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
       <DashboardBoard
         initial={fixtureApplications}
         organizations={{ "00000000-0000-4000-8000-000000000001": "Demo Makelaardij" }}
         previewEvents={fixtureEvents}
         preview
       />
+      </div>
     </main>
   );
 }

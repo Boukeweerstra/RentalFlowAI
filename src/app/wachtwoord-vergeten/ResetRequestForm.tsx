@@ -29,7 +29,7 @@ export default function ResetRequestForm() {
         <p id="reset-error" role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-800">{state.error}</p>
       )}
       <button type="submit" disabled={pending}
-        className="min-h-11 w-full rounded-md bg-zinc-900 px-4 py-3 font-medium text-white hover:bg-zinc-700 disabled:opacity-60">
+        className="min-h-11 w-full rounded-md bg-brand-800 px-4 py-3 font-medium text-white hover:bg-brand-700 disabled:opacity-60">
         {pending ? "Bezig…" : "Stuur herstellink"}
       </button>
     </form>

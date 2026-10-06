@@ -1,6 +1,8 @@
+import Link from "next/link";
 import { signOut } from "@/app/login/actions";
+import Logo from "@/components/brand/Logo";
 
-/** Kop van het dashboard: titel, kantoor, wie is ingelogd en uitloggen. */
+/** Bovenbalk van het dashboard: merk, kantoor, wie is ingelogd en uitloggen. */
 export default function DashboardHeader({
   officeNames,
   email,
@@ -11,23 +13,28 @@ export default function DashboardHeader({
   preview?: boolean;
 }) {
   return (
-    <header className="mb-6 flex flex-wrap items-start justify-between gap-3">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Aanvragen</h1>
-        <p className="text-sm text-zinc-700">{officeNames.join(", ") || "Geen kantoor gekoppeld"}</p>
-      </div>
-      <div className="flex items-center gap-3 text-sm text-zinc-700">
-        <span className="truncate">{email}</span>
-        {preview ? (
-          <span className="rounded bg-amber-100 px-2 py-1 font-medium text-amber-950">Voorbeeld, verzonnen gegevens</span>
-        ) : (
-          <form action={signOut}>
-            <button type="submit"
-              className="min-h-11 rounded-md border border-zinc-500 px-3 font-medium text-zinc-900 hover:bg-zinc-50">
-              Uitloggen
-            </button>
-          </form>
-        )}
+    <header className="bg-brand-900 text-white">
+      <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-3 sm:px-6">
+        <div className="flex min-w-0 items-center gap-4">
+          <Link href="/" aria-label="RentalFlowAI, naar de uitlegpagina"><Logo light className="text-white" /></Link>
+          <span aria-hidden="true" className="hidden h-6 w-px bg-brand-700 sm:block" />
+          <p className="hidden min-w-0 truncate text-sm text-brand-100 sm:block">
+            <span className="sr-only">Kantoor: </span>{officeNames.join(", ") || "Geen kantoor gekoppeld"}
+          </p>
+        </div>
+        <div className="flex items-center gap-3 text-sm">
+          <span className="hidden truncate text-brand-100 md:inline">{email}</span>
+          {preview ? (
+            <span className="rounded bg-amber-200 px-2 py-1 font-medium text-amber-950">Voorbeeld, verzonnen gegevens</span>
+          ) : (
+            <form action={signOut}>
+              <button type="submit"
+                className="min-h-11 rounded-md border border-brand-600 px-3 font-medium text-white hover:bg-brand-800">
+                Uitloggen
+              </button>
+            </form>
+          )}
+        </div>
       </div>
     </header>
   );

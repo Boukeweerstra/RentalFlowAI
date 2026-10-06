@@ -50,6 +50,13 @@ type Props = {
 };
 
 const ALL = "__all__";
+
+/** Kleur per groep: groen, amber en leisteengrijs. Bewust geen rood: "Unsuitable" is een indicatie, geen afwijzing. */
+const GROUP_STYLE: Record<Group, { bar: string; edge: string; chip: string; tile: string }> = {
+  suitable: { bar: "bg-emerald-600", edge: "border-l-emerald-600", chip: "bg-emerald-100 text-emerald-900", tile: "border-emerald-200 hover:bg-emerald-50" },
+  review: { bar: "bg-amber-500", edge: "border-l-amber-500", chip: "bg-amber-100 text-amber-950", tile: "border-amber-200 hover:bg-amber-50" },
+  unsuitable: { bar: "bg-slate-500", edge: "border-l-slate-500", chip: "bg-slate-200 text-slate-900", tile: "border-slate-300 hover:bg-slate-100" },
+};
 const incomeTypes = getDict("nl").incomeTypes as Record<string, string>;
 
 // ---------------------------------------------------------------------------
@@ -242,7 +249,7 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
 
   return (
     <article id={`app-${app.id}`} aria-label={`Aanvraag van ${app.name}`}
-      className="mb-3 rounded-xl border border-zinc-300 bg-white p-4">
+      className={`mb-3 rounded-xl border border-l-4 border-zinc-200 bg-white p-4 shadow-sm ${GROUP_STYLE[app.group].edge}`}>
       <div className="flex items-start gap-3">
         <div aria-hidden="true"
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-100 text-sm font-medium text-zinc-800">
@@ -630,7 +637,52 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+      <div className="mb-5">
+        <h1 className="text-2xl font-semibold tracking-tight text-brand-900">Aanvragen</h1>
+        <p className="mt-1 text-sm text-zinc-700">
+          {apps.length === 0
+            ? "Nog geen aanvragen. Zodra iemand het formulier invult, verschijnt de aanvraag hier vanzelf."
+            : `${apps.length} ${apps.length === 1 ? "aanvraag" : "aanvragen"} in totaal.`}
+        </p>
+      </div>
+
+      <ul className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4" aria-label="Overzicht">
+        {GROUPS.map((g) => (
+          <li key={g}>
+            <a href={`#group-${g}`} className={`block rounded-xl border bg-white p-3 shadow-sm ${GROUP_STYLE[g].tile}`}>
+              <span className="flex items-center gap-2 text-sm font-medium text-zinc-800">
+                <span aria-hidden="true" className={`h-3 w-3 rounded-full ${GROUP_STYLE[g].bar}`} />
+                {GROUP_META[g].title}
+              </span>
+              <span className="mt-1 block text-2xl font-semibold text-zinc-900">{apps.filter((a) => a.group === g).length}</span>
+            </a>
+          </li>
+        ))}
+        <li>
+          <button type="button" aria-pressed={status === "nieuw"}
+            onClick={() => { setStatus(status === "nieuw" ? "all" : "nieuw"); resetExtra(); }}
+            className={`block w-full rounded-xl border bg-white p-3 text-left shadow-sm hover:bg-blue-50 ${status === "nieuw" ? "border-blue-500 ring-2 ring-blue-200" : "border-blue-200"}`}>
+            <span className="flex items-center gap-2 text-sm font-medium text-zinc-800">
+              <span aria-hidden="true" className="h-3 w-3 rounded-full bg-blue-600" />
+              Nog niet benaderd
+            </span>
+            <span className="mt-1 block text-2xl font-semibold text-zinc-900">{apps.filter((a) => a.handling === "nieuw").length}</span>
+          </button>
+        </li>
+      </ul>
+
+      <details className="mb-4 rounded-xl border border-brand-100 bg-white p-3 shadow-sm">
+        <summary className="flex min-h-11 cursor-pointer items-center font-medium text-brand-800">Hoe werkt dit scherm?</summary>
+        <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-zinc-700">
+          <li><strong>Suitable, Review, Unsuitable</strong> is een eerste indicatie van de computer op basis van de eisen van de woning. Het is geen besluit: u beslist en kunt de groep in <em>Details en acties</em> wijzigen.</li>
+          <li>Bel of mail direct vanuit de kaart. Met het kopieericoon zet u het nummer of adres op het klembord.</li>
+          <li>Vink <strong>Benaderd</strong> aan als u contact heeft gehad; de status gaat dan van Nieuw naar Benaderd. Zet notities in het notitieveld.</li>
+          <li>Onder <strong>Review</strong> ziet u welk punt u zelf moet bekijken, en vaak kunt u een conceptmail laten schrijven om ontbrekende informatie op te vragen.</li>
+          <li>Nieuwe aanvragen verschijnen vanzelf. Zoeken en filteren kan op naam, e-mail, telefoon, woning en status.</li>
+        </ul>
+      </details>
+
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-end gap-3">
           <div>
             <label htmlFor="zoek" className="block text-sm font-medium">Zoeken</label>
@@ -695,10 +747,11 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
         const headingId = `group-${g}`;
         return (
           <section key={g} aria-labelledby={headingId} className="mb-8">
-            <h2 id={headingId} className="mb-3 flex flex-wrap items-baseline gap-2 text-lg font-semibold">
+            <h2 id={headingId} className="mb-3 flex flex-wrap items-center gap-2 text-lg font-semibold text-zinc-900">
+              <span aria-hidden="true" className={`h-6 w-1.5 rounded-full ${GROUP_STYLE[g].bar}`} />
               {GROUP_META[g].title}
               <span className="text-sm font-normal text-zinc-700">{GROUP_META[g].subtitle}</span>
-              <span className="ml-auto rounded-full bg-zinc-100 px-2.5 py-0.5 text-sm font-medium text-zinc-800">{list.length}</span>
+              <span className={`ml-auto rounded-full px-2.5 py-0.5 text-sm font-medium ${GROUP_STYLE[g].chip}`}>{list.length}</span>
             </h2>
             {list.length === 0 ? (
               <p className="rounded-lg border border-dashed border-zinc-300 p-4 text-sm text-zinc-700">

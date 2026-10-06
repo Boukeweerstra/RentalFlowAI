@@ -47,8 +47,8 @@ export default async function EmbedAanvraagPage({
     <main lang={lang} className="mx-auto max-w-xl space-y-6 p-4 sm:p-6">
       {/* pr-12: ruimte voor de sluitknop van het widget rechtsboven */}
       <header className="pr-12">
-        <h1 className="text-2xl font-semibold tracking-tight">{t.title}</h1>
-        <p className="mt-1 text-zinc-700">{config.address}</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-brand-900">{t.title}</h1>
+        <p className="mt-1 text-lg font-medium text-zinc-800">{config.address}</p>
         <p className="mt-2 text-sm text-zinc-600">{t.intro}</p>
       </header>
       <RequirementsPanel config={config} lang={lang} />

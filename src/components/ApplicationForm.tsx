@@ -324,8 +324,8 @@ export default function ApplicationForm({
       {/* Tijdens de waarschuwing zijn de velden vergrendeld, zodat er niets anders
           verstuurd kan worden dan wat de zoeker net gezien heeft. */}
       <fieldset disabled={!!warning} className="m-0 min-w-0 space-y-8 border-0 p-0">
-      <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">{t.sectionYou}</legend>
+      <fieldset className="space-y-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
+        <legend className="px-1 text-lg font-semibold text-brand-900">{t.sectionYou}</legend>
         <Field label={t.name} error={errMsg("applicant.name")} id="name">
           <input id="name" className={inputCls} autoComplete="name" value={name}
             onChange={(e) => setName(e.target.value)} aria-invalid={!!errors["applicant.name"]} />
@@ -342,10 +342,10 @@ export default function ApplicationForm({
           label={t.ageConfirm(model.minAge)} error={errMsg("applicant.ageConfirmed")} />
       </fieldset>
 
-      <fieldset className="space-y-6">
-        <legend className="text-lg font-semibold">{t.sectionPersons}</legend>
+      <fieldset className="space-y-6 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
+        <legend className="px-1 text-lg font-semibold text-brand-900">{t.sectionPersons}</legend>
         {persons.map((p, i) => (
-          <div key={i} className="space-y-4 rounded-lg border border-zinc-200 p-4">
+          <div key={i} className="space-y-4 rounded-lg bg-slate-50 p-4">
             <div className="flex items-center justify-between">
               <h3 className="font-medium">{i === 0 ? t.primaryPerson : t.extraPerson(i)}</h3>
               {i > 0 && (
@@ -415,8 +415,8 @@ export default function ApplicationForm({
       </fieldset>
 
       {(model.askHousemates || model.askPets || model.askOccupants) && (
-        <fieldset className="space-y-4">
-          <legend className="text-lg font-semibold">{t.sectionSituation}</legend>
+        <fieldset className="space-y-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
+          <legend className="px-1 text-lg font-semibold text-brand-900">{t.sectionSituation}</legend>
           {model.askOccupants && (
             <Field label={t.occupants} id="occupants" hint={t.occupantsHint}
               error={errMsg("situation.occupants")}>
@@ -436,8 +436,8 @@ export default function ApplicationForm({
         </fieldset>
       )}
 
-      <fieldset className="space-y-4">
-        <legend className="text-lg font-semibold">{t.sectionLease}</legend>
+      <fieldset className="space-y-4 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:p-5">
+        <legend className="px-1 text-lg font-semibold text-brand-900">{t.sectionLease}</legend>
         <Field label={t.desiredStartDate} id="start" error={errMsg("lease.desiredStartDate")}>
           <input id="start" type="date" min={today} className={inputCls} value={startDate}
             onChange={(e) => setStartDate(e.target.value)} aria-invalid={!!errors["lease.desiredStartDate"]} />
@@ -489,7 +489,7 @@ export default function ApplicationForm({
               {t.warnBack}
             </button>
             <button type="button" onClick={() => send(warning.body)}
-              className="min-h-11 rounded-md bg-zinc-900 px-4 py-2 font-medium text-white hover:bg-zinc-700">
+              className="min-h-11 rounded-md bg-brand-800 px-4 py-2 font-medium text-white hover:bg-brand-700">
               {t.warnSend}
             </button>
           </div>
@@ -512,7 +512,7 @@ export default function ApplicationForm({
             <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-800">{formError}</p>
           )}
           <button type="submit" disabled={status === "sending"}
-            className="w-full rounded-md bg-zinc-900 px-4 py-3 font-medium text-white hover:bg-zinc-700 disabled:opacity-60">
+            className="w-full rounded-md bg-brand-800 px-4 py-3 font-medium text-white hover:bg-brand-700 disabled:opacity-60">
             {status === "sending" ? t.submitting : t.submit}
           </button>
         </>

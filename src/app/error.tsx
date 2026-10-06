@@ -23,7 +23,7 @@ export default function ErrorPage({
       </p>
       <p className="mt-6">
         <button type="button" onClick={() => retry()}
-          className="min-h-11 rounded-md bg-zinc-900 px-4 py-3 font-medium text-white hover:bg-zinc-700">
+          className="min-h-11 rounded-md bg-brand-800 px-4 py-3 font-medium text-white hover:bg-brand-700">
           Opnieuw proberen
         </button>
       </p>

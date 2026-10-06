@@ -19,7 +19,7 @@ export default async function ConfirmPage({ searchParams }: PageProps<"/auth/bev
       <form action={confirmRecovery}>
         <input type="hidden" name="token_hash" value={hash} />
         <button type="submit"
-          className="min-h-11 w-full rounded-md bg-zinc-900 px-4 py-3 font-medium text-white hover:bg-zinc-700">
+          className="min-h-11 w-full rounded-md bg-brand-800 px-4 py-3 font-medium text-white hover:bg-brand-700">
           Doorgaan
         </button>
       </form>
