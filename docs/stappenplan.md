@@ -270,3 +270,28 @@ Vink af zodra het echt klopt ("klaar als" gehaald).
 - [ ] Beveiligingscontrole van Supabase en `npm audit` zonder open punten (of bewust genoteerd)
 - [ ] Alle testscripts slagen (`test-abuse`, `test-store`, en de AI-tests)
 - [ ] Eerlijke lijst van wat niet is gedaan of niet is getest
+
+## 12. Koerswijziging van 6 oktober 2026: eerst goed, duidelijk, mooi en uit te leggen
+
+Besluit van Bouke: de site hoeft **nog lang niet online**. Eerst moet hij goed werken, duidelijk zijn, mooier worden, en moet Bouke hem goed aan makelaars kunnen uitleggen. Fase B (Upstash, Turnstile, openbaar maken) en D2, D5, D6 zijn daarom **geparkeerd** tot er een echte makelaar is.
+
+**Gedaan op 6 oktober**
+- Merkidentiteit (kleuren, logo, kop en voet): `src/components/brand`, `src/components/marketing`, kleuren in `src/app/globals.css`.
+- Uitlegpagina als startpagina (`/`): hoe het werkt, de drie groepen, dashboard, AI, privacy, veelgestelde vragen, eerlijk over de stand van zaken.
+- Dashboard opgeknapt: bovenbalk met merk, overzichtstegels (Suitable, Review, Unsuitable, Nog niet benaderd), uitklapbare uitleg "Hoe werkt dit scherm?", kleur per groep, filters in een kaart.
+- Inlogschermen met een gedeeld, gemerkt kader (`AuthShell`); alle gewijzigde pagina's: 0 axe-schendingen; telefoonweergave gecontroleerd voor de uitlegpagina.
+- Formulier opgeknapt: kaartsecties, eisenblok met vinkjes, merkkleuren.
+- Realistische demo-makelaarssite (`public/demo-host.html`) met vijf woningen en lichte weergave vastgezet.
+- Demoknoppen in het formulier voor testkantoren: *Sterke aanvraag*, *Twijfelgeval*, *Past niet* (alleen zichtbaar als `mode: test`; getest dat een productietenant ze niet toont).
+- `docs/uitleg-makelaars.md`: pitch van 30 seconden, demoscript van 5 minuten, lastige vragen met eerlijke antwoorden, wat je wel en niet mag beloven, vragen voor de makelaar, woordenlijst.
+- Teksten voor makelaars consequent met "u".
+
+**Volgende kandidaten (in volgorde van waarde voor het uitleggen)**
+| # | Wie | Onderdeel | Waarom |
+|---|---|---|---|
+| H1 | Claude | Scherm "Eisen per woning" (C12): de makelaar stelt eisen, hard/review en marge zelf in | Maakt "u bepaalt hoe streng" waar; sterkste demo-moment |
+| H2 | Claude | Echte screenshots en een korte "zo ziet het eruit"-sectie op de uitlegpagina | Makelaars geloven wat ze zien |
+| H3 | Claude | Presentatie (slides) en een A4 met de kern | Voor gesprekken en de eindpresentatie |
+| H4 | Claude | Formulier: voortgang, nette bevestigingspagina, mobiele controle van formulier en dashboard | Eerste indruk bij de woningzoeker |
+| H5 | Claude | Eén automatische rooktest voor de hele keten (formulier, opslag, dashboard, verwijderen) | Zeker weten dat een demo werkt |
+| H6 | Samen | Proefgesprek met één echte makelaar met `docs/uitleg-makelaars.md`, feedback verwerken | Echte labels voor de meting (E8) en echte wensen |

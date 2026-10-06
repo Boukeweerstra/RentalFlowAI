@@ -23,7 +23,7 @@ import {
  */
 export type ActionResult<T> = { ok: true; data: T } | { ok: false; error: string };
 
-const NOT_SIGNED_IN = "Je bent niet ingelogd. Log opnieuw in.";
+const NOT_SIGNED_IN = "U bent niet ingelogd. Log opnieuw in.";
 const GENERIC = "Dat is niet gelukt. Probeer het opnieuw.";
 
 const patchSchema = z

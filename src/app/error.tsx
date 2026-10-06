@@ -18,7 +18,7 @@ export default function ErrorPage({
     <main lang="nl" className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-10">
       <h1 className="text-2xl font-semibold tracking-tight">Er is iets misgegaan</h1>
       <p role="alert" className="mt-2 text-zinc-700">
-        Dit ligt niet aan jou. Probeer het opnieuw. Lukt het nog steeds niet, wacht dan even en probeer het later nog eens.
+        Dit ligt niet aan u. Probeer het opnieuw. Lukt het nog steeds niet, wacht dan even en probeer het later nog eens.
         {error.digest && <span className="mt-2 block text-xs text-zinc-600">Referentie: {error.digest}</span>}
       </p>
       <p className="mt-6">

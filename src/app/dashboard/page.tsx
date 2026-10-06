@@ -47,7 +47,7 @@ export default async function DashboardPage({
       <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6">
       {memberships.length === 0 ? (
         <p role="alert" className="rounded-md bg-amber-50 p-4 text-amber-950">
-          Je account is nog niet gekoppeld aan een kantoor. Neem contact op met de beheerder.
+          Uw account is nog niet gekoppeld aan een kantoor. Neem contact op met de beheerder.
         </p>
       ) : applications.error ? (
         <p role="alert" className="rounded-md bg-red-50 p-4 text-red-800">

@@ -38,5 +38,5 @@ export function nextStep(group: Group, reasons: PrecheckReason[], handling: Hand
     return advice.slice(0, 2).join("; ");
   }
 
-  return "Jij beslist: er wordt niets automatisch verstuurd";
+  return "U beslist: er wordt niets automatisch verstuurd";
 }

@@ -13,7 +13,7 @@ export default function ResetRequestForm() {
     return (
       <p role="status" className="rounded-md bg-green-50 p-3 text-sm text-green-900">
         Als dit e-mailadres bij ons bekend is, hebben we een e-mail gestuurd met een link om een nieuw
-        wachtwoord te kiezen. Kijk ook in je spam. De link is een uur geldig.
+        wachtwoord te kiezen. Kijk ook in uw spam. De link is een uur geldig.
       </p>
     );
   }

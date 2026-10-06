@@ -93,7 +93,7 @@ function relative(iso: string, now: number): string {
 const yesNo = (v: boolean | null) => (v === null ? "Niet gevraagd" : v ? "Ja" : "Nee");
 
 function describeEvent(e: DashEvent): string {
-  const who = e.bySystem ? "Systeem" : e.byMe ? "Jij" : "Een collega";
+  const who = e.bySystem ? "Systeem" : e.byMe ? "U" : "Een collega";
   const handling = (v: string | null) => (v && v in HANDLING_LABEL ? HANDLING_LABEL[v as Handling] : (v ?? ""));
   const group = (v: string | null) => (v && v in GROUP_META ? GROUP_META[v as Group].title : (v ?? ""));
   switch (e.action) {
@@ -297,7 +297,7 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
       </p>
       {changedByMaker && (
         <p className="mt-1 text-xs text-zinc-700">
-          De regels stelden voor: {GROUP_META[app.precheckStatus].title}. Jij koos: {GROUP_META[app.group].title}.
+          De regels stelden voor: {GROUP_META[app.precheckStatus].title}. U koos: {GROUP_META[app.group].title}.
         </p>
       )}
 
@@ -412,7 +412,7 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
                   <label htmlFor={`draft-body-${app.id}`} className="block text-sm font-medium">Tekst</label>
                   <textarea id={`draft-body-${app.id}`} rows={9} value={draft.body} onChange={(e) => setDraft({ ...draft, body: e.target.value })}
                     className="block w-full rounded-md border border-zinc-500 bg-white px-3 py-2 text-base" />
-                  <p className="text-xs text-zinc-700">AI-concept, kan fouten bevatten. Vul zelf je naam in bij &ldquo;[naam makelaar]&rdquo; en controleer alles voor je het verstuurt.</p>
+                  <p className="text-xs text-zinc-700">AI-concept, kan fouten bevatten. Vul zelf uw naam in bij &ldquo;[naam makelaar]&rdquo; en controleer alles voordat u het verstuurt.</p>
                   <div className="flex flex-wrap gap-3">
                     <button type="button" onClick={() => navigator.clipboard?.writeText(`${draft.subject}\n\n${draft.body}`)}
                       className="min-h-11 rounded-md border border-zinc-500 px-4 text-sm font-medium hover:bg-zinc-50">Kopieer onderwerp en tekst</button>
