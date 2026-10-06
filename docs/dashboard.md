@@ -96,3 +96,23 @@ select count(*) from public.applications where id = '<id>';           -- 0
 select count(*) from public.application_events where application_id = '<id>';  -- 0
 select * from public.deletion_log where application_id = '<id>';      -- 1 regel
 ```
+
+## Herstelmail bestendig maken tegen linkscans (eenmalig, in Supabase)
+
+Mailprogramma's en virusscanners openen links automatisch. Met de standaardmail van Supabase verbruikt zo'n scan de eenmalige code, waarna de
+echte klik "verlopen of al gebruikt" geeft. De app heeft daarom een tussenpagina `/auth/bevestig` met een knop **Doorgaan**; de code wordt pas
+ingewisseld na die klik. Zet hiervoor de mail van Supabase om:
+
+1. Supabase-dashboard > project **RentalFlowAI** > *Authentication* > *Email Templates* > **Reset Password**.
+2. Vervang de tekst van het onderwerp door `Nieuw wachtwoord kiezen voor RentalFlowAI` en de inhoud (Message body) door:
+
+```html
+<h2>Nieuw wachtwoord kiezen</h2>
+<p>Klik op de knop om een nieuw wachtwoord te kiezen voor RentalFlowAI.</p>
+<p><a href="{{ .SiteURL }}/auth/bevestig?token_hash={{ .TokenHash }}&type=recovery">Nieuw wachtwoord kiezen</a></p>
+<p>Heb je dit niet aangevraagd? Dan kun je deze mail negeren.</p>
+```
+
+3. Opslaan. De link gaat nu altijd naar het adres bij *URL Configuration > Site URL* (online). Lokaal testen van herstelmails werkt daarom alleen als je Site URL tijdelijk op `http://localhost:3100` zet; test dit liever online.
+
+Zonder deze wijziging blijft de oude route (`/auth/callback`) gewoon werken.

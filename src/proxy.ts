@@ -17,6 +17,7 @@ export async function proxy(request: NextRequest) {
     path === "/login" ||
     path === "/wachtwoord-vergeten" ||
     path === "/wachtwoord-nieuw" ||
+    path === "/auth/bevestig" ||
     path.startsWith("/dashboard")
   ) {
     return updateSession(request);
@@ -37,5 +38,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/embed/:path*", "/login", "/wachtwoord-vergeten", "/wachtwoord-nieuw", "/dashboard/:path*"],
+  matcher: ["/embed/:path*", "/login", "/wachtwoord-vergeten", "/wachtwoord-nieuw", "/auth/bevestig", "/dashboard/:path*"],
 };
