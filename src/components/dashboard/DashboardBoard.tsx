@@ -14,6 +14,15 @@ import {
   type Handling,
 } from "@/lib/dashboard/types";
 import { nextStep } from "@/lib/dashboard/next-step";
+import {
+  PAGE_SIZE,
+  SORT_LABEL,
+  matchesQuery,
+  matchesStatus,
+  sortApplications,
+  type SortKey,
+  type StatusFilter,
+} from "@/lib/dashboard/filter";
 import { REASON_NL } from "@/lib/mail-texts";
 import { getDict } from "@/lib/i18n";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
@@ -365,6 +374,10 @@ function ApplicationCard({ app, orgName, open, onToggle, scrollIntoView = false,
 export default function DashboardBoard({ initial, focusId, organizations, preview = false, previewEvents }: Props) {
   const [apps, setApps] = useState<DashApplication[]>(initial);
   const [woning, setWoning] = useState(ALL);
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState<StatusFilter>("all");
+  const [sort, setSort] = useState<SortKey>("newest");
+  const [extra, setExtra] = useState<Record<Group, number>>({ suitable: 0, review: 0, unsuitable: 0 });
   const [savingId, setSavingId] = useState<string | null>(null);
   const [openIds, setOpenIds] = useState<Set<string>>(() => new Set(focusId ? [focusId] : []));
   const toggleOpen = useCallback((id: string) => {
@@ -387,9 +400,20 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
   }, [apps]);
 
   const visible = useMemo(
-    () => apps.filter((a) => woning === ALL || `${a.organizationId}|${a.propertyId}` === woning),
-    [apps, woning],
+    () =>
+      sortApplications(
+        apps.filter(
+          (a) =>
+            (woning === ALL || `${a.organizationId}|${a.propertyId}` === woning) &&
+            matchesStatus(a, status) &&
+            matchesQuery(a, query),
+        ),
+        sort,
+      ),
+    [apps, woning, status, query, sort],
   );
+  const filtering = woning !== ALL || status !== "all" || query.trim() !== "";
+  const resetExtra = () => setExtra({ suitable: 0, review: 0, unsuitable: 0 });
 
   // Live bijwerken (Supabase Realtime volgt dezelfde rijafscherming) met verversen als terugval.
   useEffect(() => {
@@ -465,13 +489,43 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <label htmlFor="woning-filter" className="block text-sm font-medium">Woning</label>
-          <select id="woning-filter" value={woning} onChange={(e) => setWoning(e.target.value)}
-            className="mt-1 block min-h-11 w-full min-w-60 rounded-md border border-zinc-500 bg-white px-3 text-base">
-            <option value={ALL}>Alle woningen</option>
-            {properties.map((p) => (<option key={p.key} value={p.key}>{p.address}</option>))}
-          </select>
+        <div className="flex flex-wrap items-end gap-3">
+          <div>
+            <label htmlFor="zoek" className="block text-sm font-medium">Zoeken</label>
+            <input id="zoek" type="search" value={query} placeholder="Naam, e-mail, telefoon of adres"
+              onChange={(e) => { setQuery(e.target.value); resetExtra(); }}
+              className="mt-1 block min-h-11 w-full min-w-60 rounded-md border border-zinc-500 bg-white px-3 text-base" />
+          </div>
+          <div>
+            <label htmlFor="woning-filter" className="block text-sm font-medium">Woning</label>
+            <select id="woning-filter" value={woning} onChange={(e) => { setWoning(e.target.value); resetExtra(); }}
+              className="mt-1 block min-h-11 w-full min-w-60 rounded-md border border-zinc-500 bg-white px-3 text-base">
+              <option value={ALL}>Alle woningen</option>
+              {properties.map((p) => (<option key={p.key} value={p.key}>{p.address}</option>))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="status-filter" className="block text-sm font-medium">Status</label>
+            <select id="status-filter" value={status} onChange={(e) => { setStatus(e.target.value as StatusFilter); resetExtra(); }}
+              className="mt-1 block min-h-11 w-full rounded-md border border-zinc-500 bg-white px-3 text-base">
+              <option value="all">Alle statussen</option>
+              <option value="open">Nog lopend (niet afgerond)</option>
+              {HANDLINGS.map((h) => (<option key={h} value={h}>{HANDLING_LABEL[h]}</option>))}
+            </select>
+          </div>
+          <div>
+            <label htmlFor="sorteer" className="block text-sm font-medium">Sorteren</label>
+            <select id="sorteer" value={sort} onChange={(e) => { setSort(e.target.value as SortKey); resetExtra(); }}
+              className="mt-1 block min-h-11 w-full rounded-md border border-zinc-500 bg-white px-3 text-base">
+              {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (<option key={k} value={k}>{SORT_LABEL[k]}</option>))}
+            </select>
+          </div>
+          {filtering && (
+            <button type="button" onClick={() => { setQuery(""); setWoning(ALL); setStatus("all"); resetExtra(); }}
+              className="min-h-11 rounded-md border border-zinc-500 px-3 font-medium hover:bg-zinc-50">
+              Filters wissen
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-3 text-sm text-zinc-700">
           <span>
@@ -493,6 +547,9 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
 
       {GROUPS.map((g) => {
         const list = visible.filter((a) => a.group === g);
+        const limit = PAGE_SIZE + extra[g];
+        // De aanvraag uit de link in de mail blijft altijd zichtbaar, ook buiten de eerste pagina.
+        const shown = list.filter((a, i) => i < limit || a.id === focusId);
         const headingId = `group-${g}`;
         return (
           <section key={g} aria-labelledby={headingId} className="mb-8">
@@ -503,14 +560,22 @@ export default function DashboardBoard({ initial, focusId, organizations, previe
             </h2>
             {list.length === 0 ? (
               <p className="rounded-lg border border-dashed border-zinc-300 p-4 text-sm text-zinc-700">
-                Geen aanvragen in deze groep.
+                {filtering ? "Geen aanvragen in deze groep met deze filters." : "Geen aanvragen in deze groep."}
               </p>
             ) : (
-              list.map((a) => (
-                <ApplicationCard key={a.id} app={a} open={openIds.has(a.id)} onToggle={toggleOpen}
-                  scrollIntoView={a.id === focusId} busy={savingId === a.id} onPatch={patch}
-                  fetchEvents={fetchEvents} orgName={multiOrg ? organizations[a.organizationId] : undefined} />
-              ))
+              <>
+                {shown.map((a) => (
+                  <ApplicationCard key={a.id} app={a} open={openIds.has(a.id)} onToggle={toggleOpen}
+                    scrollIntoView={a.id === focusId} busy={savingId === a.id} onPatch={patch}
+                    fetchEvents={fetchEvents} orgName={multiOrg ? organizations[a.organizationId] : undefined} />
+                ))}
+                {list.length > limit && (
+                  <button type="button" onClick={() => setExtra((e) => ({ ...e, [g]: e[g] + PAGE_SIZE }))}
+                    className="min-h-11 w-full rounded-md border border-zinc-500 px-3 font-medium hover:bg-zinc-50">
+                    Toon meer ({list.length - limit} overige)
+                  </button>
+                )}
+              </>
             )}
           </section>
         );
