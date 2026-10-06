@@ -62,6 +62,17 @@ const good = JSON.stringify({ summary: "De aanvrager zoekt een rustige woning di
     check(`beoordelende taal geweerd: "${bad.slice(0, 28)}…"`, parseSummary(JSON.stringify({ summary: bad, points: [] })).code === "decision_language");
   }
   check("beoordelende taal in punten geweerd", parseSummary(JSON.stringify({ summary: "ok", points: ["Goedkeuren is verstandig"] })).code === "decision_language");
+  for (const s of [
+    "De schrijver heeft een chronische ziekte en zoekt een rustige woning.",
+    "Wil een woning dicht bij de moskee vanwege het geloof.",
+    "Vanwege een beperking is een begane grond nodig.",
+    "De aanvrager is zwanger en wil snel verhuizen.",
+  ]) {
+    check(`gevoelige uitvoer geweerd: "${s.slice(0, 30)}…"`, parseSummary(JSON.stringify({ summary: s, points: [] })).code === "sensitive");
+  }
+  check("gevoelig woord in punten geweerd", parseSummary(JSON.stringify({ summary: "ok", points: ["Medische reden genoemd"] })).code === "sensitive");
+  check("woonwens zonder reden blijft toegestaan", parseSummary(JSON.stringify({ summary: "Wil graag een woning op de begane grond, dicht bij de huisarts.", points: ["Rustige omgeving"] })).ok);
+  check("systeemprompt verbiedt gevoelige onderwerpen", /NOOIT gezondheid/.test(buildSummaryRequest(MOTIVATION, NAME).system));
   check("neutrale tekst met 'garantie' blijft toegestaan", parseSummary(JSON.stringify({ summary: "Vraagt om een garantie van de ouders.", points: [] })).ok);
 }
 
@@ -89,7 +100,7 @@ const input = { applicationId: "a1", organizationId: "o1", motivation: MOTIVATIO
   const h = harness(createFakeProvider());
   const out = await runSummary(input, h.deps);
   check("nepaanbieder: ok", out === "ok" && h.saved.length === 1 && h.saved[0].status === "ok" && h.saved[0].kind === "summary");
-  check("promptversie en model vastgelegd", h.saved[0].prompt_version === "summary-v1" && h.saved[0].model === "fake-1");
+  check("promptversie en model vastgelegd", h.saved[0].prompt_version === "summary-v2" && h.saved[0].model === "fake-1");
 }
 {
   const h = harness(createFakeProvider(), { budget: false });
