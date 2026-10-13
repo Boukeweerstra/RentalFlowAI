@@ -61,7 +61,7 @@ export const nl = {
   hasValidPermit: "Beschikt u over een geldige verblijfstitel?",
 
   motivation: "Toelichting (optioneel)",
-  motivationHint: "Bijvoorbeeld iets over uw situatie of reden van verhuizing.",
+  motivationHint: "Bijvoorbeeld uw reden van verhuizen of iets over uw woonwens. Vermeld hier geen gezondheidsgegevens of andere gevoelige informatie: dat is niet nodig voor uw aanvraag.",
 
   privacyBefore: "Ik ga akkoord met de verwerking van mijn gegevens voor deze woningaanvraag (",
   privacyAfter: "). Gegevens worden alleen gebruikt om uw aanvraag te beoordelen.",
@@ -78,6 +78,14 @@ export const nl = {
   successTitle: "Bedankt, uw aanvraag is ontvangen",
   successBody:
     "De makelaar beoordeelt uw aanvraag en neemt contact met u op als deze past bij de woning.",
+  successNextTitle: "Wat gebeurt er nu?",
+  successSteps: (months: number) => [
+    "De makelaar bekijkt uw aanvraag. Een computer wijst niemand af: een medewerker beslist.",
+    "Past uw aanvraag bij de woning, dan neemt de makelaar contact met u op.",
+    `Uw gegevens worden maximaal ${months} maanden bewaard. Verwijdering kunt u vragen bij de makelaar; zie de privacyverklaring.`,
+  ],
+  progressLeft: (n: number) => (n === 1 ? "Nog 1 vraag te beantwoorden" : `Nog ${n} vragen te beantwoorden`),
+  progressDone: "Alles is ingevuld. U kunt versturen.",
   errorGeneric: "Er ging iets mis bij het versturen. Probeer het later opnieuw.",
   errorFix: "Controleer de gemarkeerde velden.",
   errorRateLimit: "Te veel pogingen. Wacht even en probeer het opnieuw.",

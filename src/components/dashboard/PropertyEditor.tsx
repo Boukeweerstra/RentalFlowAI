@@ -287,7 +287,7 @@ export default function PropertyEditor({ initial, offices, canEdit, preview = fa
               <SeverityToggle name="sev-income" value={form.incomeSeverity} onChange={(v) => set("incomeSeverity", v)} disabled={disabled} />
             </Requirement>
 
-            <Requirement title="Toegestane inkomstenbronnen" hint="Alleen de aangevinkte bronnen tellen mee.">
+            <Requirement title="Toegestane inkomstenbronnen" hint="Alleen de aangevinkte bronnen tellen mee. Let op: een bron uitsluiten (bijvoorbeeld uitkering of zzp) kan mensen in een kwetsbare positie onevenredig raken. Kies bij twijfel hieronder voor &quot;Zelf bekijken&quot;.">
               <div className="grid gap-1 sm:grid-cols-2" role="group" aria-label="Toegestane inkomstenbronnen">
                 {INCOME_TYPES.map((it) => (
                   <label key={it} className="flex min-h-11 items-center gap-2 text-sm">
@@ -383,7 +383,7 @@ export default function PropertyEditor({ initial, offices, canEdit, preview = fa
               </div>
               {!form.housematesAllowed && <SeverityToggle name="sev-house" value={form.housematesSeverity} onChange={(v) => set("housematesSeverity", v)} disabled={disabled} />}
             </Requirement>
-            <Requirement title="Studenten">
+            <Requirement title="Studenten" hint="Let op: studenten uitsluiten treft vooral jongeren en kan indirect onderscheid zijn. Kies bij twijfel &quot;Zelf bekijken&quot;.">
               <div className="flex flex-wrap gap-4" role="radiogroup" aria-label="Studenten">
                 {([[true, "Toegestaan"], [false, "Niet toegestaan"]] as const).map(([v, label]) => (
                   <label key={label} className="flex min-h-11 items-center gap-2 text-sm">
@@ -432,7 +432,7 @@ export default function PropertyEditor({ initial, offices, canEdit, preview = fa
               </div>
               {form.depositGuarantee === "required" && <SeverityToggle name="sev-dep" value={form.depositSeverity} onChange={(v) => set("depositSeverity", v)} disabled={disabled} />}
             </Requirement>
-            <Requirement title="Geldige verblijfsvergunning vereist" hint="Alleen ja of nee. Er wordt nooit op nationaliteit gestuurd.">
+            <Requirement title="Geldige verblijfsvergunning vereist" hint="Alleen ja of nee. Er wordt nooit op nationaliteit gestuurd. Let op: dit raakt mensen met een andere nationaliteit; vraag het alleen als dat voor deze woning echt nodig is en kies bij twijfel &quot;Zelf bekijken&quot;.">
               <label className="flex min-h-11 items-center gap-2 text-sm">
                 <input type="checkbox" checked={form.residencePermitRequired} onChange={(e) => set("residencePermitRequired", e.target.checked)} className="h-5 w-5" />
                 Ja, vragen of de woningzoeker een geldige verblijfsvergunning heeft

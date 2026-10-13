@@ -71,7 +71,13 @@ const SEVERITY_FIELDS: Array<[PrecheckReason, keyof RequirementsForm]> = [
 
 const num = (n: number | undefined): string => (n === undefined ? "" : String(n));
 
-/** Een nieuwe woning begint met de verstandige standaard: gebruikelijke eisen, alles volgens de standaardernst. */
+const SENSITIVE_REVIEW_DEFAULTS: Partial<Record<PrecheckReason, Severity>> = {
+  student_not_allowed: "review",
+  income_type_not_allowed: "review",
+  residence_permit_required: "review",
+};
+
+/** Een nieuwe woning begint met de verstandige standaard: gebruikelijke eisen; gevoelige eisen op "zelf bekijken", de rest volgens de standaardernst. */
 export function defaultCriteria(): Criteria {
   return criteriaSchema.parse({
     minAge: 18,
@@ -85,6 +91,9 @@ export function defaultCriteria(): Criteria {
     studentsAllowed: true,
     depositGuarantee: "not_needed",
     residencePermitRequired: false,
+    // Gevoelige eisen (kunnen indirect onderscheid opleveren) beginnen bij een nieuwe woning op "Zelf bekijken".
+    // De algemene standaard (DEFAULT_SEVERITY) blijft ongemoeid, zodat bestaande woningen niet veranderen.
+    severity: SENSITIVE_REVIEW_DEFAULTS,
   });
 }
 

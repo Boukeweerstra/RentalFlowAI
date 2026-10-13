@@ -295,3 +295,22 @@ Besluit van Bouke: de site hoeft **nog lang niet online**. Eerst moet hij goed w
 | H4 | Claude | Formulier: voortgang, nette bevestigingspagina, mobiele controle van formulier en dashboard | Eerste indruk bij de woningzoeker |
 | H5 | Claude | Eén automatische rooktest voor de hele keten (formulier, opslag, dashboard, verwijderen) | Zeker weten dat een demo werkt |
 | H6 | Samen | Proefgesprek met één echte makelaar met `docs/uitleg-makelaars.md`, feedback verwerken | Echte labels voor de meting (E8) en echte wensen |
+
+## 13. Sprint 4 (13 oktober 2026): n8n lokaal en verder optimaliseren
+
+Afspraak: zoveel mogelijk lokaal houden en pas aan het eind in één keer pushen. Laatste push was `dd5dfa4` (n8n); daarna staat alles lokaal.
+
+**Gedaan**
+- Make.com vervangen door n8n in Docker (`n8n/`, handleiding `docs/n8n-setup.md`); keten getest: webhook met geheim, Sheet-rij, melding aan de makelaar, filter op de bevestiging. De bevestigingsmail aan de woningzoeker is nog niet bevestigd in een inbox.
+- Waarschuwing bij het veld Toelichting: geen gezondheidsgegevens (DPIA risico 4, NL en EN).
+- Eisenscherm: korte waarschuwing bij studenten, inkomstenbronnen en verblijfsvergunning (mogelijk indirect onderscheid; kies bij twijfel "Zelf bekijken"), uit de AVG- en biastoets in `docs/notebooklm/`.
+- Mobiele controle van het formulier (375 px): geen horizontaal scrollen.
+- H2 klaar: sectie "Zo ziet het eruit" op de uitlegpagina (`#beeld`, formulier, dashboard en eisenscherm uit `public/screens/`, verzonnen gegevens), met alt-teksten en link in de kop; geen horizontaal scrollen op 375 px.
+- Punt 3 klaar: nieuwe woningen beginnen met studenten, inkomstenbronnen en verblijfsvergunning op "Zelf bekijken" (alleen in `defaultCriteria`; `DEFAULT_SEVERITY` en bestaande woningen ongewijzigd; test-requirements 66/66, regelmeting nog 85%).
+- H4 klaar: voortgangsregel boven de verzendknop ("Nog N vragen" / "Alles is ingevuld"), bevestigingspagina met "Wat gebeurt er nu?" (NL en EN); formulier op 375 px zonder horizontaal scrollen.
+- H3 klaar: `docs/materiaal/a4-makelaars` (1 pagina) en `slides-makelaars` (8 slides) als HTML en PDF (PDF via Edge); kopie op het Bureaublad in Makelaar-materiaal. Contactregel op de A4 staat nog op "[uw telefoon of e-mail]".
+- H5 klaar: rooktest `scripts/smoke.mjs` (12 controles: app, n8n, opslag, RLS, dubbele aanvraag, opruimen).
+
+**Wat niet lokaal kan**: Supabase (database en inloggen) staat al online; wijzigingen aan de database gaan dus naar die online omgeving. AI (OpenAI) en Google zijn externe diensten.
+
+**Open uit de toets (nog te doen)**: grondslag "stappen voor een overeenkomst" in de privacyverklaring (juridisch toetsen), standaardkeuze bij gevoelige eisen op "Zelf bekijken" overwegen, bias-onderzoek per groep met een echte makelaar, A9 (gelekte-wachtwoordcontrole), H2, H3, H5.

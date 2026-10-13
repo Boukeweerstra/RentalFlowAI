@@ -3,6 +3,7 @@ import Logo from "@/components/brand/Logo";
 
 const LINKS = [
   { href: "#hoe", label: "Hoe het werkt" },
+  { href: "#beeld", label: "Zo ziet het eruit" },
   { href: "#groepen", label: "De drie groepen" },
   { href: "#ai", label: "AI" },
   { href: "#privacy", label: "Privacy" },

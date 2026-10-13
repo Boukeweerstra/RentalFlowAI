@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>RentalFlowAI voor verhuurmakelaars</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: #1f2937; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .page { width: 210mm; height: 297mm; padding: 9mm 13mm 8mm; display: flex; flex-direction: column; gap: 3.2mm; overflow: hidden; }
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #0f766e; padding-bottom: 2.5mm; }
+  h1 { margin: 0; font-size: 21pt; color: #163b5c; line-height: 1.1; }
+  .tag { margin: 1mm 0 0; font-size: 11.5pt; color: #0f766e; font-weight: 600; }
+  .brand { font-size: 12pt; font-weight: 700; color: #163b5c; }
+  h2 { margin: 0 0 1mm; font-size: 11pt; color: #163b5c; }
+  p, li { font-size: 9pt; line-height: 1.33; margin: 0; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3mm; }
+  .step { background: #f1f6fb; border-radius: 3mm; padding: 2mm 2.6mm; }
+  .step b { display: block; color: #0f766e; font-size: 9.5pt; margin-bottom: 1mm; }
+  .step p { font-size: 8.4pt; }
+  .groups { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3mm; }
+  .g { border-radius: 3mm; padding: 2mm 2.8mm; border: 1px solid; }
+  .g b { display: block; font-size: 10pt; margin-bottom: 0.8mm; }
+  .g p { font-size: 8.4pt; }
+  .g1 { background: #ecfdf5; border-color: #a7f3d0; color: #064e3b; }
+  .g2 { background: #fffbeb; border-color: #fde68a; color: #78350f; }
+  .g3 { background: #f1f5f9; border-color: #cbd5e1; color: #1e293b; }
+  .shots { display: grid; grid-template-columns: 1fr 1fr; gap: 3mm; align-items: start; }
+  .shots figure { margin: 0; }
+  .shots img { width: 100%; height: 50mm; object-fit: cover; object-position: top left; border: 1px solid #d4d4d8; border-radius: 2mm; display: block; }
+  figcaption { font-size: 7.6pt; color: #52525b; margin-top: 1mm; }
+  ul { margin: 0; padding-left: 4.5mm; }
+  li { margin-bottom: 0.8mm; }
+  .box { background: #163b5c; color: #fff; border-radius: 3mm; padding: 2.4mm 3.6mm; }
+  .box h2 { color: #fff; }
+  .box p, .box li { color: #fff; }
+  .honest { border: 1.5px dashed #0f766e; border-radius: 3mm; padding: 2.4mm 3.6mm; background: #f0fdfa; }
+  footer { margin-top: auto; display: flex; justify-content: space-between; font-size: 8.5pt; color: #52525b; border-top: 1px solid #d4d4d8; padding-top: 2.5mm; }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div>
+      <h1>Aanvragen voor huurwoningen, compleet en voorgesorteerd</h1>
+      <p class="tag">De computer wijst nooit af. U beslist.</p>
+    </div>
+    <div class="brand">RentalFlowAI</div>
+  </header>
+
+  <div class="row">
+    <div>
+      <h2>Het probleem</h2>
+      <p>Per woning komen veel aanvragen binnen, per mail, telefoon of in wisselende formulieren. Elke aanvraag moet u nalopen op inkomen, proeftijd, huisdieren en aantal bewoners, en een groot deel voldoet niet aan uw eisen. Dat kost tijd die u liever aan bezichtigingen besteedt.</p>
+    </div>
+    <div>
+      <h2>De oplossing in één zin</h2>
+      <p>Een knop <b>Aanvraag</b> op uw woningpagina, een formulier met alleen de vragen die bij die woning horen, en een eerste check die elke aanvraag voorsorteert in een overzicht waarin u zelf beslist.</p>
+    </div>
+  </div>
+
+  <div>
+    <h2>Zo werkt het</h2>
+    <div class="steps">
+      <div class="step"><b>1. Een knop op uw site</b><p>Eén regel code. Het formulier opent op uw eigen pagina.</p></div>
+      <div class="step"><b>2. Alleen de nodige vragen</b><p>De woningzoeker ziet eerst uw eisen en vult daarna alleen in wat erbij hoort.</p></div>
+      <div class="step"><b>3. Een eerste check</b><p>Vaste regels vergelijken de antwoorden met uw eisen, met de redenen erbij.</p></div>
+      <div class="step"><b>4. U beslist</b><p>Melding per mail, dashboard met bel- en mailknop, status en notities.</p></div>
+    </div>
+  </div>
+
+  <div>
+    <h2>De drie groepen</h2>
+    <div class="groups">
+      <div class="g g1"><b>Suitable</b><p>Alle eisen gehaald. Plan een bezichtiging.</p></div>
+      <div class="g g2"><b>Review</b><p>Een punt wilt u zelf bekijken, bijvoorbeeld proeftijd of inkomen net onder de grens.</p></div>
+      <div class="g g3"><b>Unsuitable</b><p>Een harde eis niet gehaald. Een indicatie: u kunt de groep altijd wijzigen.</p></div>
+    </div>
+  </div>
+
+  <div class="shots">
+    <figure><img src="../../public/screens/eisenscherm.png" alt="Eisen per woning instellen"><figcaption>U stelt de eisen per woning zelf in. Verzonnen gegevens.</figcaption></figure>
+    <figure><img src="../../public/screens/dashboard.png" alt="Dashboard voor de makelaar"><figcaption>Uw dashboard: voorgesorteerd, met telefoon, e-mail en een voorgestelde volgende stap.</figcaption></figure>
+  </div>
+
+  <div class="row">
+    <div>
+      <h2>U bepaalt hoe streng</h2>
+      <ul>
+        <li>Per woning stelt u zelf uw eisen in: huur, inkomen, proeftijd, huisdieren, bewoners, garantsteller en meer.</li>
+        <li>Per eis kiest u: <i>past niet</i> of <i>zelf bekijken</i>, met een marge onder de inkomensgrens.</li>
+        <li>Met "Probeer een inkomen" test u direct in welke groep iemand terechtkomt.</li>
+      </ul>
+    </div>
+    <div>
+      <h2>AI: klein en begrensd</h2>
+      <ul>
+        <li>Standaard uit. Alleen tekst: een samenvatting van de toelichting en een concept-mail die u zelf leest en verstuurt.</li>
+        <li>De AI krijgt geen naam of contactgegevens en kan nooit een groep wijzigen.</li>
+        <li>De cijfers komen uit vaste regels, niet uit AI.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="box">
+    <h2>Privacy en beveiliging</h2>
+    <p>Geen kopie van een identiteitsbewijs of BSN. Standaard 6 maanden bewaard, verwijderen met één knop. Inloggen verplicht en elk kantoor ziet alleen de eigen aanvragen. De computer wijst niemand af: een medewerker beslist altijd.</p>
+  </div>
+
+  <div class="honest">
+    <h2>Eerlijk over de stand van zaken</h2>
+    <p>RentalFlowAI is een werkend <b>prototype</b>, gebouwd door een student (minor AI) en getest met verzonnen aanvragen. De privacyverklaring en de verwerkersafspraken zijn nog niet juridisch getoetst, en er is nog geen koppeling met woningbeheersystemen. Prijs en leverdatum zijn nog niet bepaald. Ik hoor graag wat u hiervan waard vindt.</p>
+  </div>
+
+  <footer>
+    <span>Bouke Weerstra · Minor AI · [uw telefoon of e-mail]</span>
+    <span>Demo op aanvraag</span>
+  </footer>
+</div>
+</body>
+</html>

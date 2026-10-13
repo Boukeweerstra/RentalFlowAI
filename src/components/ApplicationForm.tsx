@@ -15,6 +15,7 @@ import type { FormModel } from "@/lib/form-model";
 import { needsEmploymentDetails } from "@/lib/form-model";
 import { getDict, type Dict } from "@/lib/i18n";
 import TurnstileBox from "@/components/TurnstileBox";
+import { PRIVACY_RETENTION_MONTHS } from "@/lib/privacy-text";
 
 type PersonState = {
   role: Person["role"];
@@ -337,6 +338,10 @@ export default function ApplicationForm({
         className="rounded-lg border border-green-200 bg-green-50 p-6 outline-none">
         <h2 className="text-lg font-semibold text-green-900">{t.successTitle}</h2>
         <p className="mt-2 text-green-900">{t.successBody}</p>
+        <h3 className="mt-5 font-semibold text-green-900">{t.successNextTitle}</h3>
+        <ol className="mt-2 list-decimal space-y-1 pl-5 text-green-900">
+          {t.successSteps(PRIVACY_RETENTION_MONTHS).map((s) => <li key={s}>{s}</li>)}
+        </ol>
         {/* Alleen in het widget (iframe) heeft sluiten zin. */}
         <button type="button"
           onClick={() => window.parent?.postMessage({ source: "rentalflowai", type: "close" }, "*")}
@@ -354,6 +359,9 @@ export default function ApplicationForm({
   ) : (
     <span>{t.privacyNoLink}</span>
   );
+
+  // Hoeveel verplichte vragen zijn nog open (dezelfde controle als bij het versturen, zonder meldingen te tonen).
+  const missingCount = Object.keys(validateClient()).length;
 
   return (
     <form ref={formRef} onSubmit={onSubmit} noValidate className="space-y-8">
@@ -575,6 +583,9 @@ export default function ApplicationForm({
           {formError && (
             <p role="alert" className="rounded-md bg-red-50 p-3 text-sm text-red-800">{formError}</p>
           )}
+          <p className="text-sm text-zinc-700" data-testid="voortgang">
+            {missingCount === 0 ? t.progressDone : t.progressLeft(missingCount)}
+          </p>
           <button type="submit" disabled={status === "sending"}
             className="w-full rounded-md bg-brand-800 px-4 py-3 font-medium text-white hover:bg-brand-700 disabled:opacity-60">
             {status === "sending" ? t.submitting : t.submit}

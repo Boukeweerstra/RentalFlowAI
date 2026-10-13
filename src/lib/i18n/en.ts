@@ -61,7 +61,7 @@ export const en: Dict = {
   hasValidPermit: "Do you have a valid residence permit?",
 
   motivation: "Additional information (optional)",
-  motivationHint: "For example something about your situation or reason for moving.",
+  motivationHint: "For example your reason for moving or something about your housing wishes. Please do not include health information or other sensitive details: they are not needed for your application.",
 
   privacyBefore: "I agree to the processing of my data for this rental application (",
   privacyAfter: "). Data is only used to assess your application.",
@@ -78,6 +78,14 @@ export const en: Dict = {
   successTitle: "Thank you, your application has been received",
   successBody:
     "The agent will review your application and get in touch if it fits the property.",
+  successNextTitle: "What happens next?",
+  successSteps: (months) => [
+    "The agent reviews your application. A computer never rejects anyone: a staff member decides.",
+    "If your application fits the property, the agent will contact you.",
+    `Your data is kept for at most ${months} months. You can ask the agent to delete it; see the privacy statement.`,
+  ],
+  progressLeft: (n) => (n === 1 ? "1 question left to answer" : `${n} questions left to answer`),
+  progressDone: "Everything is filled in. You can send your application.",
   errorGeneric: "Something went wrong while sending. Please try again later.",
   errorFix: "Please check the highlighted fields.",
   errorRateLimit: "Too many attempts. Please wait a moment and try again.",

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<title>RentalFlowAI: gesprek met een verhuurmakelaar</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; color: #1f2937; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .s { width: 1280px; height: 720px; padding: 56px 72px; position: relative; overflow: hidden; page-break-after: always; break-after: page; background: #fff; display: flex; flex-direction: column; }
+  .s:last-child { page-break-after: auto; break-after: auto; }
+  .s::after { content: attr(data-n); position: absolute; right: 36px; bottom: 24px; font-size: 18px; color: #94a3b8; }
+  .dark { background: #163b5c; color: #fff; }
+  .dark::after { color: #94a3b8; }
+  h1 { font-size: 68px; line-height: 1.08; margin: 0; color: #163b5c; }
+  .dark h1 { color: #fff; }
+  h2 { font-size: 46px; margin: 0 0 28px; color: #163b5c; line-height: 1.12; }
+  .kicker { font-size: 24px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #0f766e; margin-bottom: 14px; }
+  .dark .kicker { color: #5eead4; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  li { font-size: 32px; line-height: 1.35; margin-bottom: 16px; padding-left: 38px; position: relative; }
+  li::before { content: ""; position: absolute; left: 0; top: 15px; width: 16px; height: 16px; border-radius: 50%; background: #0f766e; }
+  .cols { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; flex: 1; }
+  .cols.rev { grid-template-columns: 1.1fr 1fr; }
+  figure { margin: 0; }
+  figure img { width: 100%; border-radius: 14px; border: 1px solid #d4d4d8; box-shadow: 0 8px 24px rgba(15,23,42,.12); display: block; }
+  figcaption { font-size: 18px; color: #52525b; margin-top: 10px; }
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 8px; }
+  .card { border-radius: 18px; padding: 26px 28px; border: 2px solid; }
+  .card b { display: block; font-size: 34px; margin-bottom: 8px; }
+  .card p { margin: 0; font-size: 26px; line-height: 1.3; }
+  .c1 { background: #ecfdf5; border-color: #a7f3d0; color: #064e3b; }
+  .c2 { background: #fffbeb; border-color: #fde68a; color: #78350f; }
+  .c3 { background: #f1f5f9; border-color: #cbd5e1; color: #1e293b; }
+  .big { font-size: 40px; line-height: 1.3; }
+  .note { margin-top: auto; font-size: 22px; color: #475569; }
+  .dark .note { color: #cbd5e1; }
+  .q li::before { background: #5eead4; }
+</style>
+</head>
+<body>
+
+<section class="s dark" data-n="1">
+  <div style="margin:auto 0">
+    <div class="kicker">Voor verhuurmakelaars</div>
+    <h1>Aanvragen voor huurwoningen, compleet en voorgesorteerd</h1>
+    <p class="big" style="margin-top:34px;color:#99f6e4">De computer wijst nooit af. U beslist.</p>
+  </div>
+  <p class="note">RentalFlowAI · Bouke Weerstra · Minor AI</p>
+</section>
+
+<section class="s" data-n="2">
+  <div class="kicker">Het probleem</div>
+  <h2>Veel aanvragen, veel handwerk</h2>
+  <ul>
+    <li>Aanvragen komen binnen per mail, telefoon en in wisselende formulieren</li>
+    <li>Elke aanvraag nalopen op inkomen, proeftijd, huisdieren en bewoners</li>
+    <li>Een groot deel voldoet niet aan uw eisen</li>
+  </ul>
+  <p class="note">Vraag aan u: hoeveel aanvragen per woning, en hoeveel tijd kost het nalopen?</p>
+</section>
+
+<section class="s" data-n="3">
+  <div class="kicker">De oplossing</div>
+  <h2>Een knop Aanvraag, en alleen de nodige vragen</h2>
+  <div class="cols">
+    <ul>
+      <li>Eén regel code op uw woningpagina</li>
+      <li>De woningzoeker ziet eerst uw eisen</li>
+      <li>Daarna alleen de vragen die bij de woning horen</li>
+    </ul>
+    <figure><img src="../../public/screens/formulier.png" alt="Formulier met de eisen van de woning" style="max-height:430px;object-fit:cover;object-position:top"><figcaption>Het formulier voor de woningzoeker (verzonnen gegevens)</figcaption></figure>
+  </div>
+</section>
+
+<section class="s" data-n="4">
+  <div class="kicker">De eerste check</div>
+  <h2>Drie groepen, u beslist</h2>
+  <div class="three">
+    <div class="card c1"><b>Suitable</b><p>Alle eisen gehaald. Plan een bezichtiging.</p></div>
+    <div class="card c2"><b>Review</b><p>Een punt wilt u zelf bekijken, bijvoorbeeld proeftijd.</p></div>
+    <div class="card c3"><b>Unsuitable</b><p>Een harde eis niet gehaald. Een indicatie, u kunt de groep altijd wijzigen.</p></div>
+  </div>
+  <p class="big" style="margin-top:40px">Elke aanvraag blijft zichtbaar, met de redenen erbij. Er wordt nooit automatisch afgewezen.</p>
+</section>
+
+<section class="s" data-n="5">
+  <div class="kicker">Uw dashboard</div>
+  <h2>Voorgesorteerd, met bel- en mailknop</h2>
+  <figure style="flex:1;min-height:0"><img src="../../public/screens/dashboard.png" alt="Dashboard van de makelaar" style="max-height:470px;object-fit:cover;object-position:top"><figcaption>Verzonnen gegevens. Nieuwe aanvragen verschijnen vanzelf.</figcaption></figure>
+</section>
+
+<section class="s" data-n="6">
+  <div class="kicker">U bepaalt hoe streng</div>
+  <h2>Eisen per woning, zelf ingesteld</h2>
+  <div class="cols rev">
+    <figure><img src="../../public/screens/eisenscherm.png" alt="Eisen per woning instellen" style="max-height:430px;object-fit:cover;object-position:top"><figcaption>Rechts ziet u wat de woningzoeker straks ziet</figcaption></figure>
+    <ul>
+      <li>Per eis: past niet, of zelf bekijken</li>
+      <li>Marge onder de inkomensgrens</li>
+      <li>Direct testen met een voorbeeldinkomen</li>
+    </ul>
+  </div>
+</section>
+
+<section class="s" data-n="7">
+  <div class="kicker">AI, privacy en eerlijkheid</div>
+  <h2>Klein, begrensd en open</h2>
+  <ul>
+    <li>AI alleen voor tekst, standaard uit: samenvatting en concept-mail die u zelf verstuurt</li>
+    <li>Geen naam of contactgegevens naar de AI; de AI kan nooit een groep wijzigen</li>
+    <li>Geen ID-kopie of BSN, 6 maanden bewaard, verwijderen met één knop</li>
+    <li>Prototype, getest met verzonnen aanvragen; juridische toets volgt nog</li>
+  </ul>
+</section>
+
+<section class="s dark" data-n="8">
+  <div class="kicker">Uw mening</div>
+  <h2 style="color:#fff">Wat zou u ervan vinden?</h2>
+  <ul class="q">
+    <li>Wat zou u onterecht vinden als "niet passend"?</li>
+    <li>Welke eisen stelt u per woning, en welke zijn echt hard?</li>
+    <li>Met welk systeem werkt u nu, en wat moet er gekoppeld worden?</li>
+    <li>Zou u een AI-samenvatting of concept-mail gebruiken, en onder welke voorwaarden?</li>
+  </ul>
+  <p class="note">Bedankt voor uw tijd.</p>
+</section>
+
+</body>
+</html>

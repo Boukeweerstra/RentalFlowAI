@@ -35,6 +35,11 @@ for (const t of tenants) {
   check("standaard is geldig", criteriaSchema.safeParse(d).success);
   const back = formToCriteria(criteriaToForm(d));
   check("standaard heen en terug", back.ok && plain(back.criteria) === plain(d));
+  const f = criteriaToForm(d);
+  check("nieuwe woning: studenten, inkomstenbronnen en verblijfsvergunning beginnen op zelf bekijken",
+    f.studentsSeverity === "review" && f.incomeTypeSeverity === "review" && f.permitSeverity === "review");
+  check("nieuwe woning: inkomen en huisdieren blijven op de gewone standaard (past niet)",
+    f.incomeSeverity === "hard" && f.petsSeverity === "hard");
 }
 
 // 3. Foutmeldingen per veld.
@@ -67,11 +72,16 @@ check("huisdieren 'maakt niet uit' = niet gevraagd", formToCriteria({ ...base, p
 
 // 4. Ernst: alleen afwijkingen van de standaard worden opgeslagen, en komen er ook weer uit.
 {
-  const r = formToCriteria({ ...base, probationSeverity: "review", incomeSeverity: "hard" });
+  // Neutrale basis: de gevoelige eisen staan hier terug op de algemene standaard (hard).
+  const plainBase = { ...base, studentsSeverity: "hard", incomeTypeSeverity: "hard", permitSeverity: "hard" };
+  const r = formToCriteria({ ...plainBase, probationSeverity: "review", incomeSeverity: "hard" });
   check("alleen afwijking opgeslagen", r.ok && JSON.stringify(r.criteria.severity) === JSON.stringify({ probation_not_allowed: "review" }), JSON.stringify(r.criteria?.severity));
   const f = criteriaToForm(r.criteria);
   check("ernst komt terug in het formulier", f.probationSeverity === "review" && f.incomeSeverity === "hard");
-  check("niets afwijkend = geen severity-veld", formToCriteria(base).criteria.severity === undefined);
+  check("niets afwijkend = geen severity-veld", formToCriteria(plainBase).criteria.severity === undefined);
+  check("de standaard voor een nieuwe woning slaat de drie gevoelige eisen als zelf bekijken op",
+    JSON.stringify(formToCriteria(base).criteria.severity) === JSON.stringify({ income_type_not_allowed: "review", student_not_allowed: "review", residence_permit_required: "review" }),
+    JSON.stringify(formToCriteria(base).criteria.severity));
 }
 
 // 5. Woninggegevens.

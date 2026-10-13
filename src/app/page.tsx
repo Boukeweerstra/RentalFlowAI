@@ -165,6 +165,58 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Zo ziet het eruit */}
+        <section id="beeld" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-14 sm:px-6">
+          <h2 className="text-3xl font-semibold tracking-tight text-brand-900">Zo ziet het eruit</h2>
+          <p className="mt-3 max-w-3xl text-zinc-700">
+            Echte schermen uit de app, met verzonnen gegevens. Links wat de woningzoeker ziet, rechts wat u als makelaar ziet.
+          </p>
+          <div className="mt-8 grid gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+            <figure>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/screens/formulier.png"
+                width={1140}
+                height={1000}
+                loading="lazy"
+                alt="Het formulier voor de woningzoeker, met bovenaan de eisen van de woning: minimaal 21 jaar, inkomen van minimaal drie keer de huur, niet in proeftijd, geen huisdieren en maximaal drie bewoners."
+                className="w-full rounded-xl border border-zinc-200 shadow-sm"
+              />
+              <figcaption className="mt-3 text-sm text-zinc-600">
+                <strong className="text-zinc-900">De woningzoeker</strong> ziet eerst de eisen en vult daarna alleen in wat bij de woning past.
+              </figcaption>
+            </figure>
+            <figure>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/screens/dashboard.png"
+                width={2160}
+                height={1330}
+                loading="lazy"
+                alt="Het dashboard van de makelaar met vier tegels (Suitable, Review, Unsuitable, Nog niet benaderd), zoekfilters en een aanvraag met telefoon, e-mail en de volgende stap."
+                className="w-full rounded-xl border border-zinc-200 shadow-sm"
+              />
+              <figcaption className="mt-3 text-sm text-zinc-600">
+                <strong className="text-zinc-900">De makelaar</strong> ziet de aanvragen voorgesorteerd, met telefoon, e-mail en een voorgestelde volgende stap.
+              </figcaption>
+            </figure>
+          </div>
+          <figure className="mt-10">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/screens/eisenscherm.png"
+              width={2160}
+              height={1330}
+              loading="lazy"
+              alt="Het scherm Eisen per woning: links de eisen die de makelaar instelt, rechts een voorbeeld van wat de woningzoeker te zien krijgt, met een veld om een inkomen uit te proberen."
+              className="w-full rounded-xl border border-zinc-200 shadow-sm"
+            />
+            <figcaption className="mt-3 text-sm text-zinc-600">
+              <strong className="text-zinc-900">U bepaalt hoe streng:</strong> per woning stelt u de eisen in en ziet u direct wat de woningzoeker te zien krijgt.
+            </figcaption>
+          </figure>
+        </section>
+
         {/* De drie groepen */}
         <section id="groepen" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-14 sm:px-6">
           <h2 className="text-3xl font-semibold tracking-tight text-brand-900">De drie groepen</h2>
