@@ -314,3 +314,9 @@ Afspraak: zoveel mogelijk lokaal houden en pas aan het eind in één keer pushen
 **Wat niet lokaal kan**: Supabase (database en inloggen) staat al online; wijzigingen aan de database gaan dus naar die online omgeving. AI (OpenAI) en Google zijn externe diensten.
 
 **Open uit de toets (nog te doen)**: grondslag "stappen voor een overeenkomst" in de privacyverklaring (juridisch toetsen), standaardkeuze bij gevoelige eisen op "Zelf bekijken" overwegen, bias-onderzoek per groep met een echte makelaar, A9 (gelekte-wachtwoordcontrole), H2, H3, H5.
+
+**Testronde 13 oktober 2026**: tsc en eslint schoon; productiebuild slaagt; eval: regels 34/40 (85%), marge 12/12, eisen 66/66, AI 73/73; productiemodus 11/11; woningen uit de database 11/11; rooktest 12/12; misbruik 29/29 en opslag 23/23 (met nep-diensten, productiebuild). 
+pm audit --omit=dev: 2 hoge meldingen (next 16.0.0 tot 16.3.7, source-map-js); fix = next 16.4.0 en 
+pm audit fix, nog niet uitgevoerd.
+
+**Upgrade 13 oktober 2026**: `next` en `eslint-config-next` van 16.3.7 naar 16.4.0, `source-map-js` via `npm audit fix`. `npm audit --omit=dev`: 0 kwetsbaarheden. Testronde herhaald: tsc, eslint, productiebuild, eval (85%, 12/12, 66/66, 73/73), misbruik 29/29, opslag 23/23, productiemodus 11/11, woningen in database 11/11, rooktest 12/12. Over: 5 hoge meldingen alleen in lint-hulpmiddelen (`braces` via `eslint-config-next`, geen onderdeel van de app); `npm audit fix --force` zou eslint-config-next naar 14 terugzetten en wordt niet gedaan. `/dashboard/preview` geeft in een productiebuild bewust een redirect (alleen beschikbaar met `npm run dev`).
