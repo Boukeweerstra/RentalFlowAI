@@ -5,16 +5,16 @@ Stand: 6 oktober 2026. **Concept, niet juridisch getoetst.** Hoort bij `docs/ver
 ## 1. Opruimen buiten de database (D1)
 
 De bewaartaak in de database ruimt alleen `applications` op (na 6 maanden). Persoonsgegevens staan ook in de Google Sheet, in de mailbox van het kantoor
-en in de uitvoergeschiedenis van Make. Zonder afspraak blijven die staan. **Regel: elke maandag opruimen wat ouder is dan 6 maanden.**
+en in de uitvoergeschiedenis van n8n. Zonder afspraak blijven die staan. **Regel: elke maandag opruimen wat ouder is dan 6 maanden.**
 
 | Waar | Wat | Hoe | Wie |
 |---|---|---|---|
 | Google Sheet | Rijen met `submittedAt` ouder dan 6 maanden | Sorteer op kolom `submittedAt`, selecteer de oude rijen, *Rijen verwijderen*. Alternatief: een kopie van de Sheet per kwartaal en de oude verwijderen | Kantoor of beheerder |
 | Mailbox (Gmail) | Meldingen "Nieuwe aanvraag" ouder dan 6 maanden | Zoek op `older_than:6m subject:"Nieuwe aanvraag"`, selecteer alles, verwijderen, daarna ook de prullenbak legen | Kantoor |
-| Make.com | Uitvoergeschiedenis met de payload | Controleer in *Scenario > History* hoelang Make bewaart (hangt van het abonnement af) en wis oude uitvoeringen; zet waar mogelijk "Data is confidential" aan zodat inhoud niet wordt bewaard | Beheerder |
+| n8n (Docker) | Uitvoergeschiedenis met de payload | Succesvolle uitvoeringen worden niet bewaard en fouten worden na 7 dagen gewist (`n8n/docker-compose.yml`, `n8n/rentalflowai-workflow.json`). Controleer in n8n onder *Executions* dat er niets staat wat ouder is | Beheerder |
 | Supabase | Aanvragen | Gebeurt automatisch (`delete_expired_applications`); controle: `select count(*) from public.applications where created_at < now() - interval '6 months';` moet 0 zijn | Beheerder |
 
-Een geplande taak in Make die oude Sheet-rijen verwijdert is een mogelijke verbetering; wacht tot er echt gebruik is. Leg bij elke controle de datum vast (een regel in een eigen logboekdocument zonder persoonsgegevens).
+Een geplande taak in n8n die oude Sheet-rijen verwijdert is een mogelijke verbetering; wacht tot er echt gebruik is. Leg bij elke controle de datum vast (een regel in een eigen logboekdocument zonder persoonsgegevens).
 
 ## 2. Verzoeken van betrokkenen (D4)
 
@@ -28,7 +28,7 @@ Een woningzoeker kan vragen om inzage, correctie, verwijdering, beperking of bez
 |---|---|
 | Inzage | De beheerder haalt de gegevens op (zie SQL hieronder) en stuurt ze via een beveiligd kanaal naar de aanvrager. Vergeet de Sheet en de mails niet |
 | Correctie | Pas de gegevens aan in de database via SQL (de makelaar kan alleen groep, status, benaderd en notitie wijzigen) en in de Sheet; leg uit dat de eerste check niet opnieuw wordt gedaan tenzij de makelaar de groep wijzigt |
-| Verwijdering | Volg *Verwijderen op verzoek* in `docs/dashboard.md` (dashboard-knop, Sheet, mailbox, Make). Bevestig daarna zonder de gegevens te herhalen |
+| Verwijdering | Volg *Verwijderen op verzoek* in `docs/dashboard.md` (dashboard-knop, Sheet, mailbox, n8n). Bevestig daarna zonder de gegevens te herhalen |
 | Beperking of bezwaar | Zet de behandelstatus op *Afgerond*, voeg een notitie toe "niet verder verwerken" en verwijder bij een bezwaar tegen de verwerking de aanvraag zodra de wet dat vraagt |
 | Intrekken van toestemming | Behandel als verwijdering |
 
@@ -49,7 +49,7 @@ Voorbeeldantwoord (Nederlands): *"Beste [naam], wij hebben uw verzoek van [datum
 
 Voorbeelden: een gestolen laptop met het dashboard ingelogd, een verkeerde ontvanger van een mail met aanvragen, een gelekte sleutel (secret key, API-sleutel), een onbevoegde die toegang had tot het dashboard.
 
-1. **Direct stoppen:** wijzig het wachtwoord, trek de gelekte sleutel in en maak een nieuwe (Supabase *API Keys*, Make, Vercel, OpenAI), zet zo nodig de site tijdelijk offline (Vercel *Pause*).
+1. **Direct stoppen:** wijzig het wachtwoord, trek de gelekte sleutel in en maak een nieuwe (Supabase *API Keys*, het n8n-geheim, Vercel, OpenAI), zet zo nodig de site tijdelijk offline (Vercel *Pause*).
 2. **Vastleggen** (datum, wat er gebeurd is, welke gegevens, hoeveel mensen). Geen persoonsgegevens in het logboek zelf.
 3. **Beoordelen of er risico is** voor de betrokkenen. Zo ja: **melden bij de Autoriteit Persoonsgegevens binnen 72 uur** nadat het bekend is (het kantoor als verantwoordelijke; als verwerker meld je het zonder onredelijke vertraging aan het kantoor).
 4. Is het risico **hoog**: ook de betrokkenen informeren.

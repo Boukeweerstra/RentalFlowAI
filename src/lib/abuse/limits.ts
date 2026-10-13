@@ -4,8 +4,8 @@ import "server-only";
  * Instelbare limieten tegen misbruik. Alle waarden zijn te overschrijven met een
  * omgevingsvariabele; zonder variabele gelden de standaardwaarden hieronder.
  *
- * Let op: elke aanvraag kost ±3-5 Make-operaties (webhook + Sheet + 1-2 mails). Het gratis
- * plan heeft 1.000 operaties per maand, dus het dagplafond beschermt je quota.
+ * Let op: elke aanvraag laat de workflow een Sheet-rij en 1-2 mails maken (Gmail kent zelf een daglimiet). Bij Make.com kostte dat ±3-5 operaties; het gratis
+ * Make-plan had 1.000 operaties per maand. Het dagplafond beschermt in elk geval de mailbox.
  */
 const num = (name: string, fallback: number): number => {
   const v = Number(process.env[name]);
@@ -21,7 +21,7 @@ export const limits = {
   emailWindowSeconds: num("RL_EMAIL_WINDOW_SECONDS", 60 * 60),
   /** Dezelfde persoon + dezelfde woning: zo lang geblokkeerd na een geslaagde aanvraag. */
   duplicateWindowSeconds: num("DUPLICATE_WINDOW_SECONDS", 24 * 60 * 60),
-  /** Totaal aantal aanvragen per dag voor de hele app (beschermt de Make-quota). */
+  /** Totaal aantal aanvragen per dag voor de hele app (beschermt de workflow en de mailbox). */
   dailyCap: num("MAX_APPLICATIONS_PER_DAY", 30),
   /** Formulier sneller dan dit ingevuld = bot. */
   formMinSeconds: num("FORM_MIN_SECONDS", 8),

@@ -14,8 +14,8 @@ van het project (Bouke Weerstra) beide; dat verandert zodra een echt kantoor het
 | Gegevens | Naam, e-mail, telefoon, leeftijd, inkomenstype en bedrag, duur dienstverband, proeftijd, student ja/nee, woonsituatie (aantal bewoners, huisdieren, medebewoners), gewenste ingangsdatum en huurperiode, garantsteller ja/nee, verblijfsstatus (alleen als de woning dat vraagt), vrije toelichting |
 | Niet gevraagd | Kopie identiteitsbewijs, BSN, bankgegevens, gezondheidsgegevens (de toelichting kan ze per ongeluk bevatten, zie DPIA) |
 | Ontvangers | Medewerkers van het kantoor (dashboard, e-mail, Google Sheet) |
-| Verwerkers | Supabase (database, regio eu-west-1), Vercel (hosting, regio fra1), Make.com (doorsturen), Google (Sheets, Gmail), Upstash (alleen gehashte sleutels voor rate-limiting), Cloudflare Turnstile (indien aan) |
-| Doorgifte buiten de EER | Mogelijk bij Vercel, Make, Google, Upstash en Cloudflare; te regelen met standaardcontractbepalingen/DPF (taak D2) |
+| Verwerkers | Supabase (database, regio eu-west-1), Vercel (hosting, regio fra1), n8n (doorsturen, zelf beheerd in Docker; sinds 13 okt 2026 in plaats van Make.com), Google (Sheets, Gmail), Upstash (alleen gehashte sleutels voor rate-limiting), Cloudflare Turnstile (indien aan) |
+| Doorgifte buiten de EER | Mogelijk bij Vercel, Google, Upstash en Cloudflare; te regelen met standaardcontractbepalingen/DPF (taak D2) |
 | Bewaartermijn | 6 maanden in de database (nachtelijke taak, per kantoor instelbaar); Sheet en mails: handmatige regel (taak D1) |
 | Beveiliging | Zie "Maatregelen" |
 

@@ -9,7 +9,7 @@ import type {
 
 /**
  * Mailteksten voor de automatische mails. Bewust simpel en op één plek, zodat
- * ze makkelijk aan te passen zijn. Make.com verstuurt alleen wat hier staat.
+ * ze makkelijk aan te passen zijn. De workflow (n8n) verstuurt alleen wat hier staat.
  *
  * Flow: precheck (suitable/review/unsuitable) → makelaar beoordeelt → makelaar beslist.
  * De precheck is voorsorterend en ondersteunend. De mail naar de woningzoeker is
@@ -19,7 +19,7 @@ import type {
  * De precheck-uitkomst en redenen gaan alleen naar de makelaar.
  */
 
-/** `body` = platte tekst, `html` = zelfde tekst als HTML (Gmail in Make behoudt anders geen regeleinden). */
+/** `body` = platte tekst, `html` = zelfde tekst als HTML (Gmail in de workflow behoudt anders geen regeleinden). */
 export type Mail = { subject: string; body: string; html: string };
 
 const escapeHtml = (s: string) =>

@@ -8,20 +8,20 @@ import { getStore } from "@/lib/abuse/store";
 import { verifyTurnstile } from "@/lib/abuse/turnstile";
 import { configProvider } from "@/lib/config";
 import { saveApplication } from "@/lib/db/applications";
-import { deliverToMake } from "@/lib/make-client";
-import { buildMakePayload } from "@/lib/make-payload";
+import { deliverToWorkflow } from "@/lib/workflow-client";
+import { buildWorkflowPayload } from "@/lib/workflow-payload";
 import { validateApplication } from "@/lib/validate-application";
 
 /**
- * POST /api/aanvraag: ontvangt een aanvraag en stuurt die naar Make.com.
+ * POST /api/aanvraag: ontvangt een aanvraag en stuurt die naar de workflow (n8n).
  *
  * Lagen tegen misbruik, in volgorde (goedkoop en zonder opslag eerst):
  *  1. maximale grootte  2. same-origin  3. honeypot  4. rate limit per IP
  *  5. ondertekend formuliertoken met minimale invultijd  6. Turnstile (indien ingesteld)
  *  7. validatie tegen de woningconfig  8. spam-/wegwerp-e-mailcontrole
  *  9. rate limit per e-mailadres  10. dubbele aanvraag (zelfde persoon + woning)
- *  11. dagplafond voor de hele app (beschermt de Make-quota)
- * Daarna: opslaan in Supabase (bron voor het dashboard) en versturen naar Make (mail + Sheet).
+ *  11. dagplafond voor de hele app (beschermt de workflow en de Gmail-limiet)
+ * Daarna: opslaan in Supabase (bron voor het dashboard) en versturen naar de workflow (mail + Sheet).
  * Lukt minstens één van de twee, dan is de aanvraag niet verloren en krijgt de woningzoeker een succesmelding.
  * Mislukken beide, dan worden de plekken uit 10 en 11 teruggegeven.
  */
@@ -151,7 +151,7 @@ export async function POST(request: Request) {
     return json({ error: "duplicate" }, 409);
   }
 
-  // 11. Dagplafond (beschermt de Make-quota)
+  // 11. Dagplafond (beschermt de workflow en de Gmail-limiet)
   const capKey = `cap:${new Date().toISOString().slice(0, 10)}`;
   const capCount = await store.incr(capKey, 26 * 60 * 60);
   const release = async () => {
@@ -175,7 +175,7 @@ export async function POST(request: Request) {
   const appUrl = (process.env.APP_URL ?? process.env.NEXT_PUBLIC_APP_URL)?.replace(/\/$/, "");
   const dashboardUrl =
     stored === "stored" && appUrl ? `${appUrl}/dashboard?application=${application.id}` : undefined;
-  const delivery = await deliverToMake(buildMakePayload(application, config, tenant, { dashboardUrl }));
+  const delivery = await deliverToWorkflow(buildWorkflowPayload(application, config, tenant, { dashboardUrl }));
 
   if (!delivery.ok) {
     if (stored !== "stored") {
@@ -186,9 +186,9 @@ export async function POST(request: Request) {
       );
     }
     // Opgeslagen maar niet naar Make: de makelaar ziet de aanvraag in het dashboard, de mail en Sheet ontbreken.
-    console.error("[delivery] Make mislukt, aanvraag wel opgeslagen:", delivery.reason);
+    console.error("[delivery] workflow mislukt, aanvraag wel opgeslagen:", delivery.reason);
     return json({ ok: true, id: application.id, mode: "stored" });
   }
-  if (stored === "failed") console.error("[db] aanvraag niet opgeslagen, wel naar Make gestuurd");
+  if (stored === "failed") console.error("[db] aanvraag niet opgeslagen, wel naar de workflow gestuurd");
   return json({ ok: true, id: application.id, mode: delivery.mode });
 }

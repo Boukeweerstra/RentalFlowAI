@@ -8,9 +8,9 @@ import {
 
 /**
  * Kolommen van de Google Sheet, in volgorde. De eerste rij van de Sheet moet
- * exact deze namen hebben (zie docs/make-setup.md). Bewust een compacte set:
+ * exact deze namen hebben (zie docs/n8n-setup.md). Bewust een compacte set:
  * de volledige gestructureerde aanvraag zit in `application` (voor later:
- * Supabase/AI) en hoeft niet in Make gemapt te worden.
+ * Supabase/AI) en hoeft niet in de Sheet gemapt te worden.
  */
 export const SHEET_COLUMNS = [
   "submittedAt",
@@ -46,12 +46,12 @@ export type SheetColumn = (typeof SHEET_COLUMNS)[number];
 type Cell = string | number | boolean | null;
 
 /**
- * Payload naar Make.com.
+ * Payload naar de workflow (n8n).
  * - `flat`: één vlakke rij, sleutels = `SHEET_COLUMNS` (direct te mappen naar Sheets).
  * - `mail`: kant-en-klare onderwerp/tekst voor de makelaar en de woningzoeker.
  * - `application`: volledige gestructureerde aanvraag (voor Supabase/AI later).
  */
-export type MakePayload = {
+export type WorkflowPayload = {
   schemaVersion: number;
   tenantMode: "test" | "production";
   flat: Record<SheetColumn, Cell>;
@@ -62,17 +62,17 @@ export type MakePayload = {
   application: Application;
 };
 
-export function buildMakePayload(
+export function buildWorkflowPayload(
   app: Application,
   config: PropertyConfig,
   tenant: TenantConfig,
   /** Link naar de aanvraag in het dashboard; alleen meegeven als de aanvraag echt is opgeslagen. */
   opts?: { dashboardUrl?: string },
-): MakePayload {
+): WorkflowPayload {
   const p1 = app.persons[0];
   const p2 = app.persons[1];
 
-  const flat: MakePayload["flat"] = {
+  const flat: WorkflowPayload["flat"] = {
     submittedAt: app.submittedAt,
     id: app.id,
     tenantId: app.tenantId,

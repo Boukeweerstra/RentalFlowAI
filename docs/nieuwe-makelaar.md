@@ -64,7 +64,7 @@ Alleen de rol `owner` kan aanvragen verwijderen; `staff` kan lezen en bijwerken.
   (`mail.notify.to`) wordt gebruikt en dat de terugvalmail klopt.
 - De Google Sheet is gedeeld: elke rij heeft een kolom met de tenant. Spreek af wie de Sheet mag zien (er staan persoonsgegevens van meerdere kantoren in).
   Overweeg per kantoor een eigen Sheet als dat een eis is.
-- `sendApplicantMail`: zet pas op `true` als de bevestigingstekst is goedgekeurd (zie `docs/make-setup.md`).
+- `sendApplicantMail`: zet pas op `true` als de bevestigingstekst is goedgekeurd (zie `docs/n8n-setup.md`).
 
 ## 4. Uitrollen
 

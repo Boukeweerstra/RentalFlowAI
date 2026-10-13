@@ -47,9 +47,9 @@ draait op verouderde code. Zo kreeg de app een keer de oude header `x-rentalflow
 Alleen `data-tenant` en `data-property-id` zijn verplicht. `data-rent` en `data-address` zijn nodig voor
 tenants zonder vaste woningconfig (`rotsvast-test`). De site moet in `allowedOrigins` van de tenant staan.
 
-## Make.com (Google Sheets + Gmail)
+## n8n (Google Sheets + Gmail)
 
-Stap-voor-stap in [docs/make-setup.md](docs/make-setup.md). `MAKE_WEBHOOK_URL` en `MAKE_WEBHOOK_SECRET`
+Stap-voor-stap in [docs/n8n-setup.md](docs/n8n-setup.md). `WORKFLOW_WEBHOOK_URL` en `WORKFLOW_WEBHOOK_SECRET` (de oude `MAKE_...`-namen werken nog)
 staan alleen in `.env.local` (en later Vercel), nooit in code, git of de browser.
 
 Ketentest zonder formulier: `node scripts/e2e.mjs <suitable|review|unsuitable> <jouw-emailadres> [nl|en]`.

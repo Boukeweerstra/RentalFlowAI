@@ -213,11 +213,11 @@ Later toegevoegd (fase 2): `Assessment { applicationId, category, reasons[], mis
 ## 9c. Wijzigingen v1.2 (stap 5–6: Make.com)
 
 - **Vertrouwensmodel voor woninggegevens:** tenant heeft `mode` (`test` | `production`, standaard `production`). Alleen bij `test` worden `data-rent`/`data-address` en `propertyDefaults` gebruikt; de schema-validatie weigert `propertyDefaults` bij `production`. In productie komen huur, adres en criteria uitsluitend uit `properties` op basis van het woning-id, en een onbekende woning geeft 404. Elke woning heeft `source` (`config` | `widget_hints`); die staat als `propertySource` in de Sheet, zodat een ongecontroleerde huurprijs direct zichtbaar is.
-- **Geheim server-side:** `MAKE_WEBHOOK_URL` en `MAKE_WEBHOOK_SECRET` zonder `NEXT_PUBLIC_`, gebruikt in `src/lib/make-client.ts` met `import "server-only"` (importeren vanuit een client-component laat de build falen). Gecontroleerd: een productiebuild met herkenbare nep-waarden bevat die niet in `.next/static`.
+- **Geheim server-side:** `MAKE_WEBHOOK_URL` en `MAKE_WEBHOOK_SECRET` zonder `NEXT_PUBLIC_`, gebruikt in `src/lib/workflow-client.ts` met `import "server-only"` (importeren vanuit een client-component laat de build falen). Gecontroleerd: een productiebuild met herkenbare nep-waarden bevat die niet in `.next/static`.
 - **Garantsteller configureerbaar:** `criteria.guarantorCompensatesIncome` (standaard `true`): een inkomenstekort met beschikbare garantsteller wordt `review`; op `false` blijft het een gewoon tekort volgens `severity`.
-- **Sheet-kolommen** vast in `SHEET_COLUMNS` (`src/lib/make-payload.ts`); payload bevat `flat` (Sheet), `mail` (kant-en-klare onderwerp/tekst/HTML voor makelaar en zoeker) en `application` (volledig, voor later).
+- **Sheet-kolommen** vast in `SHEET_COLUMNS` (`src/lib/workflow-payload.ts`); payload bevat `flat` (Sheet), `mail` (kant-en-klare onderwerp/tekst/HTML voor makelaar en zoeker) en `application` (volledig, voor later).
 - **Mails per status** (`src/lib/mail-texts.ts`): melding naar makelaar met status in de onderwerpregel; naar de woningzoeker altijd een ontvangstbevestiging (bij `unsuitable` een neutrale tekst, geen automatische afwijzing, AVG art. 22). Per tenant `notifyEmail` (optioneel) en `sendApplicantMail` (standaard aan).
-- **Handleiding:** [docs/make-setup.md](docs/make-setup.md), voorbeeldbericht [docs/sample-payload.json](docs/sample-payload.json).
+- **Handleiding:** [docs/n8n-setup.md](docs/n8n-setup.md), voorbeeldbericht [docs/sample-payload.json](docs/sample-payload.json).
 
 ### Besluiten na test v1.2
 
@@ -225,7 +225,7 @@ Later toegevoegd (fase 2): `Assessment { applicationId, category, reasons[], mis
 - **Ontvangstbevestiging** (alle statussen): aanvraag ontvangen, na beoordeling volgt een definitieve reactie.
 - **Ontvanger melding:** `notifyEmail` in de tenant-config; in Make één fallback-adres via `ifempty(...)`.
 - **Getest:** `guarantorCompensatesIncome: false` (woning 1005): inkomenstekort + garantsteller = `unsuitable`; controle met standaard (woning 1003) = `review`. `notifyEmail` komt door in `mail.notify.to`.
-- **Volgorde:** eerst de volledige keten testen met echte Make/Sheets/Gmail (`scripts/e2e.mjs`, [docs/make-setup.md](docs/make-setup.md)); geen nieuwe functionaliteit tot die keten werkt. Daarna stap 9 (toegankelijkheid/mobiel) en stap 10 (Vercel-deploy + externe origin), daarna fase 2.
+- **Volgorde:** eerst de volledige keten testen met echte Make/Sheets/Gmail (`scripts/e2e.mjs`, [docs/n8n-setup.md](docs/n8n-setup.md)); geen nieuwe functionaliteit tot die keten werkt. Daarna stap 9 (toegankelijkheid/mobiel) en stap 10 (Vercel-deploy + externe origin), daarna fase 2.
 
 ### Status na stap 9 (toegankelijkheid en mobiel)
 

@@ -1,7 +1,7 @@
 // End-to-end test: stuurt een testaanvraag door de echte keten
-// (app → Make.com → Google Sheets → Gmail), zonder het formulier in te vullen.
+// (app → n8n-workflow → Google Sheets → Gmail), zonder het formulier in te vullen.
 //
-// Gebruik (app moet draaien, .env.local moet MAKE_WEBHOOK_URL bevatten):
+// Gebruik (app moet draaien, .env.local moet WORKFLOW_WEBHOOK_URL (of MAKE_WEBHOOK_URL) bevatten):
 //   node scripts/e2e.mjs <suitable|review|unsuitable> <jouw-emailadres> [nl|en]
 //
 // Let op:
@@ -81,9 +81,9 @@ console.log(`${res.status} ${text}`);
 if (res.ok) {
   const { mode } = JSON.parse(text);
   console.log(
-    mode === "make"
-      ? "Verstuurd naar Make.com. Controleer de Sheet en je inbox."
-      : "LET OP: mode=dev-log, er is niets naar Make gestuurd (MAKE_WEBHOOK_URL ontbreekt).",
+    mode === "workflow"
+      ? "Verstuurd naar de workflow (n8n). Controleer de Sheet en je inbox."
+      : "LET OP: mode=dev-log, er is niets naar de workflow gestuurd (WORKFLOW_WEBHOOK_URL ontbreekt).",
   );
 }
 process.exitCode = res.ok ? 0 : 1; // geen process.exit(): dat laat Node op Windows crashen na een fetch

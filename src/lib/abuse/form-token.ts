@@ -8,12 +8,12 @@ import { limits } from "./limits";
  * invullen duurde. Een bot die het formulier in een fractie van een seconde "invult" wordt zo
  * geweigerd, en een client kan de tijd niet vervalsen omdat het token ondertekend is.
  *
- * Het geheim is `FORM_TOKEN_SECRET`, of anders afgeleid van `MAKE_WEBHOOK_SECRET` (zodat er geen
+ * Het geheim is `FORM_TOKEN_SECRET`, of anders afgeleid van `WORKFLOW_WEBHOOK_SECRET` (of het oude `MAKE_WEBHOOK_SECRET`) (zodat er geen
  * extra variabele nodig is). Zonder beide (alleen lokaal) gebruiken we een vaste ontwikkelsleutel.
  */
 function key(): Buffer {
   const secret =
-    process.env.FORM_TOKEN_SECRET || process.env.MAKE_WEBHOOK_SECRET || "dev-only-insecure-secret";
+    process.env.FORM_TOKEN_SECRET || process.env.WORKFLOW_WEBHOOK_SECRET || process.env.MAKE_WEBHOOK_SECRET || "dev-only-insecure-secret";
   return createHash("sha256").update(`rentalflowai-form-token:${secret}`).digest();
 }
 

@@ -62,7 +62,7 @@ export function buildPrivacyText(lang: Lang, office: string, contactEmail?: stri
           heading: "Who processes your data",
           items: [
             `${office}, which reads your application.`,
-            "Supabase (database, European region), Vercel (hosting) and Make.com (forwarding the notification), as processors of RentalFlowAI.",
+            "Supabase (database, European region), Vercel (hosting), as processors of RentalFlowAI. The notification is forwarded by a workflow (n8n) that runs on a system managed by RentalFlowAI.",
             "Google (spreadsheet and mailbox of the office), used by the office.",
             "Upstash and, if enabled, Cloudflare Turnstile, to prevent abuse of the form; they do not receive your application content.",
             "Some of these providers may process data outside the European Economic Area, with appropriate safeguards such as standard contractual clauses.",
@@ -136,7 +136,7 @@ export function buildPrivacyText(lang: Lang, office: string, contactEmail?: stri
         heading: "Wie verwerkt uw gegevens",
         items: [
           `${office}, die uw aanvraag leest.`,
-          "Supabase (database, Europese regio), Vercel (hosting) en Make.com (doorsturen van de melding), als verwerkers van RentalFlowAI.",
+          "Supabase (database, Europese regio), Vercel (hosting), als verwerkers van RentalFlowAI. De melding wordt doorgestuurd door een workflow (n8n) op een systeem dat RentalFlowAI zelf beheert.",
           "Google (spreadsheet en mailbox van het kantoor), in gebruik bij het kantoor.",
           "Upstash en, als dat aan staat, Cloudflare Turnstile, tegen misbruik van het formulier; zij ontvangen niet de inhoud van uw aanvraag.",
           "Een deel van deze partijen kan gegevens buiten de Europese Economische Ruimte verwerken, met passende waarborgen zoals standaardcontractbepalingen.",

@@ -1,0 +1,112 @@
+{
+  "name": "RentalFlowAI aanvraag",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "rentalflowai",
+        "authentication": "headerAuth",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "name": "Aanvraag ontvangen",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "webhookId": "5a1f6c1e-0b8e-4c55-9c0a-rentalflowai01"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={{ $json.body.flat }}",
+        "options": {}
+      },
+      "id": "a1b2c3d4-0002-4000-8000-000000000002",
+      "name": "Rij voor de Sheet",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [240, 0]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": { "__rl": true, "mode": "url", "value": "" },
+        "sheetName": { "__rl": true, "mode": "name", "value": "Aanvragen" },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": null,
+          "matchingColumns": [],
+          "schema": []
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0003-4000-8000-000000000003",
+      "name": "Google Sheet: rij toevoegen",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [480, 0]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Aanvraag ontvangen').item.json.body.mail.notify.to || 'VUL-HIER-JE-EIGEN-ADRES-IN@gmail.com' }}",
+        "subject": "={{ $('Aanvraag ontvangen').item.json.body.mail.notify.subject }}",
+        "message": "={{ $('Aanvraag ontvangen').item.json.body.mail.notify.html }}",
+        "options": { "appendAttribution": false }
+      },
+      "id": "a1b2c3d4-0004-4000-8000-000000000004",
+      "name": "Gmail: melding makelaar",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [720, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "leftValue": "", "typeValidation": "strict", "version": 2 },
+          "conditions": [
+            {
+              "id": "c0ffee00-0005-4000-8000-000000000005",
+              "leftValue": "={{ $('Aanvraag ontvangen').item.json.body.mail.applicant.enabled }}",
+              "rightValue": "",
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "a1b2c3d4-0005-4000-8000-000000000005",
+      "name": "Bevestiging aan?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [960, 0]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Aanvraag ontvangen').item.json.body.mail.applicant.to }}",
+        "subject": "={{ $('Aanvraag ontvangen').item.json.body.mail.applicant.subject }}",
+        "message": "={{ $('Aanvraag ontvangen').item.json.body.mail.applicant.html }}",
+        "options": { "appendAttribution": false }
+      },
+      "id": "a1b2c3d4-0006-4000-8000-000000000006",
+      "name": "Gmail: bevestiging aanvrager",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [1200, -80]
+    }
+  ],
+  "connections": {
+    "Aanvraag ontvangen": { "main": [[{ "node": "Rij voor de Sheet", "type": "main", "index": 0 }]] },
+    "Rij voor de Sheet": { "main": [[{ "node": "Google Sheet: rij toevoegen", "type": "main", "index": 0 }]] },
+    "Google Sheet: rij toevoegen": { "main": [[{ "node": "Gmail: melding makelaar", "type": "main", "index": 0 }]] },
+    "Gmail: melding makelaar": { "main": [[{ "node": "Bevestiging aan?", "type": "main", "index": 0 }]] },
+    "Bevestiging aan?": { "main": [[{ "node": "Gmail: bevestiging aanvrager", "type": "main", "index": 0 }], []] }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "none",
+    "saveManualExecutions": false
+  },
+  "pinData": {}
+}

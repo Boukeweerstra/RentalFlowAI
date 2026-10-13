@@ -86,7 +86,7 @@ console.log("Alles werkt: opslaan en Make");
   const before = await makeCount();
   const e = email();
   const r = await submit("demo", e);
-  check("aanvraag geslaagd (200, mode make)", r.status === 200 && r.data.mode === "make", JSON.stringify(r));
+  check("aanvraag geslaagd (200, mode workflow)", r.status === 200 && r.data.mode === "workflow", JSON.stringify(r));
   const rows = (await dbRows()).filter((x) => x.email === e);
   check("er staat precies 1 rij in de database", rows.length === 1, String(rows.length));
   const row = rows[0] ?? {};
@@ -146,7 +146,7 @@ console.log("\nTenant zonder kantoor in de database");
   const before = await makeCount();
   const e = email();
   const r = await submit("hints", e);
-  check("aanvraag gaat gewoon naar Make (200)", r.status === 200 && r.data.mode === "make", JSON.stringify(r));
+  check("aanvraag gaat gewoon naar de workflow (200)", r.status === 200 && r.data.mode === "workflow", JSON.stringify(r));
   check("er is niets opgeslagen (geen kantoor)", !(await dbRows()).some((x) => x.email === e));
   check("Make kreeg de aanvraag", (await makeCount()) === before + 1);
 }

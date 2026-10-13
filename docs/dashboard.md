@@ -5,7 +5,7 @@ Een beveiligde pagina in dezelfde app: `/login` en `/dashboard`. Aanvragen staan
 
 ## Wat er is gebouwd
 
-- **Opslaan bij het indienen:** de API schrijft elke aanvraag naar Supabase en daarna naar Make (mail en Sheet). Lukt één van de twee,
+- **Opslaan bij het indienen:** de API schrijft elke aanvraag naar Supabase en daarna naar de n8n-workflow (mail en Sheet). Lukt één van de twee,
   dan is de aanvraag niet verloren. Mislukken beide, dan krijgt de woningzoeker een foutmelding.
 - **Database** (`supabase/migrations/`): kantoren, leden, aanvragen en een logboek, met rijafscherming per kantoor. Een ingelogde makelaar kan
   alleen vier kolommen wijzigen: groep, behandelstatus, "benaderd" en notitie. Wie wat deed komt automatisch in het logboek.
@@ -84,7 +84,7 @@ Een aanvrager kan vragen zijn gegevens te laten verwijderen. Doe dan dit, in dez
 1. **Dashboard:** open de aanvraag, klik op *Details en acties*, daarna *Aanvraag verwijderen…* en bevestig. Alleen de eigenaar van het kantoor kan dit. De aanvraag en het bijbehorende logboek zijn dan uit de database.
 2. **Google Sheet:** zoek de rij (op e-mailadres of tijdstip) en verwijder die. Het dashboard kan dit niet voor je doen.
 3. **Mailbox van het kantoor:** verwijder de melding "Nieuwe aanvraag" van deze persoon, ook uit de prullenbak.
-4. **Make.com:** uitvoergeschiedenis bewaart de gegevens een beperkte tijd; controleer de bewaartermijn van je Make-abonnement en wis zo nodig de uitvoering (Scenario → History).
+4. **n8n:** succesvolle uitvoeringen worden niet bewaard en fouten na 7 dagen gewist; controleer onder *Executions* dat er niets over is.
 5. **Bevestig aan de aanvrager** dat het is gebeurd, zonder de verwijderde gegevens te herhalen.
 
 Wat de database vastlegt: een regel in `deletion_log` met alleen de interne id, het kantoor, wie het deed en wanneer (geen naam, mail of telefoon). De nachtelijke bewaartaak (na 6 maanden) schrijft dezelfde regels met `method = systeem`.

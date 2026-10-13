@@ -1,0 +1,22 @@
+# n8n lokaal voor RentalFlowAI. Start met: docker compose up -d   (in deze map)
+# Gegevens (workflows, koppelingen) staan in het volume "n8n_data" en blijven bewaard.
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: rentalflowai-n8n
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:5678:5678"   # alleen bereikbaar vanaf deze laptop
+    environment:
+      - GENERIC_TIMEZONE=Europe/Amsterdam
+      - TZ=Europe/Amsterdam
+      - N8N_SECURE_COOKIE=false          # nodig omdat we http://localhost gebruiken
+      - N8N_DIAGNOSTICS_ENABLED=false
+      - N8N_PERSONALIZATION_ENABLED=false
+      - EXECUTIONS_DATA_MAX_AGE=168      # uitvoeringsgeschiedenis (met aanvraaggegevens) max 7 dagen bewaren
+      - EXECUTIONS_DATA_PRUNE=true
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+volumes:
+  n8n_data:
